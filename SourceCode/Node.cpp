@@ -63,6 +63,7 @@ void Node::print()
 	std::cout << ")" << std::endl;
 }
 
+/*
 int main()
 {
 	Node *test = new Node(3, 0);
@@ -75,3 +76,4 @@ int main()
 	
 	return 0;
 }
+*/
