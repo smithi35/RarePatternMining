@@ -75,6 +75,11 @@ void process(const char *inputfilename, const char *outputfilename)
 		{
 			array[i]->print();
 		}
+		
+		for (i = 0; i < transactions; i++)
+		{
+			delete array[i];
+		}
 	}
 	else
 	{
