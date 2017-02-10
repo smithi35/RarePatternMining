@@ -5,6 +5,8 @@
 #include <cstdlib>
 
 #include "Transaction.h"
+#include "Item.h"
+#include "Itemset.h"
 
 using namespace std;
 
@@ -59,6 +61,49 @@ Transaction **get_transactions(string contents, int transactions)
 	return array;
 }
 
+int get_total_items(Transaction **array, int transactions)
+{
+	int total = 0;
+	
+	int i;
+	for (i = 0; i < transactions; i++)
+	{
+		Transaction *curr = array[i];
+		total+=curr->get_length();
+	}
+	
+	return total;
+}
+
+// go through the transaction database to determine the support of each item, and remove any item
+// with support greater than max_support
+void remove_non_rare_items(Transaction **array, int transactions, const int max_support)
+{
+	int total_items = get_total_items(array, transactions);
+	
+	Itemset *set = new Itemset(total_items);
+	
+	// first get the support of all items in the transaction database
+	int i;
+	for (i = 0; i < transactions; i++)
+	{
+		int *items = array[i]->get_items();
+		int length = array[i]->get_length();
+		
+		int j;
+		for (j = 0; j < length; j++)
+		{
+			int curr = items[j];
+			
+			bool add = set->add_item(curr);
+			
+			if (!add) { cout << "Something went wrong with adding the item " << curr << " from Transaction number " << array[i]->get_id() << endl;}
+		}
+	}
+	
+	set->print();
+}
+
 void process(const char *inputfilename, const char *outputfilename)
 {
 	string contents = get_contents(inputfilename);
@@ -70,12 +115,10 @@ void process(const char *inputfilename, const char *outputfilename)
 	
 	if (array != NULL)
 	{
-		int i;
-		for (i = 0; i < transactions; i++)
-		{
-			array[i]->print();
-		}
+		const int max_support = 2;
+		remove_non_rare_items(array, transactions, max_support);
 		
+		int i;
 		for (i = 0; i < transactions; i++)
 		{
 			delete array[i];
