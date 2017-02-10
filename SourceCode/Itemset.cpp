@@ -89,7 +89,7 @@ void Itemset::remove_non_rare_items(int max_support)
 	{
 		delete(set[i]);
 	}
-	delete [] set;
+	//delete [] set;
 	
 	this->present = next;
 	this->size = new_size;

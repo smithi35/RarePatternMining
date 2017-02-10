@@ -75,12 +75,8 @@ int get_total_items(Transaction **array, int transactions)
 	return total;
 }
 
-// go through the transaction database to determine the support of each item, and remove any item
-// with support greater than max_support
-Transaction **remove_non_rare_items(Transaction **array, int transactions, const int max_support)
+Itemset *get_support_values(Transaction **array, int transactions, int total_items)
 {
-	int total_items = get_total_items(array, transactions);
-	
 	Itemset *set = new Itemset(total_items);
 	
 	// first get the support of all items in the transaction database
@@ -101,14 +97,14 @@ Transaction **remove_non_rare_items(Transaction **array, int transactions, const
 		}
 	}
 	
-	// second remove items with too much support from the itemset
-	set->print();
-	set->remove_non_rare_items(max_support);
-	set->print();
-	
-	// third, remove non-rare items from the transactions
+	return set;
+}
+
+int revise_transactions_number(Transaction **array, int transactions, const int max_support, Itemset *set)
+{
 	int count = 0;
 	
+	int i;
 	for (i = 0; i < transactions; i++)
 	{
 		array[i] = array[i]->remove_non_rare_items(set);
@@ -119,9 +115,14 @@ Transaction **remove_non_rare_items(Transaction **array, int transactions, const
 			count++;
 		}
 	}
-	Transaction **replacement = (Transaction **)malloc(sizeof(Transaction *) * count);
 	
+	return count;
+}
+
+Transaction **remove_non_rare_items(Transaction **array, int transactions, const int max_support, Itemset *set, int count, Transaction **replacement)
+{
 	int next = 0;
+	int i;
 	for (i = 0; i < transactions; i++)
 	{
 		if (array[i]->get_length() > 0)
@@ -129,11 +130,19 @@ Transaction **remove_non_rare_items(Transaction **array, int transactions, const
 			replacement[next] = array[i]->copy();
 			next++;
 		}
-		delete(array[i]);
 	}
-	delete [] array;
 	
 	return replacement;
+}
+
+void delete_transaction_array(Transaction **array, int length)
+{
+	int i;
+	for (i = 0; i < length; i++)
+	{
+		delete(array[i]);
+	}
+	//sdelete [] array;
 }
 
 void process(const char *inputfilename, const char *outputfilename)
@@ -142,18 +151,30 @@ void process(const char *inputfilename, const char *outputfilename)
 	int transactions = get_number_transactions(contents);
 	cout << contents << endl << transactions << endl;
 	
-	// the next step will be to take that string and make a list of transactions out of it
 	Transaction **array = get_transactions(contents, transactions);
 	
 	if (array != NULL)
 	{
 		const int max_support = 2;
-		Transaction **replacement = remove_non_rare_items(array, transactions, max_support); // need to also know the count
 		
-		int i;
-		for (i = 0; i < transactions; i++)
+		int total_items = get_total_items(array, transactions);
+		Itemset *set = get_support_values(array, transactions, total_items);
+		
+		set->print();
+		set->remove_non_rare_items(max_support);
+		set->print();
+		
+		int revised = revise_transactions_number(array, transactions, max_support, set);
+		cout << "Only need " << revised << " transactions. " << endl;
+		Transaction **replacement = (Transaction **)malloc(sizeof(Transaction *) * revised);
+		
+		if (replacement != NULL)
 		{
-			delete array[i];
+			replacement = remove_non_rare_items(array, transactions, max_support, set, revised, replacement);
+			delete_transaction_array(array, transactions);
+			delete_transaction_array(replacement, revised);
+		} else {
+			cout << "Not enough memory for replacement transaction array" << endl;
 		}
 	}
 	else
