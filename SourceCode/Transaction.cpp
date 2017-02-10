@@ -3,6 +3,7 @@
 
 #include "Transaction.h"
 #include <cstdlib>
+#include <limits.h>
 
 using namespace std;
 
@@ -30,6 +31,18 @@ Transaction::Transaction(string contents)
 	}	
 }
 
+Transaction::Transaction(int i, int l, int *list)
+{
+	id = i;
+	length = l;
+	items = list;
+}
+
+Transaction *Transaction::copy()
+{
+	return new Transaction(id, length, items);
+}
+
 Transaction::~Transaction()
 {
 	delete[] items;
@@ -51,6 +64,42 @@ void Transaction::print()
 		cout << items[i] << " ";
 	}
 	cout << endl;
+}
+
+Transaction *Transaction::remove_non_rare_items(Itemset *set)
+{
+	Transaction *replacement = NULL;
+	
+	int remove = 0;
+	int i;
+	for (i = 0; i < length; i++)
+	{
+		if (!set->contains(items[i]))
+		{
+			items[i] = INT_MIN;
+			remove++;
+		}
+	}
+	
+	if (remove > 0)
+	{
+		int *new_items = (int *)malloc(sizeof(int) * (length - remove));
+		int next = 0;
+		
+		for (i = 0; i < length; i++)
+		{
+			if (items[i] > INT_MIN)
+			{
+				new_items[next] = items[i];
+				next++;
+			}
+		}
+		
+		replacement = new Transaction(id, (length-remove), new_items);
+		delete(this);
+	}
+	
+	return replacement;
 }
 
 /*

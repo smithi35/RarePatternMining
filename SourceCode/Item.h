@@ -10,6 +10,8 @@ class Item
 		int support;
 	public:
 		Item(int n);
+		Item();
+		Item(int n, int s);
 		int get_support();
 		void set_support(int f);
 		void increment_support();

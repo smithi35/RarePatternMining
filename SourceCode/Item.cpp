@@ -1,10 +1,23 @@
 #include <iostream>
 #include "Item.h"
+#include <limits.h>
 
 Item::Item(int n)
 {
 	name = n;
 	support = 0;
+}
+
+Item::Item()
+{
+	name = INT_MAX;
+	support = INT_MAX;
+}
+
+Item::Item(int n, int s)
+{
+	name = n;
+	support = s;
 }
 
 Item::~Item() {}

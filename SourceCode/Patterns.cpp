@@ -77,7 +77,7 @@ int get_total_items(Transaction **array, int transactions)
 
 // go through the transaction database to determine the support of each item, and remove any item
 // with support greater than max_support
-void remove_non_rare_items(Transaction **array, int transactions, const int max_support)
+Transaction **remove_non_rare_items(Transaction **array, int transactions, const int max_support)
 {
 	int total_items = get_total_items(array, transactions);
 	
@@ -101,7 +101,39 @@ void remove_non_rare_items(Transaction **array, int transactions, const int max_
 		}
 	}
 	
+	// second remove items with too much support from the itemset
 	set->print();
+	set->remove_non_rare_items(max_support);
+	set->print();
+	
+	// third, remove non-rare items from the transactions
+	int count = 0;
+	
+	for (i = 0; i < transactions; i++)
+	{
+		array[i] = array[i]->remove_non_rare_items(set);
+		array[i]->print();
+		
+		if (array[i]->get_length() > 0)
+		{
+			count++;
+		}
+	}
+	Transaction **replacement = (Transaction **)malloc(sizeof(Transaction *) * count);
+	
+	int next = 0;
+	for (i = 0; i < transactions; i++)
+	{
+		if (array[i]->get_length() > 0)
+		{
+			replacement[next] = array[i]->copy();
+			next++;
+		}
+		delete(array[i]);
+	}
+	delete [] array;
+	
+	return replacement;
 }
 
 void process(const char *inputfilename, const char *outputfilename)
@@ -116,7 +148,7 @@ void process(const char *inputfilename, const char *outputfilename)
 	if (array != NULL)
 	{
 		const int max_support = 2;
-		remove_non_rare_items(array, transactions, max_support);
+		Transaction **replacement = remove_non_rare_items(array, transactions, max_support); // need to also know the count
 		
 		int i;
 		for (i = 0; i < transactions; i++)

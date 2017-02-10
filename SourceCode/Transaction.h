@@ -2,6 +2,8 @@
 #define TRANSACTION_H
 
 #include <string>
+#include "Itemset.h"
+#include "Item.h"
 
 class Transaction
 {
@@ -9,12 +11,15 @@ class Transaction
 		int id;
 		int length;
 		int* items;
+		Transaction(int i, int l, int *list);
 	public:
 		Transaction(std::string contents);
+		Transaction *copy();
 		int get_id();
 		int get_length();
 		int *get_items();
 		void print();
+		Transaction *remove_non_rare_items(Itemset *set);
 		~Transaction();
 };
 

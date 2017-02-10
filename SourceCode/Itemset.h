@@ -14,6 +14,8 @@ class Itemset
 		~Itemset();
 		bool add_item(int item);
 		void print();
+		void remove_non_rare_items(int max_support);
+		bool contains(int item);
 };
 
 #endif
