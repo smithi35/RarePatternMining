@@ -145,6 +145,11 @@ void delete_transaction_array(Transaction **array, int length)
 	//sdelete [] array;
 }
 
+void sort_transactions(Transaction **array, int size, Itemset *set)
+{
+	
+}
+
 void process(const char *inputfilename, const char *outputfilename)
 {
 	string contents = get_contents(inputfilename);
@@ -162,6 +167,7 @@ void process(const char *inputfilename, const char *outputfilename)
 		
 		set->print();
 		set->remove_non_rare_items(max_support);
+		set->sort();
 		set->print();
 		
 		int revised = revise_transactions_number(array, transactions, max_support, set);
@@ -171,6 +177,8 @@ void process(const char *inputfilename, const char *outputfilename)
 		if (replacement != NULL)
 		{
 			replacement = remove_non_rare_items(array, transactions, max_support, set, revised, replacement);
+			sort_transactions(replacement, revised, set);
+			
 			delete_transaction_array(array, transactions);
 			delete_transaction_array(replacement, revised);
 		} else {

@@ -111,3 +111,104 @@ bool Itemset::contains(int item)
 	
 	return contains;
 }
+
+void Itemset::sort()
+{
+	qsort(0, present);
+}
+
+void Itemset::qsort(int first, int last)
+{
+	if (last - first > 1)
+	{
+		int pivot = partition(first, last);
+		
+		if (pivot - first == 1)
+		{
+			if (set[first]->get_support() > set[pivot]->get_support())
+			{
+				swap(first, last);
+			}
+		}
+		else if (pivot - first > 1)
+		{
+			qsort(first, pivot);
+		}
+		
+		if (last - (pivot+1) == 1)
+		{
+			if (set[pivot+1]->get_support() > set[last]->get_support())
+			{
+				swap(pivot+1, last);
+			}
+		}
+		else if (last - (pivot+1) > 1)
+		{
+			qsort(pivot+1, last);
+		}
+	}
+}
+
+void Itemset::swap(int first, int second)
+{
+	Item *temp = set[first];
+	set[first] = set[second];
+	set[second] = temp;
+}
+
+int Itemset::partition(int first, int last)
+{
+	int pivot_value = set[first]->get_support();
+	
+	int i = first+1;
+	int j = last;
+	
+	while (i < j)
+	{
+		while (i <= last and set[i]->get_support() <= pivot_value )
+		{
+			//print("i = " + str(i) + ", pivot_value = " + str(pivot_value) + ", array[i] = " + str(array[i]));
+			i = i + 1;
+		}
+		while (j >= first and set[j]->get_support() > pivot_value )
+		{
+			// print("j = " + str(j) + ", pivot_value = " + str(pivot_value) + ", array[j] = " + str(array[j]));
+			j = j - 1;
+		}
+		
+		if (i < j)
+		{
+			swap(i, j);
+		}
+	}
+	swap(j, first);
+	
+	return j;
+}
+
+/*
+
+def partition(first, last, array):
+	pivot_value = array[first]
+	# partition the array so that everything less than pivot_value is to the left of it in the array,
+	# and everything larger is to the right
+	i = first+1
+	j = last
+	while (i < j) :
+		while (i <= last and array[i] <= pivot_value ) :
+			print("i = " + str(i) + ", pivot_value = " + str(pivot_value) + ", array[i] = " + str(array[i]))
+			i = i + 1
+		while (j >= first and array[j] > pivot_value ) :
+			print("j = " + str(j) + ", pivot_value = " + str(pivot_value) + ", array[j] = " + str(array[j]))
+			j = j - 1
+		
+		if (i < j) :
+			swap(i, j, array)
+	swap(j, first, array)
+	return j
+	
+def swap (left, right, array) :
+	temp = array[left]
+	array[left] = array[right]
+	array[right] = temp
+*/
