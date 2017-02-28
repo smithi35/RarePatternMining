@@ -114,38 +114,20 @@ bool Itemset::contains(int item)
 
 void Itemset::sort()
 {
+	std::cout << "Sorting Itemset" << std::endl;
 	qsort(0, present-1);
 }
 
 void Itemset::qsort(int first, int last)
 {
-	if (last - first > 1)
+	//if (last - first > 1)
+	if (first < last)
 	{
 		int pivot = partition(first, last);
+		std::cout << "Pivot = " << pivot << std::endl;
 		
-		if (pivot - first == 1)
-		{
-			if (set[first]->get_support() > set[pivot]->get_support())
-			{
-				swap(first, last);
-			}
-		}
-		else if (pivot - first > 1)
-		{
-			qsort(first, pivot);
-		}
-		
-		if (last - (pivot+1) == 1)
-		{
-			if (set[pivot+1]->get_support() > set[last]->get_support())
-			{
-				swap(pivot+1, last);
-			}
-		}
-		else if (last - (pivot+1) > 1)
-		{
-			qsort(pivot+1, last);
-		}
+		qsort(first, pivot);
+		qsort(pivot+1, last);
 	}
 }
 
@@ -154,37 +136,27 @@ void Itemset::swap(int first, int second)
 	Item *temp = set[first];
 	set[first] = set[second];
 	set[second] = temp;
-	std::cout << "Successful swap" << std::endl;
 }
 
 int Itemset::partition(int first, int last)
 {
-	int pivot_value = set[first]->get_support();
+	int random = rand() % last;
+	std::cout << "Random = " << random << std::endl;
+	int pivot_value = set[random]->get_support();
+	swap(first, random);
 	
-	int i = first+1;
-	int j = last;
-	
-	while (i < j)
+	int i;
+	for (i = first+1; i < last; i++)
 	{
-		while (i <= last and set[i]->get_support() <= pivot_value )
+		if (set[i]->get_support() < pivot_value)
 		{
-			//print("i = " + str(i) + ", pivot_value = " + str(pivot_value) + ", array[i] = " + str(array[i]));
-			i = i + 1;
-		}
-		while (j >= first and set[j]->get_support() > pivot_value )
-		{
-			// print("j = " + str(j) + ", pivot_value = " + str(pivot_value) + ", array[j] = " + str(array[j]));
-			j = j - 1;
-		}
-		
-		if (i < j)
-		{
-			swap(i, j);
+			swap(i, first);
+			first++;
 		}
 	}
-	swap(j, first);
+	swap(first, random);
 	
-	return j;
+	return random;
 }
 
-Item *Itemset::get_item(int index) {return set[index];}
+Item *Itemset::get_item(int index) { return set[index];}

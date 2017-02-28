@@ -76,6 +76,7 @@ Transaction *Transaction::remove_non_rare_items(Itemset *set)
 	Transaction *replacement = NULL;
 	
 	int remove = 0;
+	
 	int i;
 	for (i = 0; i < length; i++)
 	{
@@ -85,7 +86,7 @@ Transaction *Transaction::remove_non_rare_items(Itemset *set)
 			remove++;
 		}
 	}
-	
+	std::cout << "Balls" << std::endl;
 	if (remove > 0)
 	{
 		int *new_items = (int *)malloc(sizeof(int) * (length - remove));
@@ -103,12 +104,17 @@ Transaction *Transaction::remove_non_rare_items(Itemset *set)
 		replacement = new Transaction(id, (length-remove), new_items);
 		delete(this);
 	}
+	else
+	{
+		replacement = this;
+	}
 	
 	return replacement;
 }
 
 void Transaction::sort(Itemset *set)
 {
+	std::cout << "Sorting Transaction" << std::endl;
 	qsort(0, (length-1), set);
 }
 
@@ -133,39 +139,14 @@ int Transaction::get_support(int index, Itemset *set)
 
 // quick sorts the transaction item list
 void Transaction::qsort(int first, int last, Itemset *set)
-{
-	if (last - first > 1)
+{	
+	if (first < last)
 	{
-		int first_support = get_support(first, set);
-		int last_support = get_support(last, set);
-		
 		int pivot = partition(first, last, set);
-		int pivot_support = get_support(pivot, set);
-		int pivot_right = get_support((pivot+1), set);
+		std::cout << "Pivot = " << pivot << std::endl;
 		
-		if (pivot - first == 1)
-		{
-			if (first_support > pivot_support)
-			{
-				swap(first, last);
-			}
-		}
-		else if (pivot - first > 1)
-		{
-			qsort(first, pivot, set);
-		}
-		
-		if (last - (pivot+1) == 1)
-		{
-			if (pivot_right > last_support)
-			{
-				swap((pivot+1), last);
-			}
-		}
-		else if (last - (pivot+1) > 1)
-		{
-			qsort(pivot+1, last, set);
-		}
+		qsort(first, pivot, set);
+		qsort(pivot+1, last, set);
 	}
 }
 
@@ -180,34 +161,23 @@ void Transaction::swap(int first, int second)
 // partitions the items in the items array according to their support values
 int Transaction::partition(int first, int last, Itemset *set)
 {
-	int pivot_value = get_support(first, set);
+	int random = rand() % last;
+	std::cout << "Random = " << random << std::endl;
+	int pivot_value = get_support(random, set);
+	swap(first, random);
 	
-	int i = first+1;
-	int i_support = get_support(i, set);
-	int j = last;
-	int j_support = get_support(j, set);
-	
-	while (i < j)
+	int i;
+	for (i = first+1; i < last; i++)
 	{
-		while (i <= last and i_support <= pivot_value )
+		if (get_support(i, set) < pivot_value)
 		{
-			i = i + 1;
-			i_support = get_support(i, set);
-		}
-		while (j >= first and j_support > pivot_value )
-		{
-			j = j - 1;
-			j_support = get_support(j, set);
-		}
-		
-		if (i < j)
-		{
-			swap(i, j);
+			swap(i, first);
+			first++;
 		}
 	}
-	swap(j, first);
+	swap(first, random);
 	
-	return j;
+	return random;
 }
 
 /*

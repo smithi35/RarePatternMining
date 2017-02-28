@@ -103,6 +103,7 @@ Itemset *get_support_values(Transaction **array, int transactions, int total_ite
 
 int revise_transactions_number(Transaction **array, int transactions, const int max_support, Itemset *set)
 {
+	cout << "Revising the transactions number" << endl;
 	int count = 0;
 	
 	int i;
@@ -175,7 +176,7 @@ void build_tree(RPTree *tree, Transaction **array, int size)
 	tree->print();
 }
 
-void process(const char *inputfilename, const char *outputfilename)
+void process(const char *inputfilename, const char *outputfilename, const int max_support)
 {
 	string contents = get_contents(inputfilename);
 	int transactions = get_number_transactions(contents);
@@ -185,8 +186,6 @@ void process(const char *inputfilename, const char *outputfilename)
 	
 	if (array != NULL)
 	{
-		const int max_support = 2;
-		
 		int total_items = get_total_items(array, transactions);
 		Itemset *set = get_support_values(array, transactions, total_items);
 		
@@ -195,7 +194,7 @@ void process(const char *inputfilename, const char *outputfilename)
 		set->sort();
 		set->print();
 		
-		// set now doubles as the header table for the tree
+		// set now works as the header table for the tree
 		
 		int revised = revise_transactions_number(array, transactions, max_support, set);
 		cout << "Only need " << revised << " transactions. " << endl;
@@ -203,11 +202,13 @@ void process(const char *inputfilename, const char *outputfilename)
 		
 		if (replacement != NULL)
 		{
+			cout << "Removing non-rare items from the transaction list" << endl;
 			replacement = remove_non_rare_items(array, transactions, max_support, set, revised, replacement);
 			sort_transactions(replacement, revised, set);
 			
 			// build the tree
 			RPTree *tree = new RPTree();
+			
 			build_tree(tree, replacement, revised);
 			
 			// recursively examine the tree
@@ -230,7 +231,11 @@ int main()
 	const char *inputfilename = input.c_str();
 	string output = "first_trial.txt";
 	const char *outputfilename = output.c_str();
-	process(inputfilename, outputfilename);
+	//process(inputfilename, outputfilename, 2);
+	
+	process(inputfilename, outputfilename, 3);
+	
+	//process(inputfilename, outputfilename, 4);
 	
 	return 0;
 }
