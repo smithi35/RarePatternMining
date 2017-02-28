@@ -1,6 +1,7 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include "Transaction.h"
 
 class Node
 {
@@ -21,6 +22,7 @@ class Node
 		int get_children_number();
 		Node *get_child(int index);
 		void print();
+		void add_transaction(int *array, int index, int size);
 };
 
 #endif

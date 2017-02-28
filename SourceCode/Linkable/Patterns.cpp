@@ -162,12 +162,15 @@ void sort_transactions(Transaction **array, int size, Itemset *set)
 
 void build_tree(RPTree *tree, Transaction **array, int size)
 {
+	cout << "Building RPTree" << endl;
 	int i;
 	
 	for (i = 0; i < size; i++)
 	{
 		tree->add_transaction(array[i]);
 	}
+	
+	tree->print();
 }
 
 void process(const char *inputfilename, const char *outputfilename)

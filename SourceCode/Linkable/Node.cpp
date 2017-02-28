@@ -60,14 +60,41 @@ Node *Node::get_child(int index)
 
 void Node::print()
 {
-	std::cout << "Name = " << name << ", Quantity = " << quantity << ", children = " << children_number << "(";
+	std::cout << "Name = " << name << ", Quantity = " << quantity << ". ";
 	
 	int i;
 	for (i = 0; i < children_number; i++)
 	{
-		std::cout << children[i]->get_name() << ":" << children[i]->get_quantity() << " ";
+		children[i]->print();
 	}
 	std::cout << ")" << std::endl;
+}
+
+// recursively adds the contents of a transaction to the node and its children
+void Node::add_transaction(int *array, int index, int size)
+{
+	if (index < size)
+	{
+		int i;
+		bool found = false;
+		for (i = 0; i < children_number && !found; i++)
+		{
+			Node *curr = this->get_child(i);
+		
+			if (curr->get_name() == array[0])
+			{
+				curr->add_transaction(array, index+1, size);
+				found = true;
+			}
+		}
+		
+		if (!found)
+		{
+			Node *child = new Node(array[index], 1);
+			add_child(child);
+			child->add_transaction(array, index+1, size);
+		}
+	}
 }
 
 /*
