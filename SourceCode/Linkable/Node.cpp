@@ -67,7 +67,6 @@ void Node::print()
 	{
 		children[i]->print();
 	}
-	std::cout << ")" << std::endl;
 }
 
 // recursively adds the contents of a transaction to the node and its children
@@ -75,14 +74,16 @@ void Node::add_transaction(int *array, int index, int size)
 {
 	if (index < size)
 	{
-		int i;
 		bool found = false;
+		
+		int i;
 		for (i = 0; i < children_number && !found; i++)
 		{
 			Node *curr = this->get_child(i);
 		
 			if (curr->get_name() == array[0])
 			{
+				curr->increment_quantity();
 				curr->add_transaction(array, index+1, size);
 				found = true;
 			}
@@ -96,6 +97,8 @@ void Node::add_transaction(int *array, int index, int size)
 		}
 	}
 }
+
+void Node::increment_quantity() { quantity++; }
 
 /*
 int main()

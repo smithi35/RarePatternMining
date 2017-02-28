@@ -167,6 +167,8 @@ void build_tree(RPTree *tree, Transaction **array, int size)
 	
 	for (i = 0; i < size; i++)
 	{
+		cout << "Adding Transaction: " << i << endl;
+		array[i]->print();
 		tree->add_transaction(array[i]);
 	}
 	

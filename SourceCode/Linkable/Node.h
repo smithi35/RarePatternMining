@@ -23,6 +23,7 @@ class Node
 		Node *get_child(int index);
 		void print();
 		void add_transaction(int *array, int index, int size);
+		void increment_quantity();
 };
 
 #endif

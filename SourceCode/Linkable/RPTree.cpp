@@ -5,7 +5,7 @@
 
 RPTree::RPTree()
 {
-	root = NULL;
+	root = new Node(-1, 0);
 }
 
 RPTree::~RPTree()
@@ -20,12 +20,15 @@ void RPTree::add_transaction(Transaction *transaction)
 	
 	int i;
 	bool stop = false;
+	std::cout << "Children" << root->get_children_number() << std::endl;
+	
 	for (i = 0; i < root->get_children_number() && !stop; i++)
 	{
 		Node *curr = root->get_child(i);
 		
 		if (curr->get_name() == items[0])
 		{
+			curr->increment_quantity();
 			curr->add_transaction(items, 1, size);
 			stop = true;
 		}
@@ -43,6 +46,7 @@ void RPTree::add_transaction(Transaction *transaction)
 void RPTree::print()
 {
 	root->print();
+	std::cout << std::endl;
 }
 
 /*
