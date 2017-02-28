@@ -7,6 +7,7 @@
 #include "Transaction.h"
 #include "Item.h"
 #include "Itemset.h"
+#include "RPTree.h"
 
 using namespace std;
 
@@ -159,6 +160,16 @@ void sort_transactions(Transaction **array, int size, Itemset *set)
 	}
 }
 
+void build_tree(RPTree *tree, Transaction **array, int size)
+{
+	int i;
+	
+	for (i = 0; i < size; i++)
+	{
+		tree->add_transaction(array[i]);
+	}
+}
+
 void process(const char *inputfilename, const char *outputfilename)
 {
 	string contents = get_contents(inputfilename);
@@ -189,7 +200,11 @@ void process(const char *inputfilename, const char *outputfilename)
 		{
 			replacement = remove_non_rare_items(array, transactions, max_support, set, revised, replacement);
 			sort_transactions(replacement, revised, set);
+			
 			// build the tree
+			RPTree *tree = new RPTree();
+			build_tree(tree, replacement, revised);
+			
 			// recursively examine the tree
 			
 			delete_transaction_array(array, transactions);
