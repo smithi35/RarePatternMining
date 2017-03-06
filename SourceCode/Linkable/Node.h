@@ -2,6 +2,7 @@
 #define NODE_H
 
 #include "Transaction.h"
+#include "Itemset.h"
 
 class Node
 {
@@ -24,6 +25,7 @@ class Node
 		void print();
 		void add_transaction(int *array, int index, int size);
 		void increment_quantity();
+		Itemset **examine();
 };
 
 #endif

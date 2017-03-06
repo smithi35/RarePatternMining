@@ -100,6 +100,11 @@ void Node::add_transaction(int *array, int index, int size)
 
 void Node::increment_quantity() { quantity++; }
 
+Itemset **Node::examine()
+{
+	return NULL;
+}
+
 /*
 int main()
 {

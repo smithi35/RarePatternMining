@@ -233,9 +233,9 @@ int main()
 	const char *inputfilename = input.c_str();
 	string output = "first_trial.txt";
 	const char *outputfilename = output.c_str();
-	//process(inputfilename, outputfilename, 2);
+	process(inputfilename, outputfilename, 2);
 	
-	process(inputfilename, outputfilename, 3);
+	//process(inputfilename, outputfilename, 3);
 	
 	//process(inputfilename, outputfilename, 4);
 	

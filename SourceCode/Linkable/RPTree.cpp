@@ -45,7 +45,7 @@ void RPTree::add_transaction(Transaction *transaction)
 
 void RPTree::examine()
 {
-	
+	root->examine();
 }
 
 void RPTree::print()
