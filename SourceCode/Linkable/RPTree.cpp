@@ -43,6 +43,11 @@ void RPTree::add_transaction(Transaction *transaction)
 	}
 }
 
+void RPTree::examine()
+{
+	
+}
+
 void RPTree::print()
 {
 	root->print();

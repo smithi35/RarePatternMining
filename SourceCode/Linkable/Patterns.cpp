@@ -208,13 +208,15 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 			
 			// build the tree
 			RPTree *tree = new RPTree();
-			
 			build_tree(tree, replacement, revised);
 			
 			// recursively examine the tree
+			tree->examine();
 			
+			// cleanup
 			delete_transaction_array(array, transactions);
 			delete_transaction_array(replacement, revised);
+			delete(tree);
 		} else {
 			cout << "Not enough memory for replacement transaction array" << endl;
 		}
