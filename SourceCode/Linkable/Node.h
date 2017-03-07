@@ -12,6 +12,7 @@ class Node
 		Node **children;
 		int children_number;
 		void delete_children();
+		Itemset **combine_set(Itemset **first_set, Itemset **second_set);
 	public:
 		Node(int n, int q);
 		~Node();

@@ -43,9 +43,9 @@ void RPTree::add_transaction(Transaction *transaction)
 	}
 }
 
-void RPTree::examine()
+Itemset **RPTree::examine()
 {
-	root->examine();
+	return root->examine();
 }
 
 void RPTree::print()

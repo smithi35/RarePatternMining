@@ -100,9 +100,24 @@ void Node::add_transaction(int *array, int index, int size)
 
 void Node::increment_quantity() { quantity++; }
 
-Itemset **Node::examine()
+Itemset **Node::combine_set(Itemset **first_set, Itemset **second_set)
 {
 	return NULL;
+}
+
+Itemset **Node::examine()
+{
+	Itemset **set = NULL;
+
+	// call examine once for each child
+	int i;
+	for (i = 0; i < children_number; i++)
+	{
+		Itemset **child_set = children[i]->examine();
+		set = combine_set(set, child_set);
+	}
+
+	return set;
 }
 
 /*

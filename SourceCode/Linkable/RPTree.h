@@ -12,7 +12,7 @@ class RPTree
 		RPTree();
 		~RPTree();
 		void add_transaction(Transaction *transaction);
-		void examine();
+		Itemset **examine();
 		void print();
 };
 
