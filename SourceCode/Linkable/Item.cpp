@@ -20,18 +20,37 @@ Item::Item(int n, int s)
 	support = s;
 }
 
+Item::Item(Item *item)
+{
+	name = item->name;
+	support = item->support;
+}
+
 Item::~Item() {}
 
 int Item::get_name() {return name;}
 int Item::get_support() {return support;}
 void Item::set_support(int s) {support = s;}
 void Item::increment_support() {support++;}
+void Item::increase_support(int add) { support += add; }
 
 bool Item::equal(int other)
 {
 	bool equal = false;
 	
 	if (other == name)
+	{
+		equal = true;
+	}
+	
+	return equal;
+}
+
+bool Item::equal(Item *other)
+{
+	bool equal = false;
+	
+	if (other->name == name)
 	{
 		equal = true;
 	}

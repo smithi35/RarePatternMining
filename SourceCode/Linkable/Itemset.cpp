@@ -7,6 +7,20 @@ Itemset::Itemset(int s)
 	size = s;
 	set = (Item **)malloc(sizeof(Item *) * s);
 	present = 0;
+	support = 0;
+}
+
+Itemset::Itemset(Itemset *base)
+{
+	set = (Item **)malloc(sizeof(Item *) * base->size);
+	size = base->size;
+	present = base->present;
+	
+	int i;
+	for (i = 0; i < present; i++)
+	{
+		set[i] = new Item(base->set[i]);
+	}
 }
 
 Itemset::~Itemset()
@@ -43,6 +57,42 @@ bool Itemset::add_item(int item)
 			present++;
 		} else {
 			std::cout << "Itemset::add_item() says there is no more room in the itemset" << std::endl;
+		}
+	}
+	
+	return added;
+}
+
+void Itemset::increase_support(int add) { support+=add;}
+
+bool Itemset::add_item(Item *item)
+{
+	bool added = false;
+	
+	int i;
+	for (i = 0; i < present && !added; i++)
+	{
+		if (set[i]->equal(item))
+		{
+			set[i]->increase_support(item->get_support());
+		}
+	}
+	
+	if (i == present && !added)
+	{
+		if (i < size)
+		{
+			set[i] = item;
+			added = true;
+			
+			if (present + 1 <= size)
+			{
+				present++;
+			}
+			else
+			{
+				std::cout << "Itemset::add_item() says there is no more room in the itemset" << std::endl;
+			}
 		}
 	}
 	

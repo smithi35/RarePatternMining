@@ -100,21 +100,79 @@ void Node::add_transaction(int *array, int index, int size)
 
 void Node::increment_quantity() { quantity++; }
 
-Itemset **Node::combine_set(Itemset **first_set, Itemset **second_set)
+void Node::delete_itemset_array(Itemset **set, int size)
 {
-	return NULL;
+	int i;
+	for (i = 0; i < size; i++)
+	{
+		delete(set[i]);
+	}
+	delete [] set;
+}
+
+Itemset **Node::combine_set(Itemset **first_set, Itemset **second_set, int count1, int count2)
+{
+	int size = count1 + count2;
+	Itemset **combined = (Itemset **)malloc(sizeof(Itemset *) * size);
+	
+	int i;
+	for (i = 0; i < count1; i++)
+	{
+		combined[i] = new Itemset(first_set[i]);
+	}
+	
+	int index = i;
+	
+	for (i = 0; i < count2; i++)
+	{
+		combined[index] = new Itemset(second_set[i]);
+		index++;
+	}
+	
+	delete_itemset_array(first_set, count1);
+	delete_itemset_array(second_set, count2);
+	
+	return combined;
+}
+
+int Node::count()
+{
+	int count = 0;
+	
+	if (children_number > 0)
+	{
+		int i;
+		for (i = 0; i < children_number; i++)
+		{
+			count+=children[i]->count();
+		}
+	}
+	
+	return count;
 }
 
 Itemset **Node::examine()
 {
 	Itemset **set = NULL;
+	int old_count = 0;
 
-	// call examine once for each child
-	int i;
-	for (i = 0; i < children_number; i++)
+	if (children_number > 0)
 	{
-		Itemset **child_set = children[i]->examine();
-		set = combine_set(set, child_set);
+		// call examine once for each child
+		int i;
+		for (i = 0; i < children_number; i++)
+		{
+			int new_count = children[i]->count();
+			Itemset **child_set = children[i]->examine();
+			set = combine_set(set, child_set, old_count, new_count);
+			old_count = new_count;
+		}
+	}
+	else
+	{
+		set = (Itemset **)malloc(sizeof(Itemset *) * 1);
+		set[0] = new Itemset(1);
+		set[0]->add_item(name);
 	}
 
 	return set;
