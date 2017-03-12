@@ -206,17 +206,19 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 			replacement = remove_non_rare_items(array, transactions, max_support, set, revised, replacement);
 			sort_transactions(replacement, revised, set);
 			
+			/*
 			// build the tree
 			RPTree *tree = new RPTree();
 			build_tree(tree, replacement, revised);
+			tree->print();
 			
 			// recursively examine the tree
 			tree->examine();
-			
+			*/
 			// cleanup
 			delete_transaction_array(array, transactions);
 			delete_transaction_array(replacement, revised);
-			delete(tree);
+			// delete(tree);
 		} else {
 			cout << "Not enough memory for replacement transaction array" << endl;
 		}
@@ -233,9 +235,9 @@ int main()
 	const char *inputfilename = input.c_str();
 	string output = "first_trial.txt";
 	const char *outputfilename = output.c_str();
-	process(inputfilename, outputfilename, 2);
+	//process(inputfilename, outputfilename, 2);
 	
-	//process(inputfilename, outputfilename, 3);
+	process(inputfilename, outputfilename, 3);
 	
 	//process(inputfilename, outputfilename, 4);
 	

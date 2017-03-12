@@ -15,7 +15,6 @@ class Transaction
 		void qsort(int first, int last, Itemset *set);
 		void swap(int first, int second);
 		int partition(int first, int last, Itemset *set);
-		int get_support(int index, Itemset *set);
 	public:
 		Transaction(std::string contents);
 		Transaction *copy();

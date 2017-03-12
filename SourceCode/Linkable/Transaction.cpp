@@ -114,39 +114,36 @@ Transaction *Transaction::remove_non_rare_items(Itemset *set)
 
 void Transaction::sort(Itemset *set)
 {
+	set->print();
 	std::cout << "Sorting Transaction" << std::endl;
-	qsort(0, (length-1), set);
-}
-
-// returns the support of the item at items[index] according to set
-int Transaction::get_support(int index, Itemset *set)
-{
-	int search = items[index];
-	int support = 0;
-	
-	// search for the Item in set matching search
-	int i;
-	for (i = 0; i < length; i++)
-	{
-		if (set->get_item(i)->get_name() == search)
-		{
-			support = set->get_item(i)->get_support();
-		}
-	}
-	
-	return support;
+	qsort(0, length-1, set);
 }
 
 // quick sorts the transaction item list
 void Transaction::qsort(int first, int last, Itemset *set)
-{	
-	if (first < last)
+{
+	int range = last - first;
+	cout << first << endl;
+	cout << last << endl;
+	
+	if (range > 1)
 	{
 		int pivot = partition(first, last, set);
 		std::cout << "Pivot = " << pivot << std::endl;
 		
 		qsort(first, pivot, set);
-		qsort(pivot+1, last, set);
+		qsort(pivot, last, set);
+	}
+	else if (range == 1)
+	{
+		std::cout << "Here" << std::endl;
+		int sup1 = set->get_support(items[first]);
+		int sup2 = set->get_support(items[last]);
+		
+		if (sup2 > sup1)
+		{
+			swap(first, last);
+		}
 	}
 }
 
@@ -161,22 +158,30 @@ void Transaction::swap(int first, int second)
 // partitions the items in the items array according to their support values
 int Transaction::partition(int first, int last, Itemset *set)
 {
-	int random = rand() % last;
+	int range = last - first;
+	int random = rand() % range;
+	random += first;
+	
 	std::cout << "Random = " << random << std::endl;
-	int pivot_value = get_support(random, set);
-	swap(first, random);
+	
+	int pivot_value = set->get_support(items[random]);
+	cout << items[random] << " has a support of " << pivot_value << endl;
+	swap(random, last);
 	
 	int i;
-	for (i = first+1; i < last; i++)
+	for (i = last-1; i >= first; i--)
 	{
-		if (get_support(i, set) < pivot_value)
+		int support = set->get_support(items[i]);
+		cout << items[i] << " has a support value of " << support << endl;
+		
+		if (support > pivot_value)
 		{
-			swap(i, first);
-			first++;
+			swap(i, last);
+			last--;
 		}
 	}
-	swap(first, random);
-	
+	swap(last, random);
+
 	return random;
 }
 

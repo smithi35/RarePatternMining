@@ -154,7 +154,7 @@ int Node::count()
 Itemset **Node::examine()
 {
 	Itemset **set = NULL;
-	int old_count = 0;
+	// int old_count = 0;
 
 	if (children_number > 0)
 	{
@@ -163,9 +163,11 @@ Itemset **Node::examine()
 		for (i = 0; i < children_number; i++)
 		{
 			int new_count = children[i]->count();
-			Itemset **child_set = children[i]->examine();
-			set = combine_set(set, child_set, old_count, new_count);
-			old_count = new_count;
+			std::cout << "Count = " << new_count << std::endl;
+			
+			// Itemset **child_set = children[i]->examine();
+			// set = combine_set(set, child_set, old_count, new_count);
+			// old_count = new_count;
 		}
 	}
 	else

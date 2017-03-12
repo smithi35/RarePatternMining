@@ -210,3 +210,21 @@ int Itemset::partition(int first, int last)
 }
 
 Item *Itemset::get_item(int index) { return set[index];}
+
+int Itemset::get_support(int name)
+{
+	int support = -1;
+	
+	int i;
+	for (i = 0; i < present; i++)
+	{
+		Item *curr = set[i];
+		
+		if (curr->equal(name))
+		{
+			support = curr->get_support();
+		}
+	}
+	
+	return support;
+}

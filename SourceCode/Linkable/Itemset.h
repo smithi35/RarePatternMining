@@ -25,6 +25,7 @@ class Itemset
 		void sort();
 		Item *get_item(int index);
 		Itemset(Itemset *set);
+		int get_support(int name);
 };
 
 #endif
