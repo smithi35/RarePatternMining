@@ -170,8 +170,9 @@ void Itemset::sort()
 
 void Itemset::qsort(int first, int last)
 {
-	//if (last - first > 1)
-	if (first < last)
+	int range = last - first;
+	
+	if (range >= 1)
 	{
 		int pivot = partition(first, last);
 		std::cout << "Pivot = " << pivot << std::endl;
@@ -190,21 +191,27 @@ void Itemset::swap(int first, int second)
 
 int Itemset::partition(int first, int last)
 {
-	int random = rand() % last;
+	int boundary = first;
+	
+	int range = last - first;
+	int random = rand() % range;
+	random += first;
+	
 	std::cout << "Random = " << random << std::endl;
-	int pivot_value = set[random]->get_support();
-	swap(first, random);
+	
+	int pivot = set[random]->get_support();
+	swap(boundary, random);
 	
 	int i;
-	for (i = first+1; i < last; i++)
+	for (i = first+1; i <= last; i++)
 	{
-		if (set[i]->get_support() < pivot_value)
+		if (set[i]->get_support() >= pivot)
 		{
-			swap(i, first);
-			first++;
+			boundary++;
+			swap(boundary, i);
 		}
 	}
-	swap(first, random);
+	swap(first, boundary);
 	
 	return random;
 }

@@ -135,16 +135,20 @@ Itemset **Node::combine_set(Itemset **first_set, Itemset **second_set, int count
 	return combined;
 }
 
+// recursively counts the number of children, and their children, and so on until it returns the number of nodes in the (sub)tree
 int Node::count()
 {
-	int count = 0;
+	int count = 1;
 	
 	if (children_number > 0)
 	{
 		int i;
 		for (i = 0; i < children_number; i++)
 		{
-			count+=children[i]->count();
+			std::cout << i << " " << children[i]->get_name() << std::endl;
+			count+= children[i]->count();
+			
+			std::cout << "Count = " << count << std::endl;
 		}
 	}
 	

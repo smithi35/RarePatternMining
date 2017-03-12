@@ -114,7 +114,6 @@ Transaction *Transaction::remove_non_rare_items(Itemset *set)
 
 void Transaction::sort(Itemset *set)
 {
-	set->print();
 	std::cout << "Sorting Transaction" << std::endl;
 	qsort(0, length-1, set);
 }
@@ -123,8 +122,6 @@ void Transaction::sort(Itemset *set)
 void Transaction::qsort(int first, int last, Itemset *set)
 {
 	int range = last - first;
-	cout << first << endl;
-	cout << last << endl;
 	
 	if (range > 1)
 	{

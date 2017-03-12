@@ -13,7 +13,6 @@ class Node
 		int children_number;
 		void delete_children();
 		Itemset **combine_set(Itemset **first_set, Itemset **second_set, int count1, int count2);
-		int count();
 		void delete_itemset_array(Itemset **set, int size);
 	public:
 		Node(int n, int q);
@@ -29,6 +28,7 @@ class Node
 		void add_transaction(int *array, int index, int size);
 		void increment_quantity();
 		Itemset **examine();
+		int count();
 };
 
 #endif
