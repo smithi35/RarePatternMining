@@ -14,6 +14,8 @@ class Node
 		void delete_children();
 		Itemset **combine_set(Itemset **first_set, Itemset **second_set, int count1, int count2);
 		void delete_itemset_array(Itemset **set, int size);
+		int *revise_array(int *array, int size);
+		void swap(int first, int second, int *array);
 	public:
 		Node(int n, int q);
 		~Node();
@@ -25,7 +27,7 @@ class Node
 		int get_children_number();
 		Node *get_child(int index);
 		void print();
-		void add_transaction(int *array, int index, int size);
+		void add_transaction(int *array, int size);
 		void increment_quantity();
 		Itemset **examine();
 		int count();

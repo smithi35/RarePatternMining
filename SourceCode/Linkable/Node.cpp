@@ -69,31 +69,70 @@ void Node::print()
 	}
 }
 
-// recursively adds the contents of a transaction to the node and its children
-void Node::add_transaction(int *array, int index, int size)
+int *Node::revise_array(int *array, int size)
 {
-	if (index < size)
+	int *replacement = (int *)malloc(sizeof(int) * (size-1));
+	
+	int i;
+	for (i = 1; i < size; i++)
 	{
-		bool found = false;
-		
-		int i;
-		for (i = 0; i < children_number && !found; i++)
+		replacement[i-1] = array[i];
+	}
+	
+	return replacement;
+}
+
+void Node::swap(int first, int second, int *array)
+{
+	int temp = array[first];
+	array[first] = array[second];
+	array[second] = temp;
+}
+
+// recursively adds the contents of a transaction to the node and its children
+void Node::add_transaction(int *array, int size)
+{
+	if (size > 0)
+	{
+		if (children_number == 0)
 		{
-			Node *curr = this->get_child(i);
-		
-			if (curr->get_name() == array[0])
-			{
-				curr->increment_quantity();
-				curr->add_transaction(array, index+1, size);
-				found = true;
-			}
-		}
-		
-		if (!found)
-		{
-			Node *child = new Node(array[index], 1);
+			Node *child = new Node(array[0], 1);
 			add_child(child);
-			child->add_transaction(array, index+1, size);
+			int *new_array = revise_array(array, size);
+			child->add_transaction(new_array, size-1);
+		}
+		else
+		{
+			Node *curr = NULL;
+			bool stop = false;
+			int i;
+			for (i = 0; i < children_number && !stop; i++)
+			{
+				curr = children[i];
+				int name = curr->get_name();
+				
+				int j;
+				for (j = 0; j < size && !stop; j++)
+				{
+					if (name == array[j])
+					{
+						stop = true;
+						curr->increment_quantity();
+						swap(0, j, array);
+						int *new_array = revise_array(array, size);
+						curr->add_transaction(new_array, size-1);
+						
+					}
+				}
+			}
+			
+			if (!stop)
+			{
+				Node *child = new Node(array[0], 1);
+				add_child(child);
+				int *new_array = revise_array(array, size);
+				child->add_transaction(new_array, size-1);
+			}
 		}
 	}
 }

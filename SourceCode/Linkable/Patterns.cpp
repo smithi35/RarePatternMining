@@ -211,13 +211,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 			build_tree(tree, replacement, revised);
 			
 			// recursively examine the tree
-			tree->examine();
-			
-			int i;
-			for (i = 0; i < revised; i++)
-			{
-				replacement[i]->print();
-			}
+			//tree->examine();
 			
 			// cleanup
 			delete_transaction_array(array, transactions);
