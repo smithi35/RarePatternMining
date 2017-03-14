@@ -17,6 +17,7 @@ class Transaction
 		int partition(int first, int last, Itemset *set);
 	public:
 		Transaction(std::string contents);
+		Transaction(Transaction *copy);
 		Transaction *copy();
 		int get_id();
 		int get_length();

@@ -43,6 +43,19 @@ Transaction::Transaction(int i, int l, int *list)
 	}
 }
 
+Transaction::Transaction(Transaction *copy)
+{
+	id = copy->id;
+	length = copy->length;
+	items = (int *)malloc(sizeof(int) * copy->length);
+	
+	int i;
+	for (i = 0; i < length; i++)
+	{
+		items[i] = copy->items[i];
+	}
+}
+
 Transaction *Transaction::copy()
 {
 	return new Transaction(id, length, items);
