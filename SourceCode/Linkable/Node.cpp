@@ -11,6 +11,20 @@ Node::Node(int n, int q)
 	children = NULL;
 }
 
+Node::Node(Node *copy)
+{
+	name = copy->name;
+	quantity = copy->quantity;
+	children_number = copy->children_number;
+	children = (Node **)malloc(sizeof(Node *) * children_number);
+	
+	int i;
+	for (i = 0; i < children_number; i++)
+	{
+		children[i] = new Node(copy->children[i]);
+	}
+}
+
 Node::~Node()
 {
 	int i;
@@ -31,7 +45,7 @@ void Node::add_child(Node *child)
 	int i;
 	for (i = 0; i < children_number; i++)
 	{
-		new_children[i] = children[i];
+		new_children[i] = new Node(children[i]);
 	}
 	
 	new_children[children_number] = child;
@@ -60,7 +74,7 @@ Node *Node::get_child(int index)
 
 void Node::print()
 {
-	std::cout << "Name = " << name << ", Quantity = " << quantity << ". ";
+	std::cout << name << ":" << quantity << ", ";
 	
 	int i;
 	for (i = 0; i < children_number; i++)
@@ -104,24 +118,27 @@ void Node::add_transaction(int *array, int size)
 		else
 		{
 			Node *curr = NULL;
+			
 			bool stop = false;
 			int i;
 			for (i = 0; i < children_number && !stop; i++)
 			{
 				curr = children[i];
 				int name = curr->get_name();
+				std::cout << "Name = " << name << std::endl;
 				
 				int j;
 				for (j = 0; j < size && !stop; j++)
 				{
 					if (name == array[j])
 					{
+						std::cout << "Incrementing " << name << std::endl;
 						stop = true;
 						curr->increment_quantity();
 						swap(0, j, array);
 						int *new_array = revise_array(array, size);
 						curr->add_transaction(new_array, size-1);
-						
+						// this is not the most efficient way to add the transactions
 					}
 				}
 			}

@@ -11,6 +11,7 @@ class Node
 		int quantity;
 		Node **children;
 		int children_number;
+		Node(Node *copy);
 		void delete_children();
 		Itemset **combine_set(Itemset **first_set, Itemset **second_set, int count1, int count2);
 		void delete_itemset_array(Itemset **set, int size);

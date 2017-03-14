@@ -148,6 +148,7 @@ void delete_transaction_array(Transaction **array, int length)
 }
 
 // go through transaction array and sort so that items with more support are first in each transaction
+// then sort so that the shortest transactions are first
 void sort_transactions(Transaction **array, int size, Itemset *set)
 {
 	int i;
