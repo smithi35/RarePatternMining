@@ -2,8 +2,9 @@
 #define ITEMSET_H
 
 #include "Item.h"
+#include "ListItem.h"
 
-class Itemset
+class Itemset: public ListItem
 {
 	private:
 		Item **set;

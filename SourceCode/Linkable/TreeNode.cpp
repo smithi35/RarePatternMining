@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "Node.h"
+#include "TreeNode.h"
 
 Node::Node(int n, int q)
 {

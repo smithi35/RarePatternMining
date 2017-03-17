@@ -3,11 +3,11 @@
 
 #include <iostream>
 #include "ListItem.h"
+#include "BaseNode.h"
 
-class ListNode
+class ListNode: public BaseNode
 {
 	private:
-		ListItem *item;
 		ListNode *next;
 	public:
 		ListNode(ListItem *i);

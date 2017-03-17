@@ -3,8 +3,9 @@
 
 #include "Transaction.h"
 #include "Itemset.h"
+#include "Node.h"
 
-class Node
+class TreeNode: public Node
 {
 	private: 
 		int name;
