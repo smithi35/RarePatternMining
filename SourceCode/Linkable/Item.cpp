@@ -62,3 +62,18 @@ void Item::print()
 {
 	std::cout << "Name: " << name << ", support = " << support << std::endl;
 }
+
+bool Item::equals(ListItem *other)
+{
+	bool equals = true;
+	
+	if (Item *p = dynamic_cast<Item *>(other))
+	{
+		if (p->name != name)
+		{
+			equals = false;
+		}
+	}
+	
+	return equals;
+}

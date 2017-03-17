@@ -7,6 +7,8 @@ class BaseNode
 {
 	private:
 		ListItem *item;
-	public:
-		
+	protected:
+		ListItem *get_item();
+		void set_item(ListItem *i);
+		void delete_item();
 }

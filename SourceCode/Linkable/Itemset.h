@@ -7,7 +7,7 @@
 class Itemset: public ListItem
 {
 	private:
-		Item **set;
+		ListItem **set;
 		int size;
 		int present;
 		int support;
@@ -17,16 +17,16 @@ class Itemset: public ListItem
 		void increase_support(int add);
 	public:
 		Itemset(int s);
+		Itemset(Itemset *set);
 		~Itemset();
-		bool add_item(int item);
-		bool add_item(Item *item);
+		bool add_item(ListItem *item);
 		void print();
 		void remove_non_rare_items(int max_support);
 		bool contains(int item);
 		void sort();
-		Item *get_item(int index);
-		Itemset(Itemset *set);
+		ListItem *get_item(int index);
 		int get_support(int name);
+		bool equals(ListItem *other);
 };
 
 #endif

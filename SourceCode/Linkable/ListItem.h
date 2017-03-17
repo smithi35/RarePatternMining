@@ -5,7 +5,9 @@
 
 class ListItem
 {
-	public: virtual void print() = 0;
+	public: 
+		virtual void print() = 0;
+		virtual bool equals(ListItem *other) = 0;
 };
 
 #endif

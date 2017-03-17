@@ -33,7 +33,7 @@ Itemset::~Itemset()
 	delete [] set;
 }
 
-bool Itemset::add_item(int item)
+/* bool Itemset::add_item(int item)
 {
 	bool added = false;
 	int i;
@@ -62,10 +62,10 @@ bool Itemset::add_item(int item)
 	
 	return added;
 }
-
+ */
 void Itemset::increase_support(int add) { support+=add;}
 
-bool Itemset::add_item(Item *item)
+bool Itemset::add_item(ListItem *item)
 {
 	bool added = false;
 	
@@ -234,4 +234,37 @@ int Itemset::get_support(int name)
 	}
 	
 	return support;
+}
+
+bool Itemset::equals(ListItem *other)
+{
+	bool equals = true;
+	
+	if (Itemset *p = dynamic_cast<Itemset *>(other))
+	{
+		int length1 = present;
+		int length2 = p->present;
+		
+		if (length1 == length2)
+		{
+			int i;
+			for (i = 0; i < present; i++)
+			{
+				if (!p->set[i]->equals(set[i]))
+				{
+					equals = false;
+				}
+			}
+		}
+		else
+		{
+			equals = false;
+		}
+	}
+	else
+	{
+		equals = false;
+	}
+	
+	return equals;
 }
