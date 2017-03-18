@@ -10,18 +10,23 @@ Itemset::Itemset(int s)
 	ListItem::set_support(0);
 }
 
-Itemset::Itemset(Itemset *base)
+ListItem *Itemset::copy(ListItem *other)
 {
-	set = (ListItem **)malloc(sizeof(ListItem *) * base->size);
-	size = base->size;
-	present = base->present;
-	ListItem::set_support(base->ListItem::get_support());
-	
-	int i;
-	for (i = 0; i < present; i++)
+	if (Itemset *s = dynamic_cast<Itemset *>(other))
 	{
-		set[i] = (ListItem *) new Item(base->set[i]);
+		Itemset *copied = new Itemset(s->size);;
+		copied->present = s->present;
+		copied->ListItem::set_support(s->ListItem::get_support());
+		copied->set = (ListItem **)malloc(sizeof(ListItem *) * copied->size);
+		
+		int i;
+		for (i = 0; i < s->present; i++)
+		{
+			copied->set[i] = copy(s->set[i]);
+		}
 	}
+	
+	return NULL;
 }
 
 Itemset::~Itemset()
@@ -34,7 +39,7 @@ Itemset::~Itemset()
 	delete [] set;
 }
 
-void Itemset::increase_support(int add) { support+=add;}
+void Itemset::increase_support(int add) { ListItem::increase_support(add);}
 
 bool Itemset::add_item(ListItem *item)
 {
@@ -43,7 +48,7 @@ bool Itemset::add_item(ListItem *item)
 	int i;
 	for (i = 0; i < present && !added; i++)
 	{
-		if (set[i]->equal(item))
+		if (set[i]->equals(item))
 		{
 			set[i]->increase_support(item->get_support());
 		}
@@ -101,8 +106,10 @@ void Itemset::remove_non_rare_items(int max_support)
 	for (i = 0; i < present; i++)
 	{
 		if (set[i]->get_support() <= max_support) {
-			Item *n = new Item( (Item *)set[i]->get_name(), (Item *)set[i]->get_support());
-			//new_set[next] = new Item(set[i]->get_name(), set[i]->get_support());
+			Item *curr = (Item *)set[i];
+			Item *n = new Item( curr->get_name(), set[i]->get_support());
+			ListItem *l = (ListItem *)n;
+			new_set[next] = l;
 			next++;
 		}
 	}

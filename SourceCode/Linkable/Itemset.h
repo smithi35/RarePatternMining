@@ -28,6 +28,7 @@ class Itemset: public ListItem
 		int *get_items();
 		void set_support(int s);
 		bool equals(ListItem *other);
+		ListItem *copy(ListItem *other);
 };
 
 #endif

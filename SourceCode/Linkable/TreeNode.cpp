@@ -42,7 +42,7 @@ TreeNode::~TreeNode()
 	}
 }
 
-Item *Node::get_item() {return item;}
+Item *TreeNode::get_item() {return item;}
 
 // add another child to the children array
 void TreeNode::add_child(TreeNode *child)
@@ -119,7 +119,7 @@ void TreeNode::add_transaction(int *array, int size)
 		{
 			Item *i = new Item(array[0]);
 			i->set_support(1);
-			TreeNode *child = new Node(i);
+			TreeNode *child = new TreeNode(i);
 			add_child(child);
 			int *new_array = revise_array(array, size);
 			child->add_transaction(new_array, size-1);
@@ -156,7 +156,7 @@ void TreeNode::add_transaction(int *array, int size)
 			{
 				Item *i = new Item(array[0]);
 				i->set_support(1);
-				TreeNode *child = new Node(i);
+				TreeNode *child = new TreeNode(i);
 				add_child(child);
 				int *new_array = revise_array(array, size);
 				child->add_transaction(new_array, size-1);

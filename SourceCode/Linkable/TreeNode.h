@@ -4,13 +4,11 @@
 #include "Transaction.h"
 #include "Itemset.h"
 #include "Item.h"
-#include "BaseNode.h"
 
-class TreeNode: public BaseNode
+class TreeNode
 {
 	private: 
 		Item *item;
-		Node **children;
 		TreeNode **children;
 		int children_number;
 		TreeNode(TreeNode *copy);
@@ -20,10 +18,6 @@ class TreeNode: public BaseNode
 		int *revise_array(int *array, int size);
 		void swap(int first, int second, int *array);
 	public:
-		Node(Item *i);
-		~Node();
-		Item *get_item();
-		void add_child(Node *child);
 		TreeNode(Item *i);
 		~TreeNode();
 		Item *get_item();
