@@ -9,8 +9,6 @@ class Itemset: public ListItem
 	private:
 		ListItem **set;
 		int size;
-		int present;
-		int support;
 		int partition(int first, int last);
 		void qsort(int first, int last);
 		void swap(int first, int second);

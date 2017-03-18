@@ -7,7 +7,7 @@ Itemset::Itemset(int s)
 	size = s;
 	set = (Item **)malloc(sizeof(Item *) * s);
 	present = 0;
-	support = 0;
+	ListItem::set_support(0);
 }
 
 Itemset::Itemset(Itemset *base)
@@ -15,6 +15,7 @@ Itemset::Itemset(Itemset *base)
 	set = (Item **)malloc(sizeof(Item *) * base->size);
 	size = base->size;
 	present = base->present;
+	ListItem::set_support(base->ListItem::get_support())
 	
 	int i;
 	for (i = 0; i < present; i++)
