@@ -5,11 +5,13 @@
 Item::Item(int n)
 {
 	name = n;
+	ListItem::set_support(1);
 }
 
 Item::Item()
 {
 	name = INT_MAX;
+	ListItem::set_support(0);
 }
 
 Item::Item(int n, int s)
@@ -38,13 +40,13 @@ void Item::print()
 
 bool Item::equals(ListItem *other)
 {
-	bool equals = true;
+	bool equals = false;
 	
 	if (Item *p = dynamic_cast<Item *>(other))
 	{
-		if (p->name != name)
+		if (p->name == name)
 		{
-			equals = false;
+			equals = true;
 		}
 	}
 	

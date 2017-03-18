@@ -10,23 +10,25 @@ Itemset::Itemset(int s)
 	ListItem::set_support(0);
 }
 
-ListItem *Itemset::copy(ListItem *other)
+Itemset::Itemset(Itemset *copy)
 {
-	if (Itemset *s = dynamic_cast<Itemset *>(other))
+	present = copy->present;
+	size = copy->size;
+	ListItem::set_support(copy->ListItem::get_support());
+	set = (ListItem **)malloc(sizeof(ListItem *) * size);
+	
+	int i;
+	for (i = 0; i < present; i++)
 	{
-		Itemset *copied = new Itemset(s->size);;
-		copied->present = s->present;
-		copied->ListItem::set_support(s->ListItem::get_support());
-		copied->set = (ListItem **)malloc(sizeof(ListItem *) * copied->size);
-		
-		int i;
-		for (i = 0; i < s->present; i++)
+		if (Itemset *s = dynamic_cast<Itemset *>(copy->set[i]))
 		{
-			copied->set[i] = copy(s->set[i]);
+			set[i] = new Itemset(s);
+		}
+		else if (Item *item = dynamic_cast<Item *>(copy->set[i]))
+		{
+			set[i] = new Item(item);
 		}
 	}
-	
-	return NULL;
 }
 
 Itemset::~Itemset()
@@ -34,7 +36,7 @@ Itemset::~Itemset()
 	int i;
 	for (i = 0; i < size; i++)
 	{
-		delete set[i];
+		delete(set[i]);
 	}
 	delete [] set;
 }
@@ -50,7 +52,8 @@ bool Itemset::add_item(ListItem *item)
 	{
 		if (set[i]->equals(item))
 		{
-			set[i]->increase_support(item->get_support());
+			set[i]->increment_support();
+			added = true;
 		}
 	}
 	
@@ -94,7 +97,6 @@ void Itemset::remove_non_rare_items(int max_support)
 	{
 		if (set[i]->get_support() > max_support)
 		{
-			set[i] = (ListItem *) new Item();
 			total++;
 		}
 	}
@@ -105,20 +107,29 @@ void Itemset::remove_non_rare_items(int max_support)
 	
 	for (i = 0; i < present; i++)
 	{
-		if (set[i]->get_support() <= max_support) {
-			Item *curr = (Item *)set[i];
-			Item *n = new Item( curr->get_name(), set[i]->get_support());
-			ListItem *l = (ListItem *)n;
-			new_set[next] = l;
-			next++;
+		if (set[i]->get_support() <= max_support)
+		{
+			if (Item *curr = dynamic_cast<Item *>(set[i]))
+			{
+				Item *n = new Item(curr->get_name(), set[i]->get_support());
+				ListItem *l = (ListItem *)n;
+				new_set[next] = l;
+				next++;
+			}
+			else if (Itemset *curr = dynamic_cast<Itemset *>(set[i]))
+			{
+				Itemset *s = new Itemset(curr);
+				ListItem *l = (ListItem *)s;
+				new_set[next] = l;
+				next++;
+			}
 		}
 	}
 	
 	for (i = 0; i < present; i++)
-	{
 		delete(set[i]);
-	}
-	//delete [] set;
+	
+	delete [] set;
 	
 	this->present = next;
 	this->size = new_size;
@@ -154,7 +165,7 @@ void Itemset::qsort(int first, int last)
 	if (range >= 1)
 	{
 		int pivot = partition(first, last);
-		std::cout << "Pivot = " << pivot << std::endl;
+		// std::cout << "Pivot = " << pivot << std::endl;
 		
 		qsort(first, pivot);
 		qsort(pivot+1, last);
@@ -176,7 +187,7 @@ int Itemset::partition(int first, int last)
 	int random = rand() % range;
 	random += first;
 	
-	std::cout << "Random = " << random << std::endl;
+	// std::cout << "Random = " << random << std::endl;
 	
 	int pivot = set[random]->get_support();
 	swap(boundary, random);
@@ -197,7 +208,6 @@ int Itemset::partition(int first, int last)
 
 ListItem *Itemset::get_item(int index) { return set[index];}
 
-/*
 int Itemset::get_support(int name)
 {
 	ListItem *temp = (ListItem *) new Item(name);
@@ -217,6 +227,7 @@ int Itemset::get_support(int name)
 	return support;
 }
 
+/*
 int *Itemset::get_items()
 {
 	int *items = (int *)malloc(sizeof(int) * size);

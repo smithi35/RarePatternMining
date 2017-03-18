@@ -87,22 +87,27 @@ void Transaction::print()
 Transaction *Transaction::remove_non_rare_items(Itemset *set)
 {
 	Transaction *replacement = NULL;
-	
 	int remove = 0;
 	
 	int i;
 	for (i = 0; i < length; i++)
 	{
 		Item *temp = new Item(items[i]);
+
 		if (!set->contains(temp))
 		{
 			items[i] = INT_MIN;
 			remove++;
 		}
+		
 		delete(temp);
 	}
-	std::cout << "Balls" << std::endl;
-	if (remove > 0)
+	
+	if (remove == length)
+	{
+		delete(this);
+	}
+	else if (remove > 0)
 	{
 		int *new_items = (int *)malloc(sizeof(int) * (length - remove));
 		int next = 0;
@@ -119,7 +124,7 @@ Transaction *Transaction::remove_non_rare_items(Itemset *set)
 		replacement = new Transaction(id, (length-remove), new_items);
 		delete(this);
 	}
-	else
+	else if (remove == 0)
 	{
 		replacement = this;
 	}
@@ -129,7 +134,7 @@ Transaction *Transaction::remove_non_rare_items(Itemset *set)
 
 void Transaction::sort(Itemset *set)
 {
-	std::cout << "Sorting Transaction" << std::endl;
+	// cout << "Sorting Transaction" << endl;
 	qsort(0, length-1, set);
 }
 
@@ -141,14 +146,14 @@ void Transaction::qsort(int first, int last, Itemset *set)
 	if (range > 1)
 	{
 		int pivot = partition(first, last, set);
-		std::cout << "Pivot = " << pivot << std::endl;
+		// std::cout << "Pivot = " << pivot << std::endl;
 		
 		qsort(first, pivot, set);
 		qsort(pivot, last, set);
 	}
 	else if (range == 1)
 	{
-		std::cout << "Here" << std::endl;
+		// cout << "Here" << endl;
 		int sup1 = set->get_support(items[first]);
 		int sup2 = set->get_support(items[last]);
 		
@@ -174,17 +179,17 @@ int Transaction::partition(int first, int last, Itemset *set)
 	int random = rand() % range;
 	random += first;
 	
-	std::cout << "Random = " << random << std::endl;
+	// cout << "Random = " << random << endl;
 	
 	int pivot_value = set->get_support(items[random]);
-	cout << items[random] << " has a support of " << pivot_value << endl;
+	// cout << items[random] << " has a support of " << pivot_value << endl;
 	swap(random, last);
 	
 	int i;
 	for (i = last-1; i >= first; i--)
 	{
 		int support = set->get_support(items[i]);
-		cout << items[i] << " has a support value of " << support << endl;
+		// cout << items[i] << " has a support value of " << support << endl;
 		
 		if (support > pivot_value)
 		{

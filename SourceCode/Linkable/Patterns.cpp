@@ -92,13 +92,18 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 		{
 			set->print();
 			set->remove_non_rare_items(max_support);
+			set->print();
 			set->sort();
 			set->print();
 			// set now works as the header table for the tree
 			
 			array->remove_non_rare_items(set);
+			
+			array->print();
+			std::cout << "Printing Transaction List" << std::endl;
 			array->sort(set);
 			array->print();
+			exit(-1);
 			
 			// build the tree
 			RPTree *tree = new RPTree();
@@ -137,7 +142,7 @@ int main()
 	const char *inputfilename = input.c_str();
 	string output = "first_trial.txt";
 	const char *outputfilename = output.c_str();
-	//process(inputfilename, outputfilename, 2);
+	// process(inputfilename, outputfilename, 2);
 	
 	process(inputfilename, outputfilename, 3);
 	

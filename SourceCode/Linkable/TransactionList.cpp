@@ -24,7 +24,7 @@ TransactionList::~TransactionList()
 
 void TransactionList::resize()
 {
-	int new_size = 3 * size;
+	int new_size = 2 * size;
 	Transaction **new_list = (Transaction **)malloc(sizeof(Transaction *) * new_size);
 	
 	int i;
@@ -168,19 +168,22 @@ void TransactionList::remove_non_rare_items(Itemset *set)
 	int i;
 	for (i = 0; i < present; i++)
 	{
-		list[i]->remove_non_rare_items(set);
+		Transaction *temp = list[i]->remove_non_rare_items(set);
 		
-		if (list[i]->get_length() > 0)
+		if (temp != NULL)
 		{
 			revised++;
 		}
+		list[i] = temp;
 	}
 	
 	Transaction** replacement = (Transaction **)malloc(sizeof(Transaction *) * revised);
+	
 	int index = 0;
+	
 	for (i = 0; i < present; i++)
 	{
-		if (list[i]->get_length() > 0)
+		if (list[i] != NULL)
 		{
 			replacement[index] = new Transaction(list[i]);
 			index++;
