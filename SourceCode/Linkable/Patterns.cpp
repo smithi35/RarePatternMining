@@ -72,8 +72,6 @@ void build_tree(RPTree *tree, TransactionList *list)
 		cout << "Adding Transaction: " << i << endl;
 		tree->add_transaction(list->get_transaction(i));
 	}
-	
-	tree->print();
 }
 
 void process(const char *inputfilename, const char *outputfilename, const int max_support)
@@ -103,7 +101,6 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 			std::cout << "Printing Transaction List" << std::endl;
 			array->sort(set);
 			array->print();
-			exit(-1);
 			
 			// build the tree
 			RPTree *tree = new RPTree();
@@ -114,7 +111,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				tree->print();
 				
 				// recursively examine the tree
-				tree->examine();
+				// tree->examine();
 				
 				delete(tree);
 			}
