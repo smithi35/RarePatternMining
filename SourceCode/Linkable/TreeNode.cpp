@@ -31,8 +31,8 @@ TreeNode::~TreeNode()
 		delete children[i];
 	}
 	
-	// if itemset, need to call the destructor
-	if (Itemset *s = dynamic_cast<Itemset *>(item))
+	// if Set, need to call the destructor
+	if (Set *s = dynamic_cast<Set *>(item))
 	{
 		delete(s);
 	}
@@ -170,7 +170,7 @@ void TreeNode::increment_quantity()
 	item->increment_support();
 }
 
-void TreeNode::delete_itemset_array(Itemset **set, int size)
+void TreeNode::delete_itemset_array(Set **set, int size)
 {
 	item->increment_support();
 }
@@ -204,9 +204,9 @@ int TreeNode::count()
 	return count;
 }
 
-Itemset **TreeNode::examine()
+Set **TreeNode::examine()
 {
-	Itemset *set = new Itemset();
+	Set *set = new Set();
 	// int old_count = 0;
 
 	if (children_number > 0)
@@ -218,14 +218,14 @@ Itemset **TreeNode::examine()
 			int new_count = children[i]->count();
 			// std::cout << "Count = " << new_count << std::endl;
 			
-			Itemset *child_set = children[i]->examine();
+			Set *child_set = children[i]->examine();
 			set->merge(child_set); // merge only adds the contents of the new set with set
 			// old_count = new_count;
 		}
 	}
 	else
 	{
-		set->add_item(new Itemset(new Item(item)));
+		set->add_item(new Set(new Item(item)));
 	}
 
 	return set;

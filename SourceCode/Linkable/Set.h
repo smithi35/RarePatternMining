@@ -1,10 +1,10 @@
-#ifndef ITEMSET_H
-#define ITEMSET_H
+#ifndef SET_H
+#define SET_H
 
 #include "Item.h"
 #include "ListItem.h"
 
-class Itemset: public ListItem
+class Set: public ListItem
 {
 	private:
 		ListItem **set;
@@ -17,11 +17,11 @@ class Itemset: public ListItem
 		void resize();
 		ListItem **copy(ListItem **old, int count);
 	public:
-		Itemset(int s);
-		Itemset(Itemset *set);
-		Itemset(Item *i);
-		Itemset();
-		~Itemset();
+		Set(int s);
+		Set(Set *set);
+		Set(Item *i);
+		Set();
+		~Set();
 		void print();
 		bool add_item(ListItem *item);
 		void remove_non_rare_items(int max_support);
@@ -33,7 +33,7 @@ class Itemset: public ListItem
 		void set_support(int s);
 		bool equals(ListItem *other);
 		ListItem *copy(ListItem *other);
-		void merge(Itemset *other);
+		void merge(Set *other);
 };
 
 #endif

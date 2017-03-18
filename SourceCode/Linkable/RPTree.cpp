@@ -23,7 +23,7 @@ void RPTree::add_transaction(Transaction *transaction)
 	root->add_transaction(items, size);
 }
 
-Itemset **RPTree::examine()
+Set **RPTree::examine()
 {
 	std::cout << std::endl << std::endl << std::endl << root->count() << std::endl << std::endl << std::endl;
 	return NULL;

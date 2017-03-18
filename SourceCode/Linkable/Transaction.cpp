@@ -84,7 +84,7 @@ void Transaction::print()
 	cout << endl;
 }
 
-Transaction *Transaction::remove_non_rare_items(Itemset *set)
+Transaction *Transaction::remove_non_rare_items(Set *set)
 {
 	Transaction *replacement = NULL;
 	int remove = 0;
@@ -132,14 +132,14 @@ Transaction *Transaction::remove_non_rare_items(Itemset *set)
 	return replacement;
 }
 
-void Transaction::sort(Itemset *set)
+void Transaction::sort(Set *set)
 {
 	// cout << "Sorting Transaction" << endl;
 	qsort(0, length-1, set);
 }
 
 // quick sorts the transaction item list
-void Transaction::qsort(int first, int last, Itemset *set)
+void Transaction::qsort(int first, int last, Set *set)
 {
 	int range = last - first;
 	
@@ -173,7 +173,7 @@ void Transaction::swap(int first, int second)
 }
 
 // partitions the items in the items array according to their support values
-int Transaction::partition(int first, int last, Itemset *set)
+int Transaction::partition(int first, int last, Set *set)
 {
 	int range = last - first;
 	int random = rand() % range;

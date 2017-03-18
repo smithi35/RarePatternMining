@@ -1,8 +1,8 @@
-#include "Itemset.h"
+#include "Set.h"
 #include <iostream>
 #include <cstdlib>
 
-Itemset::Itemset(int s)
+Set::Set(int s)
 {
 	size = s;
 	set = (ListItem **)malloc(sizeof(ListItem *) * s);
@@ -10,7 +10,7 @@ Itemset::Itemset(int s)
 	ListItem::set_support(0);
 }
 
-Itemset::Itemset(Itemset *copy)
+Set::Set(Set *copy)
 {
 	present = copy->present;
 	size = copy->size;
@@ -20,9 +20,9 @@ Itemset::Itemset(Itemset *copy)
 	int i;
 	for (i = 0; i < present; i++)
 	{
-		if (Itemset *s = dynamic_cast<Itemset *>(copy->set[i]))
+		if (Set *s = dynamic_cast<Set *>(copy->set[i]))
 		{
-			set[i] = new Itemset(s);
+			set[i] = new Set(s);
 		}
 		else if (Item *item = dynamic_cast<Item *>(copy->set[i]))
 		{
@@ -31,7 +31,7 @@ Itemset::Itemset(Itemset *copy)
 	}
 }
 
-Itemset::Itemset()
+Set::Set()
 {
 	present = 0;
 	size = 1;
@@ -39,7 +39,7 @@ Itemset::Itemset()
 	set = (ListItem **)malloc(sizeof(ListItem *) * size);
 }
 
-Itemset::Itemset(Item *i)
+Set::Set(Item *i)
 {
 	present = 1;
 	size = 1;
@@ -48,7 +48,7 @@ Itemset::Itemset(Item *i)
 	add_item(i);
 }
 
-Itemset::~Itemset()
+Set::~Set()
 {
 	int i;
 	for (i = 0; i < size; i++)
@@ -58,9 +58,9 @@ Itemset::~Itemset()
 	delete [] set;
 }
 
-void Itemset::increase_support(int add) { ListItem::increase_support(add);}
+void Set::increase_support(int add) { ListItem::increase_support(add);}
 
-bool Itemset::add_item(ListItem *item)
+bool Set::add_item(ListItem *item)
 {
 	bool added = false;
 	
@@ -87,7 +87,7 @@ bool Itemset::add_item(ListItem *item)
 			}
 			else
 			{
-				std::cout << "Itemset::add_item() says there is no more room in the itemset" << std::endl;
+				std::cout << "Set::add_item() says there is no more room in the Set" << std::endl;
 			}
 		}
 		else
@@ -99,9 +99,9 @@ bool Itemset::add_item(ListItem *item)
 	return added;
 }
 
-void Itemset::print()
+void Set::print()
 {
-	std::cout << "Printing itemset" << std::endl;
+	std::cout << "Printing Set" << std::endl;
 	int i;
 	for (i = 0; i < present; i++)
 	{
@@ -109,7 +109,7 @@ void Itemset::print()
 	}
 }
 
-void Itemset::remove_non_rare_items(int max_support)
+void Set::remove_non_rare_items(int max_support)
 {
 	int total = 0;
 	
@@ -137,9 +137,9 @@ void Itemset::remove_non_rare_items(int max_support)
 				new_set[next] = l;
 				next++;
 			}
-			else if (Itemset *curr = dynamic_cast<Itemset *>(set[i]))
+			else if (Set *curr = dynamic_cast<Set *>(set[i]))
 			{
-				Itemset *s = new Itemset(curr);
+				Set *s = new Set(curr);
 				ListItem *l = (ListItem *)s;
 				new_set[next] = l;
 				next++;
@@ -157,7 +157,7 @@ void Itemset::remove_non_rare_items(int max_support)
 	this->set = new_set;
 }
 
-bool Itemset::contains(ListItem *item)
+bool Set::contains(ListItem *item)
 {
 	bool contains = false;
 	
@@ -173,13 +173,13 @@ bool Itemset::contains(ListItem *item)
 	return contains;
 }
 
-void Itemset::sort()
+void Set::sort()
 {
-	std::cout << "Sorting Itemset" << std::endl;
+	std::cout << "Sorting Set" << std::endl;
 	qsort(0, present-1);
 }
 
-void Itemset::qsort(int first, int last)
+void Set::qsort(int first, int last)
 {
 	int range = last - first;
 	
@@ -193,14 +193,14 @@ void Itemset::qsort(int first, int last)
 	}
 }
 
-void Itemset::swap(int first, int second)
+void Set::swap(int first, int second)
 {
 	ListItem *temp = set[first];
 	set[first] = set[second];
 	set[second] = temp;
 }
 
-int Itemset::partition(int first, int last)
+int Set::partition(int first, int last)
 {
 	int boundary = first;
 	
@@ -227,9 +227,9 @@ int Itemset::partition(int first, int last)
 	return random;
 }
 
-ListItem *Itemset::get_item(int index) { return set[index];}
+ListItem *Set::get_item(int index) { return set[index];}
 
-int Itemset::get_support(int name)
+int Set::get_support(int name)
 {
 	ListItem *temp = (ListItem *) new Item(name);
 	int support = -1;
@@ -248,11 +248,11 @@ int Itemset::get_support(int name)
 	return support;
 }
 
-bool Itemset::equals(ListItem *other)
+bool Set::equals(ListItem *other)
 {
 	bool equals = true;
 	
-	if (Itemset *p = dynamic_cast<Itemset *>(other))
+	if (Set *p = dynamic_cast<Set *>(other))
 	{
 		int length1 = present;
 		int length2 = p->present;
@@ -281,22 +281,22 @@ bool Itemset::equals(ListItem *other)
 	return equals;
 }
 
-void Itemset::resize()
+void Set::resize()
 {
 	size = 2 * size;
 	set = copy(set, present);
 }
 
-ListItem **Itemset::copy(ListItem **old, int count)
+ListItem **Set::copy(ListItem **old, int count)
 {
 	ListItem **new_set = (ListItem **)malloc(sizeof(ListItem *) * count);
 	
 	int i;
 	for (i = 0; i < count; i++)
 	{
-		if (Itemset *s = dynamic_cast<Itemset *>(old[i]))
+		if (Set *s = dynamic_cast<Set *>(old[i]))
 		{
-			new_set[i] = new Itemset(s);
+			new_set[i] = new Set(s);
 			delete(set[i]);
 		}
 		else if (Item *item = dynamic_cast<Item *>(old[i]))
@@ -310,7 +310,7 @@ ListItem **Itemset::copy(ListItem **old, int count)
 	return new_set;
 }
 
-void Itemset::merge(Itemset *other)
+void Set::merge(Set *other)
 {
 	int i;
 	for (i = 0; i < other->present; i++)

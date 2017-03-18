@@ -2,7 +2,7 @@
 #define TRANSACTIONLIST_H
 
 #include "Transaction.h"
-#include "Itemset.h"
+#include "Set.h"
 
 class TransactionList
 {
@@ -20,10 +20,10 @@ class TransactionList
 		~TransactionList();
 		void add_transaction(Transaction *transaction);
 		Transaction *get_transaction(int index);
-		void sort(Itemset *set);
+		void sort(Set *set);
 		void print();
-		Itemset *get_itemset();
-		void remove_non_rare_items(Itemset *set);
+		Set *get_itemset();
+		void remove_non_rare_items(Set *set);
 		int get_size();
 };
 

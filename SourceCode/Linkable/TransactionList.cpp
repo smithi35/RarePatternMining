@@ -63,7 +63,7 @@ Transaction *TransactionList::get_transaction(int index)
 	return found;
 }
 
-void TransactionList::sort(Itemset *set)
+void TransactionList::sort(Set *set)
 {
 	int i;
 	for (i = 0; i < present; i++)
@@ -129,7 +129,7 @@ void TransactionList::print()
 	}
 }
 
-Itemset *TransactionList::get_itemset()
+Set *TransactionList::get_itemset()
 {
 	int total = 0;
 	
@@ -139,7 +139,7 @@ Itemset *TransactionList::get_itemset()
 		total+=list[i]->get_length();
 	}
 	
-	Itemset *set = new Itemset(total);
+	Set *set = new Set(total);
 	
 	if (set != NULL)
 	{
@@ -162,7 +162,7 @@ Itemset *TransactionList::get_itemset()
 	return set;
 }
 
-void TransactionList::remove_non_rare_items(Itemset *set)
+void TransactionList::remove_non_rare_items(Set *set)
 {
 	int revised = 0;
 	int i;

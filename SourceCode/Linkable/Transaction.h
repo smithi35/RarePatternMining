@@ -2,7 +2,7 @@
 #define TRANSACTION_H
 
 #include <string>
-#include "Itemset.h"
+#include "Set.h"
 #include "Item.h"
 
 class Transaction
@@ -12,9 +12,9 @@ class Transaction
 		int length;
 		int* items;
 		Transaction(int i, int l, int *list);
-		void qsort(int first, int last, Itemset *set);
+		void qsort(int first, int last, Set *set);
 		void swap(int first, int second);
-		int partition(int first, int last, Itemset *set);
+		int partition(int first, int last, Set *set);
 	public:
 		Transaction(std::string contents);
 		Transaction(Transaction *copy);
@@ -24,9 +24,9 @@ class Transaction
 		int *get_items();
 		int get_item(int index);
 		void print();
-		Transaction *remove_non_rare_items(Itemset *set);
+		Transaction *remove_non_rare_items(Set *set);
 		~Transaction();
-		void sort(Itemset *set);
+		void sort(Set *set);
 };
 
 #endif

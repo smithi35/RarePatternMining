@@ -2,7 +2,7 @@
 #define NODE_H
 
 #include "Transaction.h"
-#include "Itemset.h"
+#include "Set.h"
 #include "Item.h"
 
 class TreeNode
@@ -13,8 +13,8 @@ class TreeNode
 		int children_number;
 		TreeNode(TreeNode *copy);
 		void delete_children();
-		Itemset **add_set(Itemset *set, Itemset *adding)
-		void delete_itemset_array(Itemset **set, int size);
+		Set **add_set(Set *set, Set *adding)
+		void delete_itemset_array(Set **set, int size);
 		int *revise_array(int *array, int size);
 		void swap(int first, int second, int *array);
 	public:
@@ -29,7 +29,7 @@ class TreeNode
 		void print();
 		void add_transaction(int *array, int size);
 		void increment_quantity();
-		Itemset **examine();
+		Set **examine();
 		int count();
 };
 

@@ -7,7 +7,7 @@
 #include "TransactionList.h"
 #include "Transaction.h"
 #include "Item.h"
-#include "Itemset.h"
+#include "Set.h"
 #include "RPTree.h"
 
 using namespace std;
@@ -84,7 +84,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 	
 	if (array != NULL)
 	{
-		Itemset *set = array->get_itemset();
+		Set *set = array->get_itemset();
 		
 		if (set != NULL)
 		{
