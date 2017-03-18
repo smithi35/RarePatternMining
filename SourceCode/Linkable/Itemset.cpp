@@ -309,3 +309,14 @@ ListItem **Itemset::copy(ListItem **old, int count)
 	
 	return new_set;
 }
+
+void Itemset::merge(Itemset *other)
+{
+	int i;
+	for (i = 0; i < other->present; i++)
+	{
+		add_item(other->set[i]);
+	}
+	
+	delete(other);
+}

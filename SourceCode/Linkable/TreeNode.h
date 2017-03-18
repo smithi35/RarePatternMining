@@ -13,7 +13,7 @@ class TreeNode
 		int children_number;
 		TreeNode(TreeNode *copy);
 		void delete_children();
-		Itemset **combine_set(Itemset **first_set, Itemset **second_set, int count1, int count2);
+		Itemset **add_set(Itemset *set, Itemset *adding)
 		void delete_itemset_array(Itemset **set, int size);
 		int *revise_array(int *array, int size);
 		void swap(int first, int second, int *array);

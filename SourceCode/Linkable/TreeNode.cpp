@@ -175,31 +175,6 @@ void TreeNode::delete_itemset_array(Itemset **set, int size)
 	item->increment_support();
 }
 
-Itemset **TreeNode::combine_set(Itemset **first_set, Itemset **second_set, int count1, int count2)
-{
-	int size = count1 + count2;
-	Itemset **combined = (Itemset **)malloc(sizeof(Itemset *) * size);
-	
-	int i;
-	for (i = 0; i < count1; i++)
-	{
-		combined[i] = new Itemset(first_set[i]);
-	}
-	
-	int index = i;
-	
-	for (i = 0; i < count2; i++)
-	{
-		combined[index] = new Itemset(second_set[i]);
-		index++;
-	}
-	
-	delete_itemset_array(first_set, count1);
-	delete_itemset_array(second_set, count2);
-	
-	return combined;
-}
-
 // recursively counts the number of children, and their children, and so on until it returns the number of nodes in the (sub)tree
 int TreeNode::count()
 {
@@ -241,10 +216,10 @@ Itemset **TreeNode::examine()
 		for (i = 0; i < children_number; i++)
 		{
 			int new_count = children[i]->count();
-			std::cout << "Count = " << new_count << std::endl;
+			// std::cout << "Count = " << new_count << std::endl;
 			
-			// Itemset **child_set = children[i]->examine();
-			// set = combine_set(set, child_set, old_count, new_count);
+			Itemset *child_set = children[i]->examine();
+			set->merge(child_set); // merge only adds the contents of the new set with set
 			// old_count = new_count;
 		}
 	}

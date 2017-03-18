@@ -33,6 +33,7 @@ class Itemset: public ListItem
 		void set_support(int s);
 		bool equals(ListItem *other);
 		ListItem *copy(ListItem *other);
+		void merge(Itemset *other);
 };
 
 #endif
