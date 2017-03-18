@@ -14,9 +14,13 @@ class Itemset: public ListItem
 		void qsort(int first, int last);
 		void swap(int first, int second);
 		void increase_support(int add);
+		void resize();
+		ListItem **copy(ListItem **old, int count);
 	public:
 		Itemset(int s);
 		Itemset(Itemset *set);
+		Itemset(Item *i);
+		Itemset();
 		~Itemset();
 		void print();
 		bool add_item(ListItem *item);

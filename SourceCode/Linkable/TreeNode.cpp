@@ -231,7 +231,7 @@ int TreeNode::count()
 
 Itemset **TreeNode::examine()
 {
-	Itemset **set = NULL;
+	Itemset *set = new Itemset();
 	// int old_count = 0;
 
 	if (children_number > 0)
@@ -250,9 +250,7 @@ Itemset **TreeNode::examine()
 	}
 	else
 	{
-		set = (Itemset **)malloc(sizeof(Itemset *) * 1);
-		set[0] = new Itemset(1);
-		set[0]->add_item(item);
+		set->add_item(new Itemset(new Item(item)));
 	}
 
 	return set;

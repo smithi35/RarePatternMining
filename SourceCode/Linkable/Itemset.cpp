@@ -31,6 +31,23 @@ Itemset::Itemset(Itemset *copy)
 	}
 }
 
+Itemset::Itemset()
+{
+	present = 0;
+	size = 1;
+	ListItem::set_support(0);
+	set = (ListItem **)malloc(sizeof(ListItem *) * size);
+}
+
+Itemset::Itemset(Item *i)
+{
+	present = 1;
+	size = 1;
+	ListItem::set_support(1);
+	set = (ListItem **)malloc(sizeof(ListItem *) * size);
+	add_item(i);
+}
+
 Itemset::~Itemset()
 {
 	int i;
@@ -72,6 +89,10 @@ bool Itemset::add_item(ListItem *item)
 			{
 				std::cout << "Itemset::add_item() says there is no more room in the itemset" << std::endl;
 			}
+		}
+		else
+		{
+			resize();
 		}
 	}
 	
@@ -227,18 +248,6 @@ int Itemset::get_support(int name)
 	return support;
 }
 
-/*
-int *Itemset::get_items()
-{
-	int *items = (int *)malloc(sizeof(int) * size);
-	
-	int i;
-	for (i = 0; i < size; i++)
-		items[i] = set[i]->get_name();
-	
-	return items;
-}
-*/
 bool Itemset::equals(ListItem *other)
 {
 	bool equals = true;
@@ -270,4 +279,33 @@ bool Itemset::equals(ListItem *other)
 	}
 	
 	return equals;
+}
+
+void Itemset::resize()
+{
+	size = 2 * size;
+	set = copy(set, present);
+}
+
+ListItem **Itemset::copy(ListItem **old, int count)
+{
+	ListItem **new_set = (ListItem **)malloc(sizeof(ListItem *) * count);
+	
+	int i;
+	for (i = 0; i < count; i++)
+	{
+		if (Itemset *s = dynamic_cast<Itemset *>(old[i]))
+		{
+			new_set[i] = new Itemset(s);
+			delete(set[i]);
+		}
+		else if (Item *item = dynamic_cast<Item *>(old[i]))
+		{
+			new_set[i] = new Item(item);
+			delete(set[i]);
+		}
+	}
+	delete [] old
+	
+	return new_set;
 }
