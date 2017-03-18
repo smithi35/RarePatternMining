@@ -5,7 +5,7 @@
 
 RPTree::RPTree()
 {
-	root = new Node(-1, 0);
+	root = new TreeNode(new Item(-1));
 }
 
 RPTree::~RPTree()

@@ -18,6 +18,7 @@ class Item: public ListItem
 		~Item();
 		int get_support();
 		void set_support(int s);
+		void increase_support(int s);
 		int get_name();
 		bool equals(ListItem *other);
 		void print();

@@ -93,11 +93,13 @@ Transaction *Transaction::remove_non_rare_items(Itemset *set)
 	int i;
 	for (i = 0; i < length; i++)
 	{
-		if (!set->contains(items[i]))
+		Item *temp = new Item(items[i]);
+		if (!set->contains(temp))
 		{
 			items[i] = INT_MIN;
 			remove++;
 		}
+		delete(temp);
 	}
 	std::cout << "Balls" << std::endl;
 	if (remove > 0)

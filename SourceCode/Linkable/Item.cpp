@@ -5,38 +5,35 @@
 Item::Item(int n)
 {
 	name = n;
-	support = 0;
 }
 
 Item::Item()
 {
 	name = INT_MAX;
-	support = INT_MAX;
 }
 
 Item::Item(int n, int s)
 {
 	name = n;
-	support = s;
+	ListItem::set_support(s);
 }
 
 Item::Item(Item *item)
 {
 	name = item->name;
-	support = item->support;
+	ListItem::set_support(item->ListItem::get_support());
 }
 
 Item::~Item() {}
 
 int Item::get_name() {return name;}
-int Item::get_support() {return support;}
-void Item::set_support(int s) {support = s;}
-void Item::increment_support() {support++;}
+int Item::get_support() {return ListItem::get_support();}
+void Item::set_support(int s) { ListItem::set_support(s); }
 void Item::increase_support(int add) { ListItem::increase_support(add); }
 
 void Item::print()
 {
-	std::cout << "Name: " << name << ", support = " << support << std::endl;
+	std::cout << "Name: " << name << ", support = " << ListItem::get_support() << std::endl;
 }
 
 bool Item::equals(ListItem *other)

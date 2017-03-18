@@ -154,7 +154,7 @@ Itemset *TransactionList::get_itemset()
 			{
 				int curr = items[j];
 				
-				set->add_item(curr);
+				set->add_item(new Item(curr));
 			}
 		}
 	}

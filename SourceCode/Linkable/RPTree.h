@@ -1,13 +1,13 @@
 #ifndef RPTREE_H
 #define RPTREE_H
 
-#include "Node.h"
+#include "TreeNode.h"
 #include "Transaction.h"
 
 class RPTree
 {
 	private: 
-		Node *root;
+		TreeNode *root;
 	public:
 		RPTree();
 		~RPTree();
