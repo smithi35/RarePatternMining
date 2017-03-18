@@ -3,49 +3,56 @@
 
 #include "TreeNode.h"
 
-Node::Node(int n, int q)
+TreeNode::TreeNode(Item *i)
 {
-	name = n;
-	quantity = q;
+	item = i;
 	children_number = 0;
 	children = NULL;
 }
 
-Node::Node(Node *copy)
+TreeNode::TreeNode(TreeNode *copy)
 {
-	name = copy->name;
-	quantity = copy->quantity;
+	item = copy->item;
 	children_number = copy->children_number;
-	children = (Node **)malloc(sizeof(Node *) * children_number);
+	children = (TreeNode **)malloc(sizeof(TreeNode *) * children_number);
 	
 	int i;
 	for (i = 0; i < children_number; i++)
 	{
-		children[i] = new Node(copy->children[i]);
+		children[i] = new TreeNode(copy->children[i]);
 	}
 }
 
-Node::~Node()
+TreeNode::~TreeNode()
 {
 	int i;
 	for (i = 0; i < children_number; i++)
 	{
 		delete children[i];
 	}
+	
+	// if itemset, need to call the destructor
+	if (Itemset *s = dynamic_cast<Itemset *>(item))
+	{
+		delete(s);
+	}
+	else if (Item *i = dynamic_cast<Item *>(item))
+	{
+		delete(i);
+	}
 }
 
-int Node::get_name() {return name;}
-int Node::get_quantity() {return quantity;}
+int TreeNode::get_item() {return item;}
 
 // add another child to the children array
-void Node::add_child(Node *child)
+void TreeNode::add_child(TreeNode *child)
 {
-	Node **new_children = (Node **)malloc(sizeof(Node *) * (children_number+1));
+	TreeNode **new_children = (TreeNode **)malloc(sizeof(TreeNode *) * (children_number+1));
 	
 	int i;
 	for (i = 0; i < children_number; i++)
 	{
-		new_children[i] = new Node(children[i]);
+		new_children[i] = new TreeNode(children[i]);
 	}
 	
 	new_children[children_number] = child;
@@ -54,25 +61,25 @@ void Node::add_child(Node *child)
 	children_number++;
 }
 
-void Node::set_quantity(int q)
+void TreeNode::set_quantity(int q)
 {
-	quantity = q;
+	item->set_quantity(q);
 }
 
-void Node::set_children(Node **c, int q)
+void TreeNode::set_children(TreeNode **c, int q)
 {
 	children = c;
 	quantity = q;
 }
 
-int Node::get_children_number() { return children_number;}
+int TreeNode::get_children_number() { return children_number;}
 
-Node *Node::get_child(int index)
+TreeNode *TreeNode::get_child(int index)
 {
 	return children[index];
 }
 
-void Node::print()
+void TreeNode::print()
 {
 	std::cout << name << ":" << quantity << ", ";
 	
@@ -83,7 +90,7 @@ void Node::print()
 	}
 }
 
-int *Node::revise_array(int *array, int size)
+int *TreeNode::revise_array(int *array, int size)
 {
 	int *replacement = (int *)malloc(sizeof(int) * (size-1));
 	
@@ -96,7 +103,7 @@ int *Node::revise_array(int *array, int size)
 	return replacement;
 }
 
-void Node::swap(int first, int second, int *array)
+void TreeNode::swap(int first, int second, int *array)
 {
 	int temp = array[first];
 	array[first] = array[second];
@@ -104,20 +111,20 @@ void Node::swap(int first, int second, int *array)
 }
 
 // recursively adds the contents of a transaction to the node and its children
-void Node::add_transaction(int *array, int size)
+void TreeNode::add_transaction(int *array, int size)
 {
 	if (size > 0)
 	{
 		if (children_number == 0)
 		{
-			Node *child = new Node(array[0], 1);
+			TreeNode *child = new TreeNode(array[0], 1);
 			add_child(child);
 			int *new_array = revise_array(array, size);
 			child->add_transaction(new_array, size-1);
 		}
 		else
 		{
-			Node *curr = NULL;
+			TreeNode *curr = NULL;
 			
 			bool stop = false;
 			int i;
@@ -145,7 +152,7 @@ void Node::add_transaction(int *array, int size)
 			
 			if (!stop)
 			{
-				Node *child = new Node(array[0], 1);
+				TreeNode *child = new TreeNode(array[0], 1);
 				add_child(child);
 				int *new_array = revise_array(array, size);
 				child->add_transaction(new_array, size-1);
@@ -154,9 +161,9 @@ void Node::add_transaction(int *array, int size)
 	}
 }
 
-void Node::increment_quantity() { quantity++; }
+void TreeNode::increment_quantity() { quantity++; }
 
-void Node::delete_itemset_array(Itemset **set, int size)
+void TreeNode::delete_itemset_array(Itemset **set, int size)
 {
 	int i;
 	for (i = 0; i < size; i++)
@@ -166,7 +173,7 @@ void Node::delete_itemset_array(Itemset **set, int size)
 	delete [] set;
 }
 
-Itemset **Node::combine_set(Itemset **first_set, Itemset **second_set, int count1, int count2)
+Itemset **TreeNode::combine_set(Itemset **first_set, Itemset **second_set, int count1, int count2)
 {
 	int size = count1 + count2;
 	Itemset **combined = (Itemset **)malloc(sizeof(Itemset *) * size);
@@ -192,7 +199,7 @@ Itemset **Node::combine_set(Itemset **first_set, Itemset **second_set, int count
 }
 
 // recursively counts the number of children, and their children, and so on until it returns the number of nodes in the (sub)tree
-int Node::count()
+int TreeNode::count()
 {
 	int count = 1;
 	
@@ -211,7 +218,7 @@ int Node::count()
 	return count;
 }
 
-Itemset **Node::examine()
+Itemset **TreeNode::examine()
 {
 	Itemset **set = NULL;
 	// int old_count = 0;
@@ -243,14 +250,6 @@ Itemset **Node::examine()
 /*
 int main()
 {
-	Node *test = new Node(3, 0);
-	test->print();
-	test->add_child(new Node(2, 1));
-	test->print();
-	test->add_child(new Node(4, 1));
-	test->set_quantity(6);
-	test->print();
 	
-	return 0;
 }
 */

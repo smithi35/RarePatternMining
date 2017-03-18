@@ -26,6 +26,7 @@ class Itemset: public ListItem
 		void sort();
 		ListItem *get_item(int index);
 		int get_support(int name);
+		void set_support(int s);
 		bool equals(ListItem *other);
 };
 

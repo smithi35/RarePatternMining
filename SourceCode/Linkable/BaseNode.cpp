@@ -5,5 +5,12 @@ void *BaseNode::set_item(ListItem *i) { item = i; }
 
 void BaseNode::delete_item()
 {
-	delete(item); // probably need to use dynamic casting
+	if (Itemset *s = dynamic_cast<Itemset *>(item))
+	{
+		delete(s);
+	}
+	else if (Item *i = dynamic_cast<Item *>(item))
+	{
+		delete(i);
+	}
 }
