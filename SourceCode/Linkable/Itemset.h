@@ -2,8 +2,9 @@
 #define ITEMSET_H
 
 #include "Item.h"
+#include "ListItem.h"
 
-class Itemset
+class Itemset: public ListItem
 {
 	private:
 		Item **set;
@@ -19,13 +20,14 @@ class Itemset
 		~Itemset();
 		bool add_item(int item);
 		bool add_item(Item *item);
-		void print();
+		virtual void print();
 		void remove_non_rare_items(int max_support);
 		bool contains(int item);
 		void sort();
 		Item *get_item(int index);
 		Itemset(Itemset *set);
 		int get_support(int name);
+		int *get_items();
 };
 
 #endif

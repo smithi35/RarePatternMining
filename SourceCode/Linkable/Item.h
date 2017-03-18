@@ -2,8 +2,9 @@
 #define ITEM_H
 
 #include <string>
+#include "ListItem.h"
 
-class Item
+class Item: public ListItem
 {
 	private: 
 		int name;

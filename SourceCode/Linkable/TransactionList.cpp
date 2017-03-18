@@ -141,18 +141,21 @@ Itemset *TransactionList::get_itemset()
 	
 	Itemset *set = new Itemset(total);
 	
-	// first get the support of all items in the transaction database
-	for (i = 0; i < present; i++)
+	if (set != NULL)
 	{
-		int *items = list[i]->get_items();
-		int length = list[i]->get_length();
-		
-		int j;
-		for (j = 0; j < length; j++)
+		// first get the support of all items in the transaction database
+		for (i = 0; i < present; i++)
 		{
-			int curr = items[j];
+			int *items = list[i]->get_items();
+			int length = list[i]->get_length();
 			
-			set->add_item(curr);
+			int j;
+			for (j = 0; j < length; j++)
+			{
+				int curr = items[j];
+				
+				set->add_item(curr);
+			}
 		}
 	}
 	

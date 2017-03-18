@@ -88,28 +88,42 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 	{
 		Itemset *set = array->get_itemset();
 		
-		set->print();
-		set->remove_non_rare_items(max_support);
-		set->sort();
-		set->print();
-		// set now works as the header table for the tree
-		
-		array->remove_non_rare_items(set);
-		array->sort(set);
-		array->print();
-		
-		// build the tree
-		RPTree *tree = new RPTree();
-		build_tree(tree, array);
-		tree->print();
-		
-		// recursively examine the tree
-		//tree->examine();
-		
-		// cleanup
+		if (set != NULL)
+		{
+			set->print();
+			set->remove_non_rare_items(max_support);
+			set->sort();
+			set->print();
+			// set now works as the header table for the tree
+			
+			array->remove_non_rare_items(set);
+			array->sort(set);
+			array->print();
+			
+			// build the tree
+			RPTree *tree = new RPTree();
+			
+			if (tree != NULL)
+			{
+				build_tree(tree, array);
+				tree->print();
+				
+				// recursively examine the tree
+				tree->examine();
+				
+				delete(tree);
+			}
+			else
+			{
+				cout << "Failed to create tree" << endl;
+			}
+			delete(set);
+		}
+		else
+		{
+			cout << "Failed to create header table" << endl;
+		}
 		delete(array);
-		delete(set);
-		delete(tree);
 	}
 	else
 	{

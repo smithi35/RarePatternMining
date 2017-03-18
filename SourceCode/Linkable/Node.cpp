@@ -3,18 +3,16 @@
 
 #include "Node.h"
 
-Node::Node(int n, int q)
+Node::Node(Item *i)
 {
-	name = n;
-	quantity = q;
+	item = i;
 	children_number = 0;
 	children = NULL;
 }
 
 Node::Node(Node *copy)
 {
-	name = copy->name;
-	quantity = copy->quantity;
+	item = copy->item;
 	children_number = copy->children_number;
 	children = (Node **)malloc(sizeof(Node *) * children_number);
 	
@@ -34,8 +32,7 @@ Node::~Node()
 	}
 }
 
-int Node::get_name() {return name;}
-int Node::get_quantity() {return quantity;}
+Item *Node::get_item() {return item;}
 
 // add another child to the children array
 void Node::add_child(Node *child)
@@ -56,13 +53,13 @@ void Node::add_child(Node *child)
 
 void Node::set_quantity(int q)
 {
-	quantity = q;
+	item->set_support(q);
 }
 
 void Node::set_children(Node **c, int q)
 {
 	children = c;
-	quantity = q;
+	item->set_support(q);
 }
 
 int Node::get_children_number() { return children_number;}
@@ -74,7 +71,7 @@ Node *Node::get_child(int index)
 
 void Node::print()
 {
-	std::cout << name << ":" << quantity << ", ";
+	item->print();
 	
 	int i;
 	for (i = 0; i < children_number; i++)
@@ -110,7 +107,9 @@ void Node::add_transaction(int *array, int size)
 	{
 		if (children_number == 0)
 		{
-			Node *child = new Node(array[0], 1);
+			Item *i = new Item(array[0]);
+			i->set_support(1);
+			Node *child = new Node(i);
 			add_child(child);
 			int *new_array = revise_array(array, size);
 			child->add_transaction(new_array, size-1);
@@ -124,7 +123,7 @@ void Node::add_transaction(int *array, int size)
 			for (i = 0; i < children_number && !stop; i++)
 			{
 				curr = children[i];
-				int name = curr->get_name();
+				int name = curr->get_item()->get_name();
 				std::cout << "Name = " << name << std::endl;
 				
 				int j;
@@ -145,7 +144,9 @@ void Node::add_transaction(int *array, int size)
 			
 			if (!stop)
 			{
-				Node *child = new Node(array[0], 1);
+				Item *i = new Item(array[0]);
+				i->set_support(1);
+				Node *child = new Node(i);
 				add_child(child);
 				int *new_array = revise_array(array, size);
 				child->add_transaction(new_array, size-1);
@@ -154,16 +155,9 @@ void Node::add_transaction(int *array, int size)
 	}
 }
 
-void Node::increment_quantity() { quantity++; }
-
-void Node::delete_itemset_array(Itemset **set, int size)
+void Node::increment_quantity() 
 {
-	int i;
-	for (i = 0; i < size; i++)
-	{
-		delete(set[i]);
-	}
-	delete [] set;
+	item->increment_support();
 }
 
 Itemset **Node::combine_set(Itemset **first_set, Itemset **second_set, int count1, int count2)
@@ -194,14 +188,23 @@ Itemset **Node::combine_set(Itemset **first_set, Itemset **second_set, int count
 // recursively counts the number of children, and their children, and so on until it returns the number of nodes in the (sub)tree
 int Node::count()
 {
-	int count = 1;
+	int count = -1;
+	
+	if (item == NULL)
+	{
+		count = 0;
+	}
+	else
+	{
+		count = 1;
+	}
 	
 	if (children_number > 0)
 	{
 		int i;
 		for (i = 0; i < children_number; i++)
 		{
-			std::cout << i << " " << children[i]->get_name() << std::endl;
+			std::cout << i << " " << children[i]->get_item() << std::endl;
 			count+= children[i]->count();
 			
 			std::cout << "Count = " << count << std::endl;
@@ -234,7 +237,7 @@ Itemset **Node::examine()
 	{
 		set = (Itemset **)malloc(sizeof(Itemset *) * 1);
 		set[0] = new Itemset(1);
-		set[0]->add_item(name);
+		set[0]->add_item(item);
 	}
 
 	return set;

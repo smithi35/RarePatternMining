@@ -3,12 +3,12 @@
 
 #include "Transaction.h"
 #include "Itemset.h"
+#include "Item.h"
 
 class Node
 {
 	private: 
-		int name;
-		int quantity;
+		Item *item;
 		Node **children;
 		int children_number;
 		Node(Node *copy);
@@ -18,10 +18,9 @@ class Node
 		int *revise_array(int *array, int size);
 		void swap(int first, int second, int *array);
 	public:
-		Node(int n, int q);
+		Node(Item *i);
 		~Node();
-		int get_name();
-		int get_quantity();
+		Item *get_item();
 		void add_child(Node *child);
 		void set_quantity(int q);
 		void set_children(Node **c, int q);

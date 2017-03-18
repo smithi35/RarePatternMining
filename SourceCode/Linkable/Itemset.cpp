@@ -235,3 +235,14 @@ int Itemset::get_support(int name)
 	
 	return support;
 }
+
+int *Itemset::get_items()
+{
+	int *items = (int *)malloc(sizeof(int) * size);
+	
+	int i;
+	for (i = 0; i < size; i++)
+		items[i] = set[i]->get_name();
+	
+	return items;
+}
