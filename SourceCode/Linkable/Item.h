@@ -4,6 +4,8 @@
 #include <string>
 #include "ListItem.h"
 
+#include "ListItem.h"
+
 class Item: public ListItem
 {
 	private: 
@@ -14,15 +16,14 @@ class Item: public ListItem
 		Item(Item *item);
 		Item();
 		Item(int n, int s);
+		~Item();
 		int get_support();
-		void set_support(int f);
+		void set_support(int s);
 		void increment_support();
 		void increase_support(int add);
 		int get_name();
-		bool equal(int other);
-		bool equal(Item *other);
+		bool equals(ListItem *other);
 		void print();
-		~Item();
 };
 
 #endif
