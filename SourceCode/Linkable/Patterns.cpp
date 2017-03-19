@@ -112,11 +112,10 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				
 				// recursively examine the tree
 				Set *rare_patterns = tree->examine();
-				std::cout << "We have some patterns" << std::endl;
+				std::cout << "We have " << rare_patterns->get_present() << " patterns" << std::endl;
 				
 				if (rare_patterns != NULL)
 				{
-					cout << rare_patterns->get_present() << endl;
 					rare_patterns->print();
 					delete(rare_patterns);
 				}
@@ -150,9 +149,9 @@ int main()
 	const char *inputfilename = input.c_str();
 	string output = "first_trial.txt";
 	const char *outputfilename = output.c_str();
-	// process(inputfilename, outputfilename, 2);
+	process(inputfilename, outputfilename, 2);
 	
-	process(inputfilename, outputfilename, 3);
+	//process(inputfilename, outputfilename, 3);
 	
 	return 0;
 }

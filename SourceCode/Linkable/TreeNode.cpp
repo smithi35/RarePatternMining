@@ -211,25 +211,38 @@ Set *TreeNode::examine()
 
 	if (children_number > 0)
 	{
+		if (item->get_name() > 0)
+		{
+			Item *curr = (Item *) item->copy();
+			Set *singleton = new Set(curr);
+			set->add_item(singleton);
+		}
+		
+		// std::cout << "There are " << children_number << " Children for this node" << std::endl;
+		// print();
+		
 		// call examine once for each child
 		int i;
 		for (i = 0; i < children_number; i++)
 		{
 			std::cout << "Stuff" << std::endl;
 			Set *child_set = children[i]->examine();
+			
+			child_set->print();
 			std::cout << "Merging" << std::endl;
-			set->merge(child_set); // merge only adds the contents of the new set with set
+			set->merge(child_set); // merge only adds the contents of the new set to set right now
+			set->print();
 			std::cout << "Done merging" << std::endl;
 		}
 	}
 	else
 	{
 		std::cout << "No children" << std::endl;
-		Item *q = new Item(item);
+		Item *curr = new Item(item);
 		std::cout << "Item" << std::endl;
-		Set *r = new Set(q);
+		Set *singleton = new Set(curr);
 		std::cout << "Set" << std::endl;
-		set->add_item(r);
+		set->add_item(singleton);
 		std::cout << "added singleton" << std::endl;
 	}
 

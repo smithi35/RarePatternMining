@@ -95,7 +95,10 @@ bool Set::add_item(ListItem *item)
 			}
 			else
 			{
+				std::cout << "Need to resize the set" << std::endl;
 				resize();
+				std::cout << "Add Item again" << std::endl;
+				add_item(item);
 			}
 		}
 	}
@@ -113,6 +116,7 @@ bool Set::add_item(ListItem *item)
 void Set::print()
 {
 	std::cout << "Printing Set" << std::endl;
+	
 	int i;
 	for (i = 0; i < present; i++)
 	{
@@ -295,7 +299,8 @@ bool Set::equals(ListItem *other)
 void Set::resize()
 {
 	size = 2 * size;
-	set = copy(set, present);
+	copy();
+	print();
 }
 
 
@@ -352,13 +357,25 @@ ListItem *Set::copy()
 
 void Set::merge(Set *other)
 {
+	std::cout << "Inside Set::merge" << std::endl;
+	print();
+	other->print();
+	std::cout << "Done printing stuff inside Set::merge" << std::endl;
+	
 	int i;
 	for (i = 0; i < other->present; i++)
 	{
 		std::cout << "Adding " << i << std::endl;
-		add_item(other->set[i]->copy()); // need to copy this
+		ListItem *curr = other->set[i];
+		ListItem *item = curr->copy();
+		std::cout << "Curr = " << std::endl;
+		item->print();
+		add_item(item);
 		std::cout << "Successful" << std::endl;
 	}
+	std::cout << "Done merging, printing new set" << std::endl;
+	std::cout << "Present = " << present << std::endl;
+	print();
 	
 	delete(other);
 	std::cout << "Exiting Set::merge" << std::endl;
