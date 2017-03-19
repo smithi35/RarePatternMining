@@ -33,7 +33,10 @@ class Set: public ListItem
 		void set_support(int s);
 		bool equals(ListItem *other);
 		ListItem *copy(ListItem *other);
+		ListItem *copy();
 		void merge(Set *other);
+		int get_size();
+		int get_present();
 };
 
 #endif

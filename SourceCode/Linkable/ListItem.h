@@ -11,6 +11,7 @@ class ListItem
 		virtual ~ListItem();
 		virtual void print() = 0;
 		virtual bool equals(ListItem *other) = 0;
+		virtual ListItem *copy() = 0;
 		void set_support(int s);
 		int get_support();
 		void increment_support();

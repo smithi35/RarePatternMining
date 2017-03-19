@@ -52,3 +52,12 @@ bool Item::equals(ListItem *other)
 	
 	return equals;
 }
+
+ListItem *Item::copy()
+{
+	Item *copy = new Item();
+	copy->name = name;
+	copy->ListItem::set_support(ListItem::get_support());
+	
+	return copy;
+}

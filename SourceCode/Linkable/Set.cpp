@@ -41,11 +41,12 @@ Set::Set()
 
 Set::Set(Item *i)
 {
-	present = 1;
+	present = 0;
 	size = 1;
-	ListItem::set_support(1);
+	ListItem::set_support(i->get_support());
 	set = (ListItem **)malloc(sizeof(ListItem *) * size);
 	add_item(i);
+	std::cout << "Initialized with single item" << std::endl;
 }
 
 Set::~Set()
@@ -64,38 +65,48 @@ bool Set::add_item(ListItem *item)
 {
 	bool added = false;
 	
-	int i;
-	for (i = 0; i < present && !added; i++)
+	if (present > 0)
 	{
-		if (set[i]->equals(item))
+		int i;
+		for (i = 0; i < present && !added; i++)
 		{
-			set[i]->increment_support();
-			added = true;
-		}
-	}
-	
-	if (i == present && !added)
-	{
-		if (i < size)
-		{
-			set[i] = item;
-			added = true;
-			
-			if (present + 1 <= size)
+			if (set[i]->equals(item))
 			{
-				present++;
+				set[i]->increment_support();
+				added = true;
+			}
+		}
+		
+		if (i == present && !added)
+		{
+			if (i < size)
+			{
+				set[i] = item;
+				added = true;
+				
+				if (present + 1 <= size)
+				{
+					present++;
+				}
+				else
+				{
+					std::cout << "Set::add_item() says there is no more room in the Set" << std::endl;
+				}
 			}
 			else
 			{
-				std::cout << "Set::add_item() says there is no more room in the Set" << std::endl;
+				resize();
 			}
 		}
-		else
-		{
-			resize();
-		}
 	}
-	
+	else
+	{
+		std::cout << "Adding first item" << std::endl;
+		set[0] = item;
+		added = true;
+		present++;
+		std::cout << "Added first item" << std::endl;
+	}
 	return added;
 }
 
@@ -231,7 +242,7 @@ ListItem *Set::get_item(int index) { return set[index];}
 
 int Set::get_support(int name)
 {
-	ListItem *temp = (ListItem *) new Item(name);
+	ListItem *temp = new Item(name);
 	int support = -1;
 	
 	int i;
@@ -287,8 +298,10 @@ void Set::resize()
 	set = copy(set, present);
 }
 
+
 ListItem **Set::copy(ListItem **old, int count)
 {
+	/*
 	ListItem **new_set = (ListItem **)malloc(sizeof(ListItem *) * count);
 	
 	int i;
@@ -305,9 +318,36 @@ ListItem **Set::copy(ListItem **old, int count)
 			delete(set[i]);
 		}
 	}
-	delete [] old
+	delete [] old;
 	
 	return new_set;
+	*/
+	
+	return NULL;
+}
+
+ListItem *Set::copy()
+{
+	Set *copy = new Set();
+	copy->present = present;
+	copy->size = size;
+	
+	copy->set = (ListItem **)malloc(sizeof(ListItem *) * size);
+	
+	int i;
+	for (i = 0; i < present; i++)
+	{
+		if (Set *s = dynamic_cast<Set *>(set[i]))
+		{
+			copy->set[i] = new Set(s);
+		}
+		else if (Item *item = dynamic_cast<Item *>(set[i]))
+		{
+			copy->set[i] = new Item(item);
+		}
+	}
+	
+	return copy;
 }
 
 void Set::merge(Set *other)
@@ -315,8 +355,14 @@ void Set::merge(Set *other)
 	int i;
 	for (i = 0; i < other->present; i++)
 	{
-		add_item(other->set[i]);
+		std::cout << "Adding " << i << std::endl;
+		add_item(other->set[i]->copy()); // need to copy this
+		std::cout << "Successful" << std::endl;
 	}
 	
 	delete(other);
+	std::cout << "Exiting Set::merge" << std::endl;
 }
+
+int Set::get_size() { return size; }
+int Set::get_present() { return present; }

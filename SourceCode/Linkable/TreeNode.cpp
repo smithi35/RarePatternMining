@@ -134,14 +134,14 @@ void TreeNode::add_transaction(int *array, int size)
 			{
 				curr = children[i];
 				int name = curr->get_item()->get_name();
-				std::cout << "Name = " << name << std::endl;
+				// std::cout << "Name = " << name << std::endl;
 				
 				int j;
 				for (j = 0; j < size && !stop; j++)
 				{
 					if (name == array[j])
 					{
-						std::cout << "Incrementing " << name << std::endl;
+						// std::cout << "Incrementing " << name << std::endl;
 						stop = true;
 						curr->increment_quantity();
 						swap(0, j, array);
@@ -194,20 +194,20 @@ int TreeNode::count()
 		int i;
 		for (i = 0; i < children_number; i++)
 		{
-			std::cout << i << " " << children[i]->get_item() << std::endl;
+			// std::cout << i << " " << children[i]->get_item() << std::endl;
 			count+= children[i]->count();
 			
-			std::cout << "Count = " << count << std::endl;
+			// std::cout << "Count = " << count << std::endl;
 		}
 	}
 	
 	return count;
 }
 
-Set **TreeNode::examine()
+Set *TreeNode::examine()
 {
 	Set *set = new Set();
-	// int old_count = 0;
+	std::cout << "Starting" << std::endl;
 
 	if (children_number > 0)
 	{
@@ -215,17 +215,22 @@ Set **TreeNode::examine()
 		int i;
 		for (i = 0; i < children_number; i++)
 		{
-			int new_count = children[i]->count();
-			// std::cout << "Count = " << new_count << std::endl;
-			
+			std::cout << "Stuff" << std::endl;
 			Set *child_set = children[i]->examine();
+			std::cout << "Merging" << std::endl;
 			set->merge(child_set); // merge only adds the contents of the new set with set
-			// old_count = new_count;
+			std::cout << "Done merging" << std::endl;
 		}
 	}
 	else
 	{
-		set->add_item(new Set(new Item(item)));
+		std::cout << "No children" << std::endl;
+		Item *q = new Item(item);
+		std::cout << "Item" << std::endl;
+		Set *r = new Set(q);
+		std::cout << "Set" << std::endl;
+		set->add_item(r);
+		std::cout << "added singleton" << std::endl;
 	}
 
 	return set;

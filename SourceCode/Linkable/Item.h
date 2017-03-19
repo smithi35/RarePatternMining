@@ -23,6 +23,7 @@ class Item: public ListItem
 		bool equals(ListItem *other);
 		void print();
 		ListItem *copy(ListItem *other);
+		ListItem *copy();
 };
 
 #endif

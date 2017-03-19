@@ -84,22 +84,22 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 	
 	if (array != NULL)
 	{
-		Set *set = array->get_itemset();
+		Set *header = array->get_itemset();
 		
-		if (set != NULL)
+		if (header != NULL)
 		{
-			set->print();
-			set->remove_non_rare_items(max_support);
-			set->print();
-			set->sort();
-			set->print();
+			header->print();
+			header->remove_non_rare_items(max_support);
+			header->print();
+			header->sort();
+			header->print();
 			// set now works as the header table for the tree
 			
-			array->remove_non_rare_items(set);
+			array->remove_non_rare_items(header);
 			
 			array->print();
 			std::cout << "Printing Transaction List" << std::endl;
-			array->sort(set);
+			array->sort(header);
 			array->print();
 			
 			// build the tree
@@ -108,18 +108,29 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 			if (tree != NULL)
 			{
 				build_tree(tree, array);
-				tree->print();
+				cout << "The tree has " << tree->size() << " nodes in it" << endl;
 				
 				// recursively examine the tree
-				// tree->examine();
+				Set *rare_patterns = tree->examine();
+				std::cout << "We have some patterns" << std::endl;
 				
+				if (rare_patterns != NULL)
+				{
+					cout << rare_patterns->get_present() << endl;
+					rare_patterns->print();
+					delete(rare_patterns);
+				}
+				else
+				{
+					cout << "Failed to create rare patterns" << endl;
+				}
 				delete(tree);
 			}
 			else
 			{
 				cout << "Failed to create tree" << endl;
 			}
-			delete(set);
+			delete(header);
 		}
 		else
 		{

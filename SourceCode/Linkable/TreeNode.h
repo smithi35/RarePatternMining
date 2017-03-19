@@ -13,7 +13,7 @@ class TreeNode
 		int children_number;
 		TreeNode(TreeNode *copy);
 		void delete_children();
-		Set **add_set(Set *set, Set *adding)
+		Set **add_set(Set *set, Set *adding);
 		void delete_itemset_array(Set **set, int size);
 		int *revise_array(int *array, int size);
 		void swap(int first, int second, int *array);
@@ -29,7 +29,7 @@ class TreeNode
 		void print();
 		void add_transaction(int *array, int size);
 		void increment_quantity();
-		Set **examine();
+		Set *examine();
 		int count();
 };
 
