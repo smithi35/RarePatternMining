@@ -53,20 +53,7 @@ Set::~Set()
 {
 	std::cout << "Deleting set" << std::endl << "Size = " << size << std::endl;
 	
-	if (present > 0)
-	{
-		int i;
-		for (i = 0; i < present; i++)
-		{
-			delete set[i];
-		}
-	}
-	
-	std::cout << "Deleting array" << std::endl;
-	if (set != NULL)
-	{
-		free(set);
-	}
+	free(set);
 	
 	std::cout << "Deleted set" << std::endl;
 }
@@ -84,9 +71,10 @@ bool Set::add_item(ListItem *item)
 		int i;
 		for (i = 0; i < present && !added; i++)
 		{
-			if (set[i]->equals(item))
+			ListItem *curr = set[i];
+			if (curr->equals(item))
 			{
-				set[i]->increment_support();
+				curr->increment_support();
 				delete item;
 				added = true;
 			}
@@ -96,7 +84,8 @@ bool Set::add_item(ListItem *item)
 		{
 			if (i < size)
 			{
-				set[i] = item;
+				ListItem *temp = item->copy();
+				set[i] = temp;
 				added = true;
 				
 				if (present + 1 <= size)
@@ -138,8 +127,11 @@ void Set::print()
 		int i;
 		for (i = 0; i < present; i++)
 		{
-			set[i]->print();
+			std::cout << "i = " << i << std::endl;
+			ListItem *curr = set[i];
+			curr->print();
 		}
+		std::cout << "Post-loop: i = " << i << std::endl;
 	}
 	std::cout << "Done printing" << std::endl;
 }
@@ -185,7 +177,7 @@ void Set::remove_non_rare_items(int max_support)
 	for (i = 0; i < present; i++)
 		delete(set[i]);
 	
-	delete [] set;
+	free(set);
 	
 	this->present = next;
 	this->size = new_size;
@@ -396,11 +388,10 @@ void Set::merge(Set *other)
 	for (i = 0; i < other->present; i++)
 	{
 		std::cout << "Adding " << i << std::endl;
-		ListItem *curr = other->set[i];
-		ListItem *item = curr->copy();
+		ListItem *curr = other->get_item(i);
 		std::cout << "Curr = " << std::endl;
-		item->print();
-		add_item(item);
+		curr->print();
+		add_item(curr);
 		std::cout << "Successful" << std::endl;
 	}
 	std::cout << "Done merging, printing new set" << std::endl;

@@ -31,9 +31,8 @@ void TransactionList::resize()
 	for (i = 0; i < present; i++)
 	{
 		new_list[i] = new Transaction(list[i]);
-		delete list[i];
 	}
-	delete [] list;
+	free(list);
 	
 	list = new_list;
 	size = new_size;

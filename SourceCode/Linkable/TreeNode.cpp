@@ -225,6 +225,7 @@ Set *TreeNode::examine()
 			set->merge(child_set); // merge only adds the contents of the new set to set right now
 			set->print();
 			std::cout << "Done merging" << std::endl;
+			delete child_set;
 		}
 	}
 	else
