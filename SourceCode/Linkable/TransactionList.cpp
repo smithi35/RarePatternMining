@@ -193,7 +193,7 @@ void TransactionList::remove_non_rare_items(Set *set)
 	{
 		delete(list[i]);
 	}
-	delete [] list;
+	free(list);
 	
 	list = replacement;
 	present = revised;

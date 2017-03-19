@@ -10,11 +10,12 @@ class Set: public ListItem
 		ListItem **set;
 		int size;
 		int present;
+		void init_array();
 		int partition(int first, int last);
 		void qsort(int first, int last);
 		void swap(int first, int second);
 		void increase_support(int add);
-		void resize();
+		void increase_size();
 		void resize(int s);
 		ListItem **copy(ListItem **old, int count);
 	public:
@@ -29,6 +30,7 @@ class Set: public ListItem
 		bool contains(ListItem *item);
 		void sort();
 		ListItem *get_item(int index);
+		ListItem *remove_item(int index);
 		int get_support(int name);
 		int *get_items();
 		void set_support(int s);

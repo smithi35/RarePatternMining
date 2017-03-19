@@ -5,7 +5,8 @@
 Set::Set(int s)
 {
 	size = s;
-	set = (ListItem **)malloc(sizeof(ListItem *) * s);
+	set = new ListItem *[s];
+	init_array();
 	present = 0;
 	ListItem::set_support(0);
 }
@@ -15,7 +16,8 @@ Set::Set(Set *copy)
 	present = copy->present;
 	size = copy->size;
 	ListItem::set_support(copy->ListItem::get_support());
-	set = (ListItem **)malloc(sizeof(ListItem *) * size);
+	set = new ListItem *[copy->size];
+	init_array();
 	
 	int i;
 	for (i = 0; i < present; i++)
@@ -36,7 +38,8 @@ Set::Set()
 	present = 0;
 	size = 1;
 	ListItem::set_support(0);
-	set = (ListItem **)malloc(sizeof(ListItem *) * size);
+	set = new ListItem *[size];
+	init_array();
 }
 
 Set::Set(Item *i)
@@ -44,16 +47,26 @@ Set::Set(Item *i)
 	present = 0;
 	size = 1;
 	ListItem::set_support(i->get_support());
-	set = (ListItem **)malloc(sizeof(ListItem *) * size);
+	set = new ListItem *[size];
+	init_array();
 	add_item(i);
 	std::cout << "Initialized with single item" << std::endl;
+}
+
+void Set::init_array()
+{
+	int i;
+	for (i = 0; i < size; i++)
+	{
+		set[i] = NULL;
+	}
 }
 
 Set::~Set()
 {
 	std::cout << "Deleting set" << std::endl << "Size = " << size << std::endl;
 	
-	free(set);
+	delete [] set;
 	
 	std::cout << "Deleted set" << std::endl;
 }
@@ -71,7 +84,9 @@ bool Set::add_item(ListItem *item)
 		int i;
 		for (i = 0; i < present && !added; i++)
 		{
+			std::cout << "I = " << i << std::endl;
 			ListItem *curr = set[i];
+			
 			if (curr->equals(item))
 			{
 				curr->increment_support();
@@ -84,7 +99,7 @@ bool Set::add_item(ListItem *item)
 		{
 			if (i < size)
 			{
-				ListItem *temp = item->copy();
+				ListItem *temp = item;
 				set[i] = temp;
 				added = true;
 				
@@ -100,7 +115,7 @@ bool Set::add_item(ListItem *item)
 			else
 			{
 				std::cout << "Need to resize the set" << std::endl;
-				resize();
+				increase_size();
 				std::cout << "Add Item again" << std::endl;
 				add_item(item);
 			}
@@ -122,14 +137,16 @@ void Set::print()
 	std::cout << "Printing Set" << std::endl;
 	std::cout << "Present = " << present << std::endl;
 	
-	if (present > 0)
+	if (present > 0 && present <= size)
 	{
 		int i;
 		for (i = 0; i < present; i++)
 		{
-			std::cout << "i = " << i << std::endl;
-			ListItem *curr = set[i];
-			curr->print();
+			std::cout << "i = " << i << ", present = " << present << 
+				", size = " << size << std::endl;
+			
+			if (set[i] != NULL)
+				set[i]->print();
 		}
 		std::cout << "Post-loop: i = " << i << std::endl;
 	}
@@ -150,7 +167,7 @@ void Set::remove_non_rare_items(int max_support)
 	}
 	
 	int new_size = size-total;
-	ListItem **new_set = (ListItem **)malloc(sizeof(ListItem *) * new_size);
+	ListItem **new_set = new ListItem *[new_size];
 	int next = 0;
 	
 	for (i = 0; i < present; i++)
@@ -177,7 +194,7 @@ void Set::remove_non_rare_items(int max_support)
 	for (i = 0; i < present; i++)
 		delete(set[i]);
 	
-	free(set);
+	delete [] set;
 	
 	this->present = next;
 	this->size = new_size;
@@ -308,11 +325,36 @@ bool Set::equals(ListItem *other)
 	return equals;
 }
 
-void Set::resize()
+void Set::increase_size()
 {
-	size = 2 * size;
-	copy();
-	print();
+	std::cout << "Increasing the size of the set" << std::endl;
+	int new_size = size * 2;
+	ListItem **replacement = new ListItem *[new_size];
+	
+	int i;
+	for (i = 0; i < new_size; i++)
+		replacement[i] = NULL;
+
+	if (present <= size)
+	{
+		int count = 0;
+		for (i = 0; i < present; i++)
+		{
+			if (set[i] != NULL)
+			{
+				set[i]->print();
+				ListItem *temp = set[i]->copy();
+				replacement[count] = temp;
+				count++;
+			}
+		}
+		std::cout << "Count = " << count << std::endl;
+		present = count;
+		delete [] set;
+		set = replacement;
+		size = new_size;
+	}
+	std::cout << "Worked? " << (set[0] != NULL) << std::endl;
 }
 
 void Set::resize(int s)
@@ -322,6 +364,24 @@ void Set::resize(int s)
 		size = s;
 		copy();
 		print();
+	}
+	else
+	{
+		ListItem **replace = new ListItem *[s];
+		int count = 0;
+		
+		int i;
+		for (i = 0; i < present; i++)
+		{
+			if (set[i] != NULL)
+			{
+				replace[count] = set[i]->copy();
+			}
+		}
+		
+		free(set);
+		set = replace;
+		present = count;
 	}
 }
 
@@ -359,19 +419,12 @@ ListItem *Set::copy()
 	copy->present = present;
 	copy->size = size;
 	
-	copy->set = (ListItem **)malloc(sizeof(ListItem *) * size);
+	copy->set = new ListItem *[size];
 	
 	int i;
 	for (i = 0; i < present; i++)
 	{
-		if (Set *s = dynamic_cast<Set *>(set[i]))
-		{
-			copy->set[i] = new Set(s);
-		}
-		else if (Item *item = dynamic_cast<Item *>(set[i]))
-		{
-			copy->set[i] = new Item(item);
-		}
+		copy->set[i] = set[i]->copy();
 	}
 	
 	return copy;
@@ -388,19 +441,36 @@ void Set::merge(Set *other)
 	for (i = 0; i < other->present; i++)
 	{
 		std::cout << "Adding " << i << std::endl;
-		ListItem *curr = other->get_item(i);
+		ListItem *curr = other->remove_item(i);
 		std::cout << "Curr = " << std::endl;
-		curr->print();
-		add_item(curr);
-		std::cout << "Successful" << std::endl;
+		bool add = add_item(curr);
+		std::cout << "Successful: " << add << std::endl;
 	}
+	resize(present);
+	std::cout << "Size = " << size << ", present = " << present << std::endl;
 	std::cout << "Done merging, printing new set" << std::endl;
 	std::cout << "Present = " << present << std::endl;
 	print();
 	std::cout << "Successful print" << std::endl;
-	//delete(other);
 	std::cout << "Exiting Set::merge" << std::endl;
 }
 
 int Set::get_size() { return size; }
 int Set::get_present() { return present; }
+
+ListItem *Set::remove_item(int index)
+{
+	ListItem *removed = NULL;
+	
+	if (set != NULL)
+	{
+		ListItem *at_index = set[index];
+		if (at_index != NULL)
+		{
+			removed = (ListItem *) at_index;
+			set[index] = NULL;
+		}
+	}
+	
+	return removed;
+}
