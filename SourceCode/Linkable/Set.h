@@ -15,6 +15,7 @@ class Set: public ListItem
 		void swap(int first, int second);
 		void increase_support(int add);
 		void resize();
+		void resize(int s);
 		ListItem **copy(ListItem **old, int count);
 	public:
 		Set(int s);

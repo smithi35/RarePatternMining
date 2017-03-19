@@ -30,16 +30,8 @@ TreeNode::~TreeNode()
 	{
 		delete children[i];
 	}
-	
-	// if Set, need to call the destructor
-	if (Set *s = dynamic_cast<Set *>(item))
-	{
-		delete(s);
-	}
-	else if (Item *i = dynamic_cast<Item *>(item))
-	{
-		delete(i);
-	}
+	free(children);
+	delete item;
 }
 
 Item *TreeNode::get_item() {return item;}

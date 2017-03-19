@@ -17,9 +17,9 @@ TransactionList::~TransactionList()
 	int i;
 	for (i = 0; i < present; i++)
 	{
-		delete(list[i]);
+		delete list[i];
 	}
-	delete [] list;
+	free(list);
 }
 
 void TransactionList::resize()
@@ -31,7 +31,7 @@ void TransactionList::resize()
 	for (i = 0; i < present; i++)
 	{
 		new_list[i] = new Transaction(list[i]);
-		delete(list[i]);
+		delete list[i];
 	}
 	delete [] list;
 	

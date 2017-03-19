@@ -93,7 +93,6 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 			header->print();
 			header->sort();
 			header->print();
-			// set now works as the header table for the tree
 			
 			array->remove_non_rare_items(header);
 			
@@ -112,12 +111,13 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				
 				// recursively examine the tree
 				Set *rare_patterns = tree->examine();
-				std::cout << "We have " << rare_patterns->get_present() << " patterns" << std::endl;
+				std::cout << "There are " << rare_patterns->get_present() << " patterns" << std::endl;
 				
 				if (rare_patterns != NULL)
 				{
+					cout << "Printing Rare Patterns" << endl;
 					rare_patterns->print();
-					delete(rare_patterns);
+					delete rare_patterns;
 				}
 				else
 				{
@@ -149,9 +149,9 @@ int main()
 	const char *inputfilename = input.c_str();
 	string output = "first_trial.txt";
 	const char *outputfilename = output.c_str();
-	process(inputfilename, outputfilename, 2);
+	// process(inputfilename, outputfilename, 2);
 	
-	//process(inputfilename, outputfilename, 3);
+	process(inputfilename, outputfilename, 3);
 	
 	return 0;
 }
