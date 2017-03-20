@@ -50,7 +50,7 @@ Set::Set(Item *i)
 	set = new ListItem *[size];
 	init_array();
 	add_item(i);
-	std::cout << "Initialized with single item" << std::endl;
+	// std::cout << "Initialized with single item" << std::endl;
 }
 
 void Set::init_array()
@@ -64,11 +64,11 @@ void Set::init_array()
 
 Set::~Set()
 {
-	std::cout << "Deleting set" << std::endl << "Size = " << size << std::endl;
+	// std::cout << "Deleting set" << std::endl << "Size = " << size << std::endl;
 	
 	delete [] set;
 	
-	std::cout << "Deleted set" << std::endl;
+	// std::cout << "Deleted set" << std::endl;
 }
 
 void Set::increase_support(int add) { ListItem::increase_support(add);}
@@ -84,7 +84,7 @@ bool Set::add_item(ListItem *item)
 		int i;
 		for (i = 0; i < present && !added; i++)
 		{
-			std::cout << "I = " << i << std::endl;
+			// std::cout << "I = " << i << std::endl;
 			ListItem *curr = set[i];
 			
 			if (curr->equals(item))
@@ -109,25 +109,25 @@ bool Set::add_item(ListItem *item)
 				}
 				else
 				{
-					std::cout << "Set::add_item() says there is no more room in the Set" << std::endl;
+					// std::cout << "Set::add_item() says there is no more room in the Set" << std::endl;
 				}
 			}
 			else
 			{
-				std::cout << "Need to resize the set" << std::endl;
+				// std::cout << "Need to resize the set" << std::endl;
 				increase_size();
-				std::cout << "Add Item again" << std::endl;
+				// std::cout << "Add Item again" << std::endl;
 				add_item(item);
 			}
 		}
 	}
 	else
 	{
-		std::cout << "Adding first item" << std::endl;
+		// std::cout << "Adding first item" << std::endl;
 		set[0] = item;
 		added = true;
 		present++;
-		std::cout << "Added first item" << std::endl;
+		// std::cout << "Added first item" << std::endl;
 	}
 	return added;
 }
@@ -142,13 +142,13 @@ void Set::print()
 		int i;
 		for (i = 0; i < present; i++)
 		{
-			std::cout << "i = " << i << ", present = " << present << 
+			// std::cout << "i = " << i << ", present = " << present << 
 				", size = " << size << std::endl;
 			
 			if (set[i] != NULL)
 				set[i]->print();
 		}
-		std::cout << "Post-loop: i = " << i << std::endl;
+		// std::cout << "Post-loop: i = " << i << std::endl;
 	}
 	std::cout << "Done printing" << std::endl;
 }
@@ -219,7 +219,7 @@ bool Set::contains(ListItem *item)
 
 void Set::sort()
 {
-	std::cout << "Sorting Set" << std::endl;
+	// std::cout << "Sorting Set" << std::endl;
 	qsort(0, present-1);
 }
 
@@ -327,7 +327,7 @@ bool Set::equals(ListItem *other)
 
 void Set::increase_size()
 {
-	std::cout << "Increasing the size of the set" << std::endl;
+	// std::cout << "Increasing the size of the set" << std::endl;
 	int new_size = size * 2;
 	ListItem **replacement = new ListItem *[new_size];
 	
@@ -348,13 +348,13 @@ void Set::increase_size()
 				count++;
 			}
 		}
-		std::cout << "Count = " << count << std::endl;
+		// std::cout << "Count = " << count << std::endl;
 		present = count;
 		delete [] set;
 		set = replacement;
 		size = new_size;
 	}
-	std::cout << "Worked? " << (set[0] != NULL) << std::endl;
+	// std::cout << "Worked? " << (set[0] != NULL) << std::endl;
 }
 
 void Set::resize(int s)
@@ -432,30 +432,30 @@ ListItem *Set::copy()
 
 void Set::merge(Set *other)
 {
-	std::cout << "Inside Set::merge" << std::endl;
-	print();
-	other->print();
-	std::cout << "Done printing stuff inside Set::merge" << std::endl;
+	// std::cout << "Inside Set::merge" << std::endl;
+	// print();
+	// other->print();
+	// std::cout << "Done printing stuff inside Set::merge" << std::endl;
 	
 	int i;
 	for (i = 0; i < other->present; i++)
 	{
-		std::cout << "Adding " << i << std::endl;
+		// std::cout << "Adding " << i << std::endl;
 		ListItem *curr = other->remove_item(i);
-		std::cout << "Curr = " << std::endl;
+		// std::cout << "Curr = " << std::endl;
 		bool add = add_item(curr);
-		std::cout << "Successful: " << add << std::endl;
+		// std::cout << "Successful: " << add << std::endl;
 	}
 	
 	// still need to add the item supersets
 	
 	resize(present);
-	std::cout << "Size = " << size << ", present = " << present << std::endl;
-	std::cout << "Done merging, printing new set" << std::endl;
-	std::cout << "Present = " << present << std::endl;
-	print();
-	std::cout << "Successful print" << std::endl;
-	std::cout << "Exiting Set::merge" << std::endl;
+	// std::cout << "Size = " << size << ", present = " << present << std::endl;
+	// std::cout << "Done merging, printing new set" << std::endl;
+	// std::cout << "Present = " << present << std::endl;
+	// print();
+	// std::cout << "Successful print" << std::endl;
+	// std::cout << "Exiting Set::merge" << std::endl;
 }
 
 int Set::get_size() { return size; }

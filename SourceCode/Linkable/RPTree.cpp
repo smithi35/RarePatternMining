@@ -36,7 +36,7 @@ int RPTree::size()
 void RPTree::print()
 {
 	root->print();
-	std::cout << std::endl;
+	// std::cout << std::endl;
 }
 
 /*
