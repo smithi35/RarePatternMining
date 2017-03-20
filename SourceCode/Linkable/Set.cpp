@@ -142,8 +142,7 @@ void Set::print()
 		int i;
 		for (i = 0; i < present; i++)
 		{
-			// std::cout << "i = " << i << ", present = " << present << 
-				", size = " << size << std::endl;
+			// std::cout << "i = " << i << ", present = " << present << ", size = " << size << std::endl;
 			
 			if (set[i] != NULL)
 				set[i]->print();
@@ -440,14 +439,16 @@ void Set::merge(Set *other)
 	int i;
 	for (i = 0; i < other->present; i++)
 	{
+		if (Set *s = dynamic_cast<Set *>(other->remove_item(i)))
+		{
+			bool add = add_item(s);
+			std::cout << "Successful: " << add << std::endl;
+		}
+		
 		// std::cout << "Adding " << i << std::endl;
-		ListItem *curr = other->remove_item(i);
+		// ListItem *curr = other->remove_item(i);
 		// std::cout << "Curr = " << std::endl;
-		bool add = add_item(curr);
-		// std::cout << "Successful: " << add << std::endl;
 	}
-	
-	// still need to add the item supersets
 	
 	resize(present);
 	// std::cout << "Size = " << size << ", present = " << present << std::endl;

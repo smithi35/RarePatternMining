@@ -12,6 +12,32 @@
 
 using namespace std;
 
+bool do_a_test()
+{
+	bool success = false;
+	
+	Set *a = new Set(1);
+	Set *b = new Set(1);
+	
+	Item *i = new Item(1, 1);
+	Item *j = new Item(2, 2);
+	
+	a->add_item(i);
+	b->add_item(j);
+	
+	a->merge(b);
+	a->print();
+	
+	Set *comp = new Set(2);
+	comp->add_item(i->copy());
+	comp->add_item(j->copy());
+	
+	if (a->equals(comp))
+		success = true;
+	
+	return success;
+}
+
 string get_contents(const char* filename)
 {
 	ifstream stream;
@@ -145,6 +171,8 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 
 int main()
 {
+	// cout << "Test? " << do_a_test() << endl;
+	
 	string input = "PreciseDB.txt";
 	const char *inputfilename = input.c_str();
 	string output = "first_trial.txt";
