@@ -446,6 +446,9 @@ void Set::merge(Set *other)
 		bool add = add_item(curr);
 		std::cout << "Successful: " << add << std::endl;
 	}
+	
+	// still need to add the item supersets
+	
 	resize(present);
 	std::cout << "Size = " << size << ", present = " << present << std::endl;
 	std::cout << "Done merging, printing new set" << std::endl;
