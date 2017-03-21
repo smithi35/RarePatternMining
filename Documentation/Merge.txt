@@ -1,0 +1,32 @@
+For examining the Nodes:
+	First, create a set for the current node alone
+	
+	Then, for each child-node, combine it with the other sets
+	
+e.g., for a tree that goes 1:1, 2:1, 3:2 (1 has 2 children, 2 and 3) the result should be a set that includes: {1}:2, {2}:1, {3}:1, {1,2}:1, {1,3}:1
+It goes like this:
+	For 1, you create the set: {1}:2, then call the children:
+		For 2, you simply return {2}:1
+		For 3, you simply return {3}:1
+	When you have those child sets you have {1}:2, and {2}:1, you return those two plus {1,2}:1
+	When you get back {3}:1 you return: {{1}:1, {3}:1, {1,3}:1
+Meaning you get back {{1}:2, {2}:1, {3}:1, {1,2}:1, {1:3}:1}
+The support is just the support of the leaf node, though as always if an identical set is added it will just increment the support value for correctness
+
+For a parent, you add the parent node to the superset, and to all the subsets, keeping copies of the original ones.
+
+The next tree is a little bigger: [1:4,2:3,3:2,4:1,5:1,6:1,7:1]
+	For 1, {1}:4 then call the children (2 and 3)
+		For 2, {2}:3, then call the children (4 and 5)
+			For 4 return {4}:1
+			For 5 return {5}:1
+		Return {{2}:3, {4}:1, {5}:1, {2,4}:1, {2,5}:1}
+	So far we have: {{1}:4, {2}:3, {4}:1, {5}:1, {2,4}:1, {2,5}:1, {1,2}:3, {1,2,4}:1, {1,2,5}:1}
+		For 3, {3}:2, then call 6 and 7
+			For 6 return {6}:1
+			For 7 return {7}:1
+		Return {{3}:2, {6}:1, {7}:1, {3,6}:1, {3,7}:1}
+	We return: {{1}:4, {2}:3, {3}:2, {4}:1, {5}:1, {6}:1, {7}:1, {1,2}:3, {1,3}:2, {2,4}:1, {2,5}:1, {3,6}:1, {3,7}:1, {1,2,4}:1, {1,2,5}:1, {1,3,6}:1, {1,3,7}:1}
+Sometimes I really, really hate recursion
+Could recreate the database using the tree to some extent, but why bother?
+Bottom line is that all those patterns are clearly in the tree.
