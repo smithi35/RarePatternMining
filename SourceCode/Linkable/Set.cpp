@@ -89,7 +89,10 @@ bool Set::add_item(ListItem *item)
 			
 			if (curr->equals(item))
 			{
-				curr->increment_support();
+				if (item->get_support() > 1)
+					curr->increase_support(item->get_support());
+				else
+					curr->increment_support();
 				delete item;
 				added = true;
 			}

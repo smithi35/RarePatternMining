@@ -200,10 +200,9 @@ int TreeNode::count()
 Set *TreeNode::examine()
 {
 	Set *set = new Set();
-	Item *curr = (Item *) item->copy();
+	Item *item_copy = (Item *) item->copy();
 	Set *singleton = new Set(curr);
-	set->add_item(singleton);
-	Set *copy = set->copy();
+	set->add_item(singleton->copy());
 	// std::cout << "Starting" << std::endl;
 
 	if (children_number > 0)
@@ -216,7 +215,6 @@ Set *TreeNode::examine()
 		for (i = 0; i < children_number; i++)
 		{
 			Set *singleton_copy = singleton->copy();
-			// std::cout << "Stuff" << std::endl;
 			Set *child_set = children[i]->examine();
 			set->merge(child_set); // merge only adds the contents of the new set to set right now
 			Set *child_copy = child_set->copy();
@@ -229,7 +227,7 @@ Set *TreeNode::examine()
 				if (Set *c = dynamic_cast<Set *>(curr))
 				{
 					// add item to the contents of the set, the support value should remain the same
-					c->merge(singleton_copy);
+					c->add_item(item->copy());
 				}
 				set->add_item(curr);
 			}
