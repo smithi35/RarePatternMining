@@ -199,17 +199,14 @@ int TreeNode::count()
 Set *TreeNode::examine()
 {
 	Set *set = new Set();
+	Item *curr = (Item *) item->copy();
+	Set *singleton = new Set(curr);
+	set->add_item(singleton);
+	Set *copy = set->copy();
 	// std::cout << "Starting" << std::endl;
 
 	if (children_number > 0)
 	{
-		if (item->get_name() > 0)
-		{
-			Item *curr = (Item *) item->copy();
-			Set *singleton = new Set(curr);
-			set->add_item(singleton);
-		}
-		
 		// std::cout << "There are " << children_number << " Children for this node" << std::endl;
 		// print();
 		
@@ -227,16 +224,6 @@ Set *TreeNode::examine()
 			// std::cout << "Done merging" << std::endl;
 			delete child_set;
 		}
-	}
-	else
-	{
-		// std::cout << "No children" << std::endl;
-		Item *curr = new Item(item);
-		// std::cout << "Item" << std::endl;
-		Set *singleton = new Set(curr);
-		// std::cout << "Set" << std::endl;
-		set->add_item(singleton);
-		// std::cout << "added singleton" << std::endl;
 	}
 
 	return set;
