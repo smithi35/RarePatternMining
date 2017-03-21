@@ -450,7 +450,7 @@ void Set::merge(Set *other)
 		// std::cout << "Curr = " << std::endl;
 	}
 	
-	resize(present);
+	resize(present); // this should be conditional
 	// std::cout << "Size = " << size << ", present = " << present << std::endl;
 	// std::cout << "Done merging, printing new set" << std::endl;
 	// std::cout << "Present = " << present << std::endl;
