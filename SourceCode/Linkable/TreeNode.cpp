@@ -196,20 +196,17 @@ int TreeNode::count()
 	return count;
 }
 
+// Recursively examine the contents of this TreeNode and its children
 Set *TreeNode::examine()
 {
 	Set *set = new Set();
+	Item *item_copy = (Item *) item->copy();
+	Set *singleton = new Set(curr);
+	set->add_item(singleton->copy());
 	// std::cout << "Starting" << std::endl;
 
 	if (children_number > 0)
 	{
-		if (item->get_name() > 0)
-		{
-			Item *curr = (Item *) item->copy();
-			Set *singleton = new Set(curr);
-			set->add_item(singleton);
-		}
-		
 		// std::cout << "There are " << children_number << " Children for this node" << std::endl;
 		// print();
 		
@@ -217,26 +214,33 @@ Set *TreeNode::examine()
 		int i;
 		for (i = 0; i < children_number; i++)
 		{
-			// std::cout << "Stuff" << std::endl;
+			Set *singleton_copy = singleton->copy();
 			Set *child_set = children[i]->examine();
+			set->merge(child_set); // merge only adds the contents of the new set to set right now
+			Set *child_copy = child_set->copy();
+			
+			int j;
+			for (j = 0; j < child_copy->get_present(); j++)
+			{
+				ListItem *curr = child_copy->get(j);
+				
+				if (Set *c = dynamic_cast<Set *>(curr))
+				{
+					// add item to the contents of the set, the support value should remain the same
+					c->add_item(item->copy());
+				}
+				set->add_item(curr);
+			}
+			
+			// merge the contents of copy with the contents of child_set?
+			
 			
 			child_set->print();
 			// std::cout << "Merging" << std::endl;
-			set->merge(child_set); // merge only adds the contents of the new set to set right now
 			set->print();
 			// std::cout << "Done merging" << std::endl;
 			delete child_set;
 		}
-	}
-	else
-	{
-		// std::cout << "No children" << std::endl;
-		Item *curr = new Item(item);
-		// std::cout << "Item" << std::endl;
-		Set *singleton = new Set(curr);
-		// std::cout << "Set" << std::endl;
-		set->add_item(singleton);
-		// std::cout << "added singleton" << std::endl;
 	}
 
 	return set;

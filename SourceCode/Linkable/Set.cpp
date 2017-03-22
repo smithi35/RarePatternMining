@@ -89,7 +89,10 @@ bool Set::add_item(ListItem *item)
 			
 			if (curr->equals(item))
 			{
-				curr->increment_support();
+				if (item->get_support() > 1)
+					curr->increase_support(item->get_support());
+				else
+					curr->increment_support();
 				delete item;
 				added = true;
 			}
@@ -453,7 +456,7 @@ void Set::merge(Set *other)
 		// std::cout << "Curr = " << std::endl;
 	}
 	
-	resize(present);
+	resize(present); // this should be conditional
 	// std::cout << "Size = " << size << ", present = " << present << std::endl;
 	// std::cout << "Done merging, printing new set" << std::endl;
 	// std::cout << "Present = " << present << std::endl;
