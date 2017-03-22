@@ -201,7 +201,7 @@ Set *TreeNode::examine()
 {
 	Set *set = new Set();
 	Item *item_copy = (Item *) item->copy();
-	Set *singleton = new Set(curr);
+	Set *singleton = new Set(item_copy);
 	set->add_item(singleton->copy());
 	// std::cout << "Starting" << std::endl;
 
@@ -214,15 +214,15 @@ Set *TreeNode::examine()
 		int i;
 		for (i = 0; i < children_number; i++)
 		{
-			Set *singleton_copy = singleton->copy();
+			Set *singleton_copy = (Set *)singleton->copy();
 			Set *child_set = children[i]->examine();
 			set->merge(child_set); // merge only adds the contents of the new set to set right now
-			Set *child_copy = child_set->copy();
+			Set *child_copy = (Set *)child_set->copy();
 			
 			int j;
 			for (j = 0; j < child_copy->get_present(); j++)
 			{
-				ListItem *curr = child_copy->get(j);
+				ListItem *curr = child_copy->get_item(j);
 				
 				if (Set *c = dynamic_cast<Set *>(curr))
 				{
