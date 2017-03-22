@@ -134,22 +134,23 @@ bool Set::add_item(ListItem *item)
 
 void Set::print()
 {
-	std::cout << "Printing Set" << std::endl;
-	std::cout << "Present = " << present << std::endl;
-	
+	std::cout << "{";
 	if (present > 0 && present <= size)
 	{
 		int i;
 		for (i = 0; i < present; i++)
 		{
-			// std::cout << "i = " << i << ", present = " << present << ", size = " << size << std::endl;
-			
-			if (set[i] != NULL)
-				set[i]->print();
+			if (Set *s = dynamic_cast<Set *>(set[i]))
+			{
+				s->print();
+			}
+			else if (Item *j = dynamic_cast<Item *>(set[i]))
+			{
+				std::cout << j->get_name() << ",";
+			}
 		}
-		// std::cout << "Post-loop: i = " << i << std::endl;
 	}
-	std::cout << "Done printing" << std::endl;
+	std::cout << "}:" << ListItem::get_support() << std::endl;
 }
 
 void Set::remove_non_rare_items(int max_support)
@@ -290,6 +291,8 @@ int Set::get_support(int name)
 	
 	return support;
 }
+
+int Set::get_support() { return ListItem::get_support(); }
 
 bool Set::equals(ListItem *other)
 {

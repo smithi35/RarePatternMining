@@ -32,6 +32,7 @@ class Set: public ListItem
 		ListItem *get_item(int index);
 		ListItem *remove_item(int index);
 		int get_support(int name);
+		int get_support();
 		int *get_items();
 		void set_support(int s);
 		bool equals(ListItem *other);

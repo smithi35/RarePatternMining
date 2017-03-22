@@ -35,7 +35,7 @@ void Item::increase_support(int add) { ListItem::increase_support(add); }
 
 void Item::print()
 {
-	std::cout << "Name: " << name << ", support = " << ListItem::get_support() << std::endl;
+	std::cout << name << ":" << ListItem::get_support() << std::endl;
 }
 
 bool Item::equals(ListItem *other)

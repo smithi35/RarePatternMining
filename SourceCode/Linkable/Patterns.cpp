@@ -26,6 +26,7 @@ bool do_a_test()
 	b->add_item(j);
 	
 	a->merge(b);
+	cout << "Support = " << a->get_support() << endl;
 	a->print();
 	
 	Set *comp = new Set(2);
@@ -171,7 +172,8 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 
 int main()
 {
-	// cout << "Test? " << do_a_test() << endl;
+	cout << "Test? " << do_a_test() << endl;
+	exit(-1);
 	
 	string input = "PreciseDB.txt";
 	const char *inputfilename = input.c_str();
