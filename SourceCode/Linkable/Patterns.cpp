@@ -171,10 +171,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 }
 
 int main()
-{
-	cout << "Test? " << do_a_test() << endl;
-	exit(-1);
-	
+{	
 	string input = "PreciseDB.txt";
 	const char *inputfilename = input.c_str();
 	string output = "first_trial.txt";

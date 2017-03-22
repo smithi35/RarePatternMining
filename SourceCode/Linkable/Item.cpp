@@ -26,7 +26,7 @@ Item::Item(Item *item)
 	ListItem::set_support(item->ListItem::get_support());
 }
 
-Item::~Item() { std::cout << "Deleting item" << std::endl; }
+Item::~Item() { }
 
 int Item::get_name() {return name;}
 int Item::get_support() {return ListItem::get_support();}

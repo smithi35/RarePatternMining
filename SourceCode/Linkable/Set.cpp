@@ -90,9 +90,13 @@ bool Set::add_item(ListItem *item)
 			if (curr->equals(item))
 			{
 				if (item->get_support() > 1)
+				{
 					curr->increase_support(item->get_support());
+				}
 				else
+				{
 					curr->increment_support();
+				}
 				delete item;
 				added = true;
 			}
@@ -110,28 +114,21 @@ bool Set::add_item(ListItem *item)
 				{
 					present++;
 				}
-				else
-				{
-					// std::cout << "Set::add_item() says there is no more room in the Set" << std::endl;
-				}
 			}
 			else
 			{
-				// std::cout << "Need to resize the set" << std::endl;
 				increase_size();
-				// std::cout << "Add Item again" << std::endl;
 				add_item(item);
 			}
 		}
 	}
 	else
 	{
-		// std::cout << "Adding first item" << std::endl;
 		set[0] = item;
 		added = true;
 		present++;
-		// std::cout << "Added first item" << std::endl;
 	}
+	
 	return added;
 }
 
@@ -149,13 +146,19 @@ void Set::print()
 			}
 			else if (Item *j = dynamic_cast<Item *>(set[i]))
 			{
-				std::cout << j->get_name() << ",";
+				std::cout << j->get_name();
+			}
+			
+			if (i+1 < present)
+			{
+				std::cout << ",";
 			}
 		}
 	}
 	std::cout << "}:" << ListItem::get_support() << std::endl;
 }
 
+// if an item in the set has more support than max_support it is removed from the set
 void Set::remove_non_rare_items(int max_support)
 {
 	int total = 0;
@@ -169,7 +172,7 @@ void Set::remove_non_rare_items(int max_support)
 		}
 	}
 	
-	int new_size = size-total;
+	int new_size = size - total;
 	ListItem **new_set = new ListItem *[new_size];
 	int next = 0;
 	
@@ -437,7 +440,7 @@ ListItem *Set::copy()
 
 void Set::merge(Set *other)
 {
-	// std::cout << "Inside Set::merge" << std::endl;
+	std::cout << "Inside Set::merge" << std::endl;
 	// print();
 	// other->print();
 	// std::cout << "Done printing stuff inside Set::merge" << std::endl;
@@ -462,7 +465,7 @@ void Set::merge(Set *other)
 	// std::cout << "Present = " << present << std::endl;
 	// print();
 	// std::cout << "Successful print" << std::endl;
-	// std::cout << "Exiting Set::merge" << std::endl;
+	std::cout << "Exiting Set::merge" << std::endl;
 }
 
 int Set::get_size() { return size; }

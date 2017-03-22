@@ -199,6 +199,7 @@ int TreeNode::count()
 // Recursively examine the contents of this TreeNode and its children
 Set *TreeNode::examine()
 {
+	std::cout << "Inside TreeNode::examine()" << std::endl;
 	Set *set = new Set();
 	Item *item_copy = (Item *) item->copy();
 	Set *singleton = new Set(item_copy);
@@ -207,17 +208,17 @@ Set *TreeNode::examine()
 
 	if (children_number > 0)
 	{
-		// std::cout << "There are " << children_number << " Children for this node" << std::endl;
-		// print();
-		
 		// call examine once for each child
 		int i;
 		for (i = 0; i < children_number; i++)
 		{
 			Set *singleton_copy = (Set *)singleton->copy();
 			Set *child_set = children[i]->examine();
-			set->merge(child_set); // merge only adds the contents of the new set to set right now
 			Set *child_copy = (Set *)child_set->copy();
+			
+			// merge only adds the contents of the new set to set right now
+			set->merge(child_set);
+			std::cout << "Here?" << std::endl;
 			
 			int j;
 			for (j = 0; j < child_copy->get_present(); j++)

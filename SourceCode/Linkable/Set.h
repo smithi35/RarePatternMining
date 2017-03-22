@@ -20,7 +20,7 @@ class Set: public ListItem
 		ListItem **copy(ListItem **old, int count);
 	public:
 		Set(int s);
-		Set(Set *set);
+		Set(Set *copy);
 		Set(Item *i);
 		Set();
 		~Set();
