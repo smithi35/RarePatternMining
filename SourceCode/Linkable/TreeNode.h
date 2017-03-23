@@ -3,12 +3,12 @@
 
 #include "Transaction.h"
 #include "Set.h"
-#include "BaseNode.h"
 #include "Item.h"
 
-class TreeNode : public BaseNode
+class TreeNode
 {
 	private:
+		ListItem *item;
 		TreeNode **children;
 		int children_number;
 		TreeNode(TreeNode *copy);

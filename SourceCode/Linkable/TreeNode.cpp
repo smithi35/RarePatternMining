@@ -5,14 +5,14 @@
 
 TreeNode::TreeNode(ListItem *i)
 {
-	BaseNode::set_item(i);
+	item = i;
 	children_number = 0;
 	children = NULL;
 }
 
 TreeNode::TreeNode(TreeNode *copy)
 {
-	BaseNode::set_item(copy->BaseNode::get_item());
+	item = copy->item->copy();
 	children_number = copy->children_number;
 	children = (TreeNode **)malloc(sizeof(TreeNode *) * children_number);
 	
@@ -31,11 +31,9 @@ TreeNode::~TreeNode()
 		delete children[i];
 	}
 	free(children);
-	
-	BaseNode::delete_item();
 }
 
-ListItem *TreeNode::get_item() {return BaseNode::get_item();}
+ListItem *TreeNode::get_item() {return item;}
 
 // add another child to the children array
 void TreeNode::add_child(TreeNode *child)
@@ -56,16 +54,17 @@ void TreeNode::add_child(TreeNode *child)
 
 void TreeNode::set_quantity(int q)
 {
-	ListItem *i = BaseNode::get_item();
-	i->set_support(q);
+	item->set_support(q);
 }
 
+/*
 void TreeNode::set_children(TreeNode **c, int q)
 {
 	children = c;
 	ListItem *i = BaseNode::get_item();
 	i->set_support(q);
 }
+*/
 
 int TreeNode::get_children_number() { return children_number;}
 
@@ -76,7 +75,7 @@ TreeNode *TreeNode::get_child(int index)
 
 void TreeNode::print()
 {
-	BaseNode::print();
+	item->print();
 	
 	int i;
 	for (i = 0; i < children_number; i++)
@@ -128,11 +127,10 @@ void TreeNode::add_transaction(int *array, int size)
 			for (i = 0; i < children_number && !stop; i++)
 			{
 				curr = children[i];
-				ListItem *temp = curr->BaseNode::get_item();
 				
-				if (Item *item = dynamic_cast<Item *>(temp))
+				if (Item *q = dynamic_cast<Item *>(item))
 				{
-					int name = item->get_name();
+					int name = q->get_name();
 					
 					int j;
 					for (j = 0; j < size && !stop; j++)
@@ -166,8 +164,7 @@ void TreeNode::add_transaction(int *array, int size)
 
 void TreeNode::increment_quantity()
 {
-	ListItem *i = BaseNode::get_item();
-	i->increment_support();
+	item->increment_support();
 }
 
 void TreeNode::delete_itemset_array(Set **set, int size)
@@ -180,7 +177,7 @@ int TreeNode::count()
 {
 	int count = -1;
 	
-	if (BaseNode::get_item() == NULL)
+	if (item == NULL)
 	{
 		count = 0;
 	}
@@ -207,14 +204,13 @@ int TreeNode::count()
 // Recursively examine the contents of this TreeNode and its children
 Set *TreeNode::examine()
 {
-	std::cout << "Inside TreeNode::examine()" << std::endl;
 	Set *set = new Set();
-	ListItem *i = BaseNode::get_item();
 	
-	if (Item *item = dynamic_cast<Item *>(i))
+	ListItem *item_copy = (Item *) item->copy();
+	
+	if (Item *q = dynamic_cast<Item *>(item_copy))
 	{
-		Item *item_copy = (Item *) item->copy();
-		Set *singleton = new Set(item_copy);
+		Set *singleton = new Set(q);
 		set->add_item(singleton->copy());
 		// std::cout << "Starting" << std::endl;
 
@@ -224,13 +220,12 @@ Set *TreeNode::examine()
 			int i;
 			for (i = 0; i < children_number; i++)
 			{
-				Set *singleton_copy = (Set *)singleton->copy();
+				// Set *singleton_copy = (Set *)singleton->copy();
 				Set *child_set = children[i]->examine();
 				Set *child_copy = (Set *)child_set->copy();
 				
 				// merge only adds the contents of the new set to set right now
 				set->merge(child_set);
-				std::cout << "Here?" << std::endl;
 				
 				int j;
 				for (j = 0; j < child_copy->get_present(); j++)
@@ -248,9 +243,9 @@ Set *TreeNode::examine()
 				// merge the contents of copy with the contents of child_set?
 				
 				
-				child_set->print();
+				// child_set->print();
 				// std::cout << "Merging" << std::endl;
-				set->print();
+				// set->print();
 				// std::cout << "Done merging" << std::endl;
 				delete child_set;
 			}

@@ -3,12 +3,11 @@
 
 #include "TreeNode.h"
 #include "Transaction.h"
-#include "Linkedlist.h"
 
 class RPTree
 {
 	private: 
-		Linkedlist *roots;
+		TreeNode *root;
 	public:
 		RPTree();
 		~RPTree();

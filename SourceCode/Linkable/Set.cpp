@@ -440,7 +440,7 @@ ListItem *Set::copy()
 
 void Set::merge(Set *other)
 {
-	std::cout << "Inside Set::merge" << std::endl;
+	// std::cout << "Inside Set::merge" << std::endl;
 	// print();
 	// other->print();
 	// std::cout << "Done printing stuff inside Set::merge" << std::endl;
@@ -465,7 +465,7 @@ void Set::merge(Set *other)
 	// std::cout << "Present = " << present << std::endl;
 	// print();
 	// std::cout << "Successful print" << std::endl;
-	std::cout << "Exiting Set::merge" << std::endl;
+	// std::cout << "Exiting Set::merge" << std::endl;
 }
 
 int Set::get_size() { return size; }

@@ -5,12 +5,12 @@
 
 RPTree::RPTree()
 {
-	roots = new Linkedlist();
+	root = new TreeNode(new Item(-1));
 }
 
 RPTree::~RPTree()
 {
-	delete roots;
+	delete root;
 }
 
 // The order of the items in the transaction does not matter!!!
@@ -30,24 +30,18 @@ Set *RPTree::examine()
 
 int RPTree::size()
 {
-	int count = 0;
-	
-	int i;
-	for (i = 0; i < roots->get_length(); i++)
-	{
-		ListNode *curr = roots->get_node(i);
-		count += curr->count();
-	}
-	
-	return count;
+	return root->count();
 }
 
 void RPTree::print()
 {
-	int i;
-	for (i = 0; i < roots->get_length(); i++)
-	{
-		ListItem *curr = roots->get_item(i);
-		curr->print();
-	}
+	root->print();
 }
+
+/*
+int main()
+{
+	RPTree *tree = new RPTree();
+	delete tree;
+}
+*/

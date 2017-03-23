@@ -135,7 +135,9 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 			{
 				build_tree(tree, array);
 				cout << "The tree has " << tree->size() << " nodes in it" << endl;
+				tree->print();
 				
+				/*
 				// recursively examine the tree
 				Set *rare_patterns = tree->examine();
 				std::cout << "There are " << rare_patterns->get_present() << " patterns" << std::endl;
@@ -150,6 +152,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				{
 					cout << "Failed to create rare patterns" << endl;
 				}
+				*/
 				delete(tree);
 			}
 			else

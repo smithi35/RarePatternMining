@@ -11,4 +11,7 @@ class BaseNode
 		ListItem *get_item();
 		void set_item(ListItem *i);
 		void delete_item();
-}
+		void print();
+};
+
+#endif
