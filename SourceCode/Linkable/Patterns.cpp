@@ -146,6 +146,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				{
 					cout << "Printing Rare Patterns" << endl;
 					rare_patterns->print();
+					cout << endl;
 					delete rare_patterns;
 				}
 				else

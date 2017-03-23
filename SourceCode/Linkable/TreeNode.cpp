@@ -213,14 +213,25 @@ int TreeNode::count()
 Set *TreeNode::examine()
 {
 	Set *set = new Set();
-	ListItem *item_copy = (Item *) item->copy();
 	
-	if (Item *q = dynamic_cast<Item *>(item_copy))
+	if (Item *q = dynamic_cast<Item *>(item))
 	{
-		Set *singleton = new Set(q);
-		set->add_item(singleton->copy());
-		// std::cout << "Starting" << std::endl;
-
+		int name = q->get_name();
+		
+		// don't add to sets if -1
+		if (name == -1)
+		{
+			
+		}
+		else
+		{
+			Item *q_copy = (Item *) q->copy();
+			
+			Set *singleton = new Set(q_copy);
+			set->add_item(singleton->copy());
+			// std::cout << "Starting" << std::endl;
+		}
+		
 		if (children_number > 0)
 		{
 			// call examine once for each child
@@ -256,7 +267,7 @@ Set *TreeNode::examine()
 			}
 		}
 	}
-
+	
 	return set;
 }
 
