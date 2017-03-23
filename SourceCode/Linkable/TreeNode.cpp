@@ -75,12 +75,18 @@ TreeNode *TreeNode::get_child(int index)
 
 void TreeNode::print()
 {
-	item->print();
-	
-	int i;
-	for (i = 0; i < children_number; i++)
+	if (Item *q = dynamic_cast<Item *>(item))
 	{
-		children[i]->print();
+		if (q->get_name() != -1)
+		{
+			q->print();
+		}
+		
+		int i;
+		for (i = 0; i < children_number; i++)
+		{
+			children[i]->print();
+		}
 	}
 }
 
@@ -111,6 +117,7 @@ void TreeNode::add_transaction(int *array, int size)
 	{
 		if (children_number == 0)
 		{
+			// std::cout << "Children: " << children_number << std::endl;
 			Item *i = new Item(array[0]);
 			i->set_support(1);
 			TreeNode *child = new TreeNode(i);
@@ -128,7 +135,7 @@ void TreeNode::add_transaction(int *array, int size)
 			{
 				curr = children[i];
 				
-				if (Item *q = dynamic_cast<Item *>(item))
+				if (Item *q = dynamic_cast<Item *>(curr->get_item()))
 				{
 					int name = q->get_name();
 					
@@ -151,6 +158,7 @@ void TreeNode::add_transaction(int *array, int size)
 			
 			if (!stop)
 			{
+				// std::cout << "Need to add another child" << std::endl;
 				Item *i = new Item(array[0]);
 				i->set_support(1);
 				TreeNode *child = new TreeNode(i);
@@ -205,7 +213,6 @@ int TreeNode::count()
 Set *TreeNode::examine()
 {
 	Set *set = new Set();
-	
 	ListItem *item_copy = (Item *) item->copy();
 	
 	if (Item *q = dynamic_cast<Item *>(item_copy))
@@ -241,8 +248,6 @@ Set *TreeNode::examine()
 				}
 				
 				// merge the contents of copy with the contents of child_set?
-				
-				
 				// child_set->print();
 				// std::cout << "Merging" << std::endl;
 				// set->print();

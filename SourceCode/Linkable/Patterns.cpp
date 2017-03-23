@@ -96,8 +96,9 @@ void build_tree(RPTree *tree, TransactionList *list)
 	
 	for (i = 0; i < list->get_size(); i++)
 	{
-		cout << "Adding Transaction: " << i << endl;
-		tree->add_transaction(list->get_transaction(i));
+		Transaction *add = list->get_transaction(i);
+		cout << "Adding Transaction: " << add->get_id() << endl;
+		tree->add_transaction(add);
 	}
 }
 
@@ -137,7 +138,6 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				cout << "The tree has " << tree->size() << " nodes in it" << endl;
 				tree->print();
 				
-				/*
 				// recursively examine the tree
 				Set *rare_patterns = tree->examine();
 				std::cout << "There are " << rare_patterns->get_present() << " patterns" << std::endl;
@@ -152,7 +152,6 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				{
 					cout << "Failed to create rare patterns" << endl;
 				}
-				*/
 				delete(tree);
 			}
 			else
