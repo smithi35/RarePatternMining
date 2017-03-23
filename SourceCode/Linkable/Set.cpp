@@ -356,7 +356,7 @@ void Set::increase_size()
 		{
 			if (set[i] != NULL)
 			{
-				set[i]->print();
+				// set[i]->print();
 				ListItem *temp = set[i]->copy();
 				replacement[count] = temp;
 				count++;
