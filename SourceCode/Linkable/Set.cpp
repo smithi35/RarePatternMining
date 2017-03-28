@@ -437,6 +437,7 @@ ListItem *Set::copy()
 	{
 		copy->set[i] = set[i]->copy();
 	}
+	copy->ListItem::set_support(ListItem::get_support());
 	
 	return copy;
 }
@@ -453,7 +454,8 @@ void Set::merge(Set *other)
 	{
 		if (Set *s = dynamic_cast<Set *>(other->remove_item(i)))
 		{
-			bool add = add_item(s);
+			//bool add = 
+			add_item(s);
 			// std::cout << "Successful: " << add << std::endl;
 		}
 		
