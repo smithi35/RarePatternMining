@@ -99,7 +99,6 @@ void build_tree(RPTree *tree, TransactionList *list)
 		Transaction *add = list->get_transaction(i);
 		cout << "Adding Transaction: " << add->get_id() << endl;
 		tree->add_transaction(add);
-		tree->print();
 	}
 }
 
