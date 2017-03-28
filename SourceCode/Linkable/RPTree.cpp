@@ -72,15 +72,18 @@ void RPTree::add_transaction(Transaction *transaction)
 					{
 						temp->increment_support();
 						
-						int *replacement = (int *)malloc(sizeof(int) * (size - 1));
-			
-						for (i = 1; i < size; i++)
+						// remove items[j] from items array
+						int *rep = (int *)malloc(sizeof(int) * (size-1));
+						
+						int q;
+						for (q = 1; q < size; q++)
 						{
-							replacement[i-1] = items[i];
+							rep[q-1] = items[q];
 						}
-						size--;
 						free(items);
-						items = replacement;
+						items = rep;
+						size--;
+						
 						
 						roots[i]->add_transaction(items, size);
 						added = true;
@@ -104,8 +107,6 @@ void RPTree::add_transaction(Transaction *transaction)
 			size--;
 			free(items);
 			items = replacement;
-			std::cout << "Items[0] = " << items[0] << std::endl;
-			std::cout << "Items[1] = " << items[1] << std::endl;
 			
 			add->add_transaction(items, size);
 			
