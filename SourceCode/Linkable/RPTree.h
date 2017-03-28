@@ -7,7 +7,8 @@
 class RPTree
 {
 	private: 
-		TreeNode *root;
+		TreeNode **roots;
+		int count;
 	public:
 		RPTree();
 		~RPTree();
@@ -15,6 +16,7 @@ class RPTree
 		Set *examine();
 		int size();
 		void print();
+		void add_root(TreeNode *root);
 };
 
 #endif
