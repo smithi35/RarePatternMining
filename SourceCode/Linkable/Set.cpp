@@ -106,8 +106,7 @@ bool Set::add_item(ListItem *item)
 		{
 			if (i < size)
 			{
-				ListItem *temp = item;
-				set[i] = temp;
+				set[i] = item;
 				added = true;
 				
 				if (present + 1 <= size)
@@ -119,6 +118,7 @@ bool Set::add_item(ListItem *item)
 			{
 				increase_size();
 				add_item(item);
+				added = true;
 			}
 		}
 	}
@@ -341,7 +341,6 @@ bool Set::equals(ListItem *other)
 
 void Set::increase_size()
 {
-	// std::cout << "Increasing the size of the set" << std::endl;
 	int new_size = size * 2;
 	ListItem **replacement = new ListItem *[new_size];
 	
@@ -356,30 +355,21 @@ void Set::increase_size()
 		{
 			if (set[i] != NULL)
 			{
-				// set[i]->print();
-				ListItem *temp = set[i]->copy();
-				replacement[count] = temp;
+				replacement[count] = set[i];
 				count++;
 			}
 		}
-		// std::cout << "Count = " << count << std::endl;
+		
 		present = count;
 		delete [] set;
 		set = replacement;
 		size = new_size;
 	}
-	// std::cout << "Worked? " << (set[0] != NULL) << std::endl;
 }
 
 void Set::resize(int s)
 {
-	if (s == present)
-	{
-		size = s;
-		copy();
-		// print();
-	}
-	else
+	if (s >= present)
 	{
 		ListItem **replace = new ListItem *[s];
 		int count = 0;
@@ -389,13 +379,14 @@ void Set::resize(int s)
 		{
 			if (set[i] != NULL)
 			{
-				replace[count] = set[i]->copy();
+				replace[count] = set[i];
+				count++;
 			}
 		}
-		
-		free(set);
+		delete [] set;
 		set = replace;
 		present = count;
+		size = s;
 	}
 }
 
@@ -424,6 +415,7 @@ ListItem **Set::copy(ListItem **old, int count)
 }
 */
 
+// copies the contents of the set into a new ListItem
 ListItem *Set::copy()
 {
 	Set *copy = new Set();
