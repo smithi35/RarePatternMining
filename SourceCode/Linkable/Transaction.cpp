@@ -19,7 +19,8 @@ Transaction::Transaction(string contents)
 		ss >> length;
 		if (length > 0)
 		{
-			items = (int *) malloc(sizeof(int) * length);
+			items = new int[length];
+			
 			int curr;
 			int i = 0;
 			while (ss >> curr)
@@ -35,7 +36,7 @@ Transaction::Transaction(int i, int l, int *list)
 {
 	id = i;
 	length = l;
-	items = (int *) malloc(sizeof(int) * length);
+	items = new int[length];
 	
 	for (i = 0; i < l; i++)
 	{
@@ -47,7 +48,7 @@ Transaction::Transaction(Transaction *copy)
 {
 	id = copy->id;
 	length = copy->length;
-	items = (int *)malloc(sizeof(int) * copy->length);
+	items = new int[length];
 	
 	int i;
 	for (i = 0; i < length; i++)
@@ -63,7 +64,7 @@ Transaction *Transaction::copy()
 
 Transaction::~Transaction()
 {
-	free(items);
+	delete []items;
 }
 
 int Transaction::get_id() {	return id; }

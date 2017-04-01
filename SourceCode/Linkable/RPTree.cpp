@@ -12,12 +12,7 @@ RPTree::RPTree()
 
 RPTree::~RPTree()
 {
-	int i;
-	for (i = 0; i < count; i++)
-	{
-		delete roots[i];
-	}
-	delete [] roots;
+	free(roots);
 }
 
 void RPTree::add_root(TreeNode *root)
@@ -80,7 +75,6 @@ void RPTree::add_transaction(Transaction *transaction)
 						{
 							rep[q-1] = items[q];
 						}
-						free(items);
 						items = rep;
 						size--;
 						
@@ -105,7 +99,6 @@ void RPTree::add_transaction(Transaction *transaction)
 				replacement[i-1] = items[i];
 			}
 			size--;
-			free(items);
 			items = replacement;
 			
 			add->add_transaction(items, size);
@@ -125,7 +118,6 @@ void RPTree::add_transaction(Transaction *transaction)
 			replacement[i-1] = items[i];
 		}
 		size--;
-		free(items);
 		items = replacement;
 		
 		add->add_transaction(items, size);

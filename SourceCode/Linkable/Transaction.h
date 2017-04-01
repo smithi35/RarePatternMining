@@ -10,7 +10,7 @@ class Transaction
 	private: 
 		int id;
 		int length;
-		int* items;
+		int *items;
 		Transaction(int i, int l, int *list);
 		void qsort(int first, int last, Set *set);
 		void swap(int first, int second);
