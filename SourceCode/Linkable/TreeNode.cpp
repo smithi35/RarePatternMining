@@ -90,9 +90,9 @@ void TreeNode::print()
 	}
 }
 
-int *TreeNode::revise_array(int *array, int size)
+int *TreeNode::revise_array(int array[], int size)
 {
-	int *replacement = (int *)malloc(sizeof(int) * (size-1));
+	int replacement[size-1];
 	
 	int i;
 	for (i = 1; i < size; i++)
@@ -103,7 +103,7 @@ int *TreeNode::revise_array(int *array, int size)
 	return replacement;
 }
 
-void TreeNode::swap(int first, int second, int *array)
+void TreeNode::swap(int first, int second, int array[])
 {
 	int temp = array[first];
 	array[first] = array[second];
@@ -111,7 +111,7 @@ void TreeNode::swap(int first, int second, int *array)
 }
 
 // recursively adds the contents of a transaction to the node and its children
-void TreeNode::add_transaction(int *array, int size)
+void TreeNode::add_transaction(int array[], int size)
 {
 	if (size > 0)
 	{

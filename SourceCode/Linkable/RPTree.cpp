@@ -47,11 +47,15 @@ void RPTree::add_transaction(Transaction *transaction)
 {
 	int *items = transaction->get_items();
 	int size = transaction->get_length();
+	int array[size];
 	bool added = false;
+	
+	int i;
+	for (i = 0; i < size; i++)
+		array[i] = items[i];
 	
 	if (count > 0)
 	{
-		int i;
 		for (i = 0; i < count && !added; i++)
 		{
 			ListItem *item = roots[i]->get_item();
@@ -63,23 +67,22 @@ void RPTree::add_transaction(Transaction *transaction)
 				int j;
 				for (j = 0; j < size && !added; j++)
 				{
-					if (name == items[j])
+					if (name == array[j])
 					{
 						temp->increment_support();
 						
 						// remove items[j] from items array
-						int *rep = (int *)malloc(sizeof(int) * (size-1));
+						int rep[size-1];
 						
 						int q;
 						for (q = 1; q < size; q++)
 						{
-							rep[q-1] = items[q];
+							rep[q-1] = array[q];
 						}
-						items = rep;
 						size--;
 						
 						
-						roots[i]->add_transaction(items, size);
+						roots[i]->add_transaction(rep, size);
 						added = true;
 					}
 				}
@@ -92,16 +95,16 @@ void RPTree::add_transaction(Transaction *transaction)
 			Item *q = new Item(items[0]);
 			TreeNode *add = new TreeNode(q);
 			
-			int *replacement = (int *)malloc(sizeof(int) * (size - 1));
+			int replacement[size-1];
 			
 			for (i = 1; i < size; i++)
 			{
-				replacement[i-1] = items[i];
+				replacement[i-1] = array[i];
 			}
 			size--;
 			items = replacement;
 			
-			add->add_transaction(items, size);
+			add->add_transaction(replacement, size);
 			
 			add_root(add);
 		}
@@ -110,17 +113,16 @@ void RPTree::add_transaction(Transaction *transaction)
 	{
 		Item *q = new Item(items[0]);
 		TreeNode *add = new TreeNode(q);
-		int *replacement = (int *)malloc(sizeof(int) * (size - 1));
+		int replacement[size-1];
 		
 		int i;
 		for (i = 1; i < size; i++)
 		{
-			replacement[i-1] = items[i];
+			replacement[i-1] = array[i];
 		}
 		size--;
-		items = replacement;
 		
-		add->add_transaction(items, size);
+		add->add_transaction(replacement, size);
 		add_root(add);
 	}
 }

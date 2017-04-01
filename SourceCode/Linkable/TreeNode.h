@@ -15,8 +15,8 @@ class TreeNode
 		void delete_children();
 		Set **add_set(Set *set, Set *adding);
 		void delete_itemset_array(Set **set, int size);
-		int *revise_array(int *array, int size);
-		void swap(int first, int second, int *array);
+		int *revise_array(int array[], int size);
+		void swap(int first, int second, int array[]);
 	public:
 		TreeNode(ListItem *i);
 		~TreeNode();
@@ -27,7 +27,7 @@ class TreeNode
 		int get_children_number();
 		TreeNode *get_child(int index);
 		void print();
-		void add_transaction(int *array, int size);
+		void add_transaction(int array[], int size);
 		void increment_quantity();
 		Set *examine();
 		int count();
