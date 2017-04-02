@@ -16,7 +16,6 @@ class Set: public ListItem
 		void swap(int first, int second);
 		void increase_support(int add);
 		void increase_size();
-		void resize(int s);
 		ListItem **copy(ListItem **old, int count);
 	public:
 		Set(int s);
@@ -25,6 +24,7 @@ class Set: public ListItem
 		Set();
 		~Set();
 		void print();
+		void print_with_support();
 		bool add_item(ListItem *item);
 		void remove_non_rare_items(int max_support);
 		bool contains(ListItem *item);
@@ -41,6 +41,7 @@ class Set: public ListItem
 		void merge(Set *other);
 		int get_size();
 		int get_present();
+		void resize(int s);
 };
 
 #endif

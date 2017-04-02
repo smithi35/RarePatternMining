@@ -8,7 +8,7 @@ using namespace std;
 TransactionList::TransactionList(int s)
 {
 	size = s;
-	list = (Transaction **)malloc(sizeof(Transaction *) * size);
+	list = new Transaction*[size];
 	present = 0;
 }
 
@@ -19,20 +19,20 @@ TransactionList::~TransactionList()
 	{
 		delete list[i];
 	}
-	free(list);
+	delete [] list;
 }
 
 void TransactionList::resize()
 {
 	int new_size = 2 * size;
-	Transaction **new_list = (Transaction **)malloc(sizeof(Transaction *) * new_size);
+	Transaction **new_list = new Transaction *[new_size];
 	
 	int i;
 	for (i = 0; i < present; i++)
 	{
 		new_list[i] = new Transaction(list[i]);
 	}
-	free(list);
+	delete [] list;
 	
 	list = new_list;
 	size = new_size;
@@ -46,7 +46,8 @@ void TransactionList::add_transaction(Transaction *transaction)
 	}
 	
 	// add the transaction to the list
-	list[present] = transaction;
+	Transaction *copy = transaction->copy();
+	list[present] = copy;
 	present++;
 }
 
@@ -152,10 +153,13 @@ Set *TransactionList::get_itemset()
 			for (j = 0; j < length; j++)
 			{
 				int curr = items[j];
+				Item *item = new Item(curr);
 				
-				set->add_item(new Item(curr));
+				set->add_item(item);
 			}
 		}
+		
+		set->resize(set->get_present());
 	}
 	
 	return set;
@@ -176,7 +180,7 @@ void TransactionList::remove_non_rare_items(Set *set)
 		list[i] = temp;
 	}
 	
-	Transaction** replacement = (Transaction **)malloc(sizeof(Transaction *) * revised);
+	Transaction** replacement = new Transaction*[revised];
 	
 	int index = 0;
 	
@@ -193,7 +197,7 @@ void TransactionList::remove_non_rare_items(Set *set)
 	{
 		delete(list[i]);
 	}
-	free(list);
+	delete [] list;
 	
 	list = replacement;
 	present = revised;
@@ -201,5 +205,3 @@ void TransactionList::remove_non_rare_items(Set *set)
 }
 
 int TransactionList::get_size() { return present; }
-
-

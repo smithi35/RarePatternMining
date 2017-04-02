@@ -82,7 +82,9 @@ TransactionList *get_transactions(string contents, int transactions)
 	
 	while (getline(f, line) && i < transactions)
 	{
-		list->add_transaction(new Transaction(line));
+		Transaction *t = new Transaction(line);
+		list->add_transaction(t);
+		delete t;
 		i++;
 	}
 	
@@ -116,11 +118,17 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 		
 		if (header != NULL)
 		{
+			cout << "Initial header table: " << std::endl;
 			header->print();
+			cout << endl;
 			header->remove_non_rare_items(max_support);
+			cout << "Only rare items" << std::endl;
 			header->print();
+			cout << endl;
 			header->sort();
+			cout << "Sorted header table" << endl;
 			header->print();
+			cout << endl;
 			
 			array->remove_non_rare_items(header);
 			
@@ -135,7 +143,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 			if (tree != NULL)
 			{
 				build_tree(tree, array);
-				cout << "The tree has " << tree->size() << " nodes in it" << endl;
+				cout << "The tree has " << tree->tree_size() << " nodes in it" << endl;
 				tree->print();
 				
 				// recursively examine the tree
@@ -145,7 +153,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				if (rare_patterns != NULL)
 				{
 					cout << "Printing Rare Patterns" << endl;
-					rare_patterns->print();
+					rare_patterns->print_with_support();
 					cout << endl;
 					delete rare_patterns;
 				}

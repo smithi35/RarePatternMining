@@ -31,6 +31,7 @@ TreeNode::~TreeNode()
 		delete children[i];
 	}
 	free(children);
+	delete item;
 }
 
 ListItem *TreeNode::get_item() {return item;}
@@ -92,7 +93,7 @@ void TreeNode::print()
 
 int *TreeNode::revise_array(int array[], int size)
 {
-	int replacement[size-1];
+	int *replacement = (int *)malloc(sizeof(int) * (size-1));
 	
 	int i;
 	for (i = 1; i < size; i++)
@@ -111,7 +112,7 @@ void TreeNode::swap(int first, int second, int array[])
 }
 
 // recursively adds the contents of a transaction to the node and its children
-void TreeNode::add_transaction(int array[], int size)
+void TreeNode::add_transaction(int *array, int size)
 {
 	if (size > 0)
 	{
@@ -124,6 +125,7 @@ void TreeNode::add_transaction(int array[], int size)
 			add_child(child);
 			int *new_array = revise_array(array, size);
 			child->add_transaction(new_array, size-1);
+			free(new_array);
 		}
 		else
 		{
@@ -150,6 +152,7 @@ void TreeNode::add_transaction(int array[], int size)
 							swap(0, j, array);
 							int *new_array = revise_array(array, size);
 							curr->add_transaction(new_array, size-1);
+							free(new_array);
 							// this is not the most efficient way to add the transactions
 						}
 					}
@@ -165,6 +168,7 @@ void TreeNode::add_transaction(int array[], int size)
 				add_child(child);
 				int *new_array = revise_array(array, size);
 				child->add_transaction(new_array, size-1);
+				free(new_array);
 			}
 		}
 	}
@@ -216,34 +220,22 @@ Set *TreeNode::examine()
 	
 	if (Item *q = dynamic_cast<Item *>(item))
 	{
-		int name = q->get_name();
-		
-		// don't add to sets if -1
-		if (name == -1)
-		{
-			
-		}
-		else
-		{
-			Item *q_copy = (Item *) q->copy();
-			
-			Set *singleton = new Set(q_copy);
-			set->add_item(singleton->copy());
-			// std::cout << "Starting" << std::endl;
-		}
+		Set *singleton = new Set(q);
+		set->add_item(singleton);
+		delete singleton;
 		
 		if (children_number > 0)
 		{
-			// call examine once for each child
 			int i;
 			for (i = 0; i < children_number; i++)
 			{
-				// Set *singleton_copy = (Set *)singleton->copy();
+				// examine each child node
 				Set *child_set = children[i]->examine();
 				Set *child_copy = (Set *)child_set->copy();
 				
 				// merge only adds the contents of the new set to set right now
 				set->merge(child_set);
+				delete child_set;
 				
 				int j;
 				for (j = 0; j < child_copy->get_present(); j++)
@@ -253,17 +245,12 @@ Set *TreeNode::examine()
 					if (Set *c = dynamic_cast<Set *>(curr))
 					{
 						// add item to the contents of the set, the support value should remain the same
-						c->add_item(item->copy());
+						c->add_item(q);
+						set->add_item(c);
 					}
-					set->add_item(curr);
 				}
 				
-				// merge the contents of copy with the contents of child_set?
-				// child_set->print();
-				// std::cout << "Merging" << std::endl;
-				// set->print();
-				// std::cout << "Done merging" << std::endl;
-				delete child_set;
+				delete child_copy;
 			}
 		}
 	}

@@ -8,14 +8,15 @@ class RPTree
 {
 	private: 
 		TreeNode **roots;
-		int count;
+		int present;
+		int size;
 		void add_root(TreeNode *root);
 	public:
 		RPTree();
 		~RPTree();
 		void add_transaction(Transaction *transaction);
 		Set *examine();
-		int size();
+		int tree_size();
 		void print();
 };
 

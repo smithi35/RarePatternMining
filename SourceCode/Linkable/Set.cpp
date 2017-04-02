@@ -36,10 +36,9 @@ Set::Set(Set *copy)
 Set::Set()
 {
 	present = 0;
-	size = 1;
+	size = 0;
 	ListItem::set_support(0);
-	set = new ListItem *[size];
-	init_array();
+	set = NULL;
 }
 
 Set::Set(Item *i)
@@ -64,11 +63,18 @@ void Set::init_array()
 
 Set::~Set()
 {
-	// std::cout << "Deleting set" << std::endl << "Size = " << size << std::endl;
+	int i;
+	for (i = 0; i < present; i++)
+	{
+		if (set[i] != NULL)
+		{
+			delete set[i];
+		}
+	}
 	
 	delete [] set;
-	
-	// std::cout << "Deleted set" << std::endl;
+	size = 0;
+	present = 0;
 }
 
 void Set::increase_support(int add) { ListItem::increase_support(add);}
@@ -106,7 +112,7 @@ bool Set::add_item(ListItem *item)
 		{
 			if (i < size)
 			{
-				set[i] = item;
+				set[i] = item->copy();
 				added = true;
 				
 				if (present + 1 <= size)
@@ -124,9 +130,20 @@ bool Set::add_item(ListItem *item)
 	}
 	else
 	{
-		set[0] = item;
-		added = true;
-		present++;
+		if (size > 0)
+		{
+			set[0] = item->copy();
+			added = true;
+			present++;
+		}
+		else
+		{
+			size = 5;
+			set = new ListItem*[size];
+			present = 1;
+			set[0] = item->copy();
+			added = true;
+		}
 	}
 	
 	return added;
@@ -161,7 +178,7 @@ void Set::print()
 		}
 	}
 	
-	std::cout << "}:" << ListItem::get_support();
+	std::cout << "}";
 }
 
 // if an item in the set has more support than max_support it is removed from the set
@@ -300,6 +317,7 @@ int Set::get_support(int name)
 			support = curr->get_support();
 		}
 	}
+	delete temp;
 	
 	return support;
 }
@@ -421,8 +439,7 @@ ListItem *Set::copy()
 	Set *copy = new Set();
 	copy->present = present;
 	copy->size = size;
-	
-	copy->set = new ListItem *[size];
+	copy->set = new ListItem *[copy->size];
 	
 	int i;
 	for (i = 0; i < present; i++)
@@ -436,33 +453,21 @@ ListItem *Set::copy()
 
 void Set::merge(Set *other)
 {
-	// std::cout << "Inside Set::merge" << std::endl;
-	// print();
-	// other->print();
-	// std::cout << "Done printing stuff inside Set::merge" << std::endl;
-	
 	int i;
 	for (i = 0; i < other->present; i++)
 	{
 		if (Set *s = dynamic_cast<Set *>(other->remove_item(i)))
 		{
-			//bool add = 
-			add_item(s);
-			// std::cout << "Successful: " << add << std::endl;
+			bool add = add_item(s);
+			
+			if (!add)
+			{
+				std::cout << "Add item failed" << std::endl;
+			}
 		}
-		
-		// std::cout << "Adding " << i << std::endl;
-		// ListItem *curr = other->remove_item(i);
-		// std::cout << "Curr = " << std::endl;
 	}
 	
 	resize(present); // this should be conditional
-	// std::cout << "Size = " << size << ", present = " << present << std::endl;
-	// std::cout << "Done merging, printing new set" << std::endl;
-	// std::cout << "Present = " << present << std::endl;
-	// print();
-	// std::cout << "Successful print" << std::endl;
-	// std::cout << "Exiting Set::merge" << std::endl;
 }
 
 int Set::get_size() { return size; }
@@ -477,10 +482,42 @@ ListItem *Set::remove_item(int index)
 		ListItem *at_index = set[index];
 		if (at_index != NULL)
 		{
-			removed = (ListItem *) at_index;
+			removed = at_index;
 			set[index] = NULL;
 		}
 	}
 	
 	return removed;
+}
+
+void Set::print_with_support()
+{
+	std::cout << "{";
+	if (present > 0 && present <= size)
+	{
+		int i;
+		for (i = 0; i < present; i++)
+		{
+			if (Set *s = dynamic_cast<Set *>(set[i]))
+			{
+				s->print_with_support();
+				
+				if (i+1 < present)
+				{
+					std::cout << "," << std::endl;
+				}
+			}
+			else if (Item *j = dynamic_cast<Item *>(set[i]))
+			{
+				std::cout << j->get_name();
+				
+				if (i+1 < present)
+				{
+					std::cout << ",";
+				}
+			}
+		}
+	}
+	
+	std::cout << "}:" << ListItem::get_support();
 }

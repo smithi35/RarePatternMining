@@ -5,37 +5,42 @@
 
 RPTree::RPTree()
 {
-	// root = 
 	roots = NULL;
-	count = 0;
+	present = 0;
+	size = 0;
 }
 
 RPTree::~RPTree()
 {
-	free(roots);
+	int i;
+	for (i = 0; i < present; i++)
+		delete roots[i];
+	delete [] roots;
 }
 
 void RPTree::add_root(TreeNode *root)
 {
-	if (count > 0)
+	if (present > 0)
 	{
-		int new_count = count + 1;
-		
-		TreeNode **rep = (TreeNode **)malloc(sizeof(TreeNode *) * new_count);
+		int new_size = size+5;
+		TreeNode **rep = new TreeNode*[new_size];
 		
 		int i;
-		for (i = 0; i < count; i++)
+		for (i = 0; i < present; i++)
 		{
 			rep[i] = roots[i];
 		}
-		rep[count] = root;
-		count = new_count;
+		delete [] roots;
+		rep[present] = root;
+		present++;
+		size = new_size;
 		roots = rep;
 	}
 	else
 	{
-		count = 1;
-		roots = (TreeNode **)malloc(sizeof(TreeNode *));
+		present = 1;
+		size = 1;
+		roots = new TreeNode*[size];
 		roots[0] = root;
 	}
 }
@@ -47,16 +52,17 @@ void RPTree::add_transaction(Transaction *transaction)
 {
 	int *items = transaction->get_items();
 	int size = transaction->get_length();
-	int array[size];
+	int *copy = (int *)malloc(sizeof(int) * size);
 	bool added = false;
 	
 	int i;
 	for (i = 0; i < size; i++)
-		array[i] = items[i];
+		copy[i] = items[i];
+	items = copy;
 	
-	if (count > 0)
+	if (present > 0)
 	{
-		for (i = 0; i < count && !added; i++)
+		for (i = 0; i < present && !added; i++)
 		{
 			ListItem *item = roots[i]->get_item();
 			
@@ -67,7 +73,7 @@ void RPTree::add_transaction(Transaction *transaction)
 				int j;
 				for (j = 0; j < size && !added; j++)
 				{
-					if (name == array[j])
+					if (name == items[j])
 					{
 						temp->increment_support();
 						
@@ -77,7 +83,7 @@ void RPTree::add_transaction(Transaction *transaction)
 						int q;
 						for (q = 1; q < size; q++)
 						{
-							rep[q-1] = array[q];
+							rep[q-1] = items[q];
 						}
 						size--;
 						
@@ -91,26 +97,25 @@ void RPTree::add_transaction(Transaction *transaction)
 		
 		if (!added)
 		{
-			// put in function
+			// none of the items in the transaction correspond to a branch, need a new root
 			Item *q = new Item(items[0]);
 			TreeNode *add = new TreeNode(q);
-			
 			int replacement[size-1];
 			
 			for (i = 1; i < size; i++)
 			{
-				replacement[i-1] = array[i];
+				replacement[i-1] = items[i];
 			}
 			size--;
 			items = replacement;
 			
 			add->add_transaction(replacement, size);
-			
 			add_root(add);
 		}
 	}
 	else
 	{
+		// first root case
 		Item *q = new Item(items[0]);
 		TreeNode *add = new TreeNode(q);
 		int replacement[size-1];
@@ -118,13 +123,15 @@ void RPTree::add_transaction(Transaction *transaction)
 		int i;
 		for (i = 1; i < size; i++)
 		{
-			replacement[i-1] = array[i];
+			replacement[i-1] = items[i];
 		}
 		size--;
 		
 		add->add_transaction(replacement, size);
 		add_root(add);
 	}
+	
+	free(copy);
 }
 
 Set *RPTree::examine()
@@ -132,19 +139,21 @@ Set *RPTree::examine()
 	Set *out = new Set();
 	
 	int i;
-	for (i = 0; i < count; i++)
+	for (i = 0; i < present; i++)
 	{
-		out->merge(roots[i]->examine());
+		Set *root = roots[i]->examine();
+		out->merge(root);
+		delete root;
 	}
 	
 	return out;
 }
 
-int RPTree::size()
+int RPTree::tree_size()
 {
 	int total = 0;
 	int i;
-	for (i = 0; i < count; i++)
+	for (i = 0; i < present; i++)
 		total += roots[i]->count();
 	
 	return total;
@@ -154,7 +163,7 @@ void RPTree::print()
 {
 	std::cout << "Printing RPTree" << std::endl;
 	int i;
-	for (i = 0; i < count; i++)
+	for (i = 0; i < present; i++)
 	{
 		std::cout << "i = " << i << std::endl;
 		roots[i]->print();
