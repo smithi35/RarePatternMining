@@ -234,22 +234,11 @@ Set *TreeNode::examine()
 				Set *child_copy = (Set *)child_set->copy();
 				
 				// merge only adds the contents of the new set to set right now
-				set->merge(child_set);
+				set->add_sets(child_set);
 				delete child_set;
 				
-				int j;
-				for (j = 0; j < child_copy->get_present(); j++)
-				{
-					ListItem *curr = child_copy->get_item(j);
-					
-					if (Set *c = dynamic_cast<Set *>(curr))
-					{
-						// add item to the contents of the set, the support value should remain the same
-						c->add_item(q);
-						set->add_item(c);
-					}
-				}
-				
+				child_copy->add_item_to_sets(q);
+				set->add_sets(child_copy);
 				delete child_copy;
 			}
 		}

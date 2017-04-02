@@ -38,7 +38,8 @@ class Set: public ListItem
 		bool equals(ListItem *other);
 		ListItem *copy(ListItem *other);
 		ListItem *copy();
-		void merge(Set *other);
+		void add_sets(Set *other);
+		void add_item_to_sets(Item *item);
 		int get_size();
 		int get_present();
 		void resize(int s);

@@ -3,8 +3,6 @@
 #include <cstdlib>
 #include <iostream>
 
-using namespace std;
-
 TransactionList::TransactionList(int s)
 {
 	size = s;
@@ -15,9 +13,11 @@ TransactionList::TransactionList(int s)
 TransactionList::~TransactionList()
 {
 	int i;
+	std::cout << "PResent = " << present << ", Size = " << size << std::endl;
 	for (i = 0; i < present; i++)
 	{
-		delete list[i];
+		Transaction *curr = list[i];
+		delete curr;
 	}
 	delete [] list;
 }
@@ -40,14 +40,13 @@ void TransactionList::resize()
 
 void TransactionList::add_transaction(Transaction *transaction)
 {
-	if (present + 1 >= size)
+	if (present == size)
 	{
 		resize();
 	}
 	
 	// add the transaction to the list
-	Transaction *copy = transaction->copy();
-	list[present] = copy;
+	list[present] = transaction;
 	present++;
 }
 
@@ -156,6 +155,7 @@ Set *TransactionList::get_itemset()
 				Item *item = new Item(curr);
 				
 				set->add_item(item);
+				delete item;
 			}
 		}
 		

@@ -22,19 +22,27 @@ void RPTree::add_root(TreeNode *root)
 {
 	if (present > 0)
 	{
-		int new_size = size+5;
-		TreeNode **rep = new TreeNode*[new_size];
-		
-		int i;
-		for (i = 0; i < present; i++)
+		if (present == size)
 		{
-			rep[i] = roots[i];
+			int new_size = size+5;
+			TreeNode **rep = new TreeNode*[new_size];
+			
+			int i;
+			for (i = 0; i < present; i++)
+			{
+				rep[i] = roots[i];
+			}
+			delete [] roots;
+			rep[present] = root;
+			present++;
+			size = new_size;
+			roots = rep;
 		}
-		delete [] roots;
-		rep[present] = root;
-		present++;
-		size = new_size;
-		roots = rep;
+		else
+		{
+			roots[present] = root;
+			present++;
+		}
 	}
 	else
 	{
@@ -142,7 +150,7 @@ Set *RPTree::examine()
 	for (i = 0; i < present; i++)
 	{
 		Set *root = roots[i]->examine();
-		out->merge(root);
+		out->add_sets(root);
 		delete root;
 	}
 	

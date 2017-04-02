@@ -64,7 +64,7 @@ Transaction *Transaction::copy()
 
 Transaction::~Transaction()
 {
-	delete []items;
+	delete [] items;
 }
 
 int Transaction::get_id() {	return id; }

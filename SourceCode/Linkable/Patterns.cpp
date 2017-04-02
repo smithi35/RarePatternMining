@@ -25,7 +25,7 @@ bool do_a_test()
 	a->add_item(i);
 	b->add_item(j);
 	
-	a->merge(b);
+	a->add_sets(b);
 	cout << "Support = " << a->get_support() << endl;
 	a->print();
 	
@@ -72,9 +72,8 @@ int get_number_transactions(string contents)
 	return count;
 }
 
-TransactionList *get_transactions(string contents, int transactions)
+void get_transactions(string contents, int transactions, TransactionList *list)
 {
-	TransactionList *list = new TransactionList(transactions);
 	istringstream f(contents);
 	string line = "";
 	getline(f, line);
@@ -84,11 +83,8 @@ TransactionList *get_transactions(string contents, int transactions)
 	{
 		Transaction *t = new Transaction(line);
 		list->add_transaction(t);
-		delete t;
 		i++;
 	}
-	
-	return list;
 }
 
 void build_tree(RPTree *tree, TransactionList *list)
@@ -110,10 +106,11 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 	int transactions = get_number_transactions(contents);
 	cout << contents << endl << transactions << endl;
 	
-	TransactionList *array = get_transactions(contents, transactions);
+	TransactionList *array = new TransactionList(transactions);
 	
 	if (array != NULL)
 	{
+		get_transactions(contents, transactions, array);
 		Set *header = array->get_itemset();
 		
 		if (header != NULL)
@@ -153,7 +150,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				if (rare_patterns != NULL)
 				{
 					cout << "Printing Rare Patterns" << endl;
-					rare_patterns->print_with_support();
+					rare_patterns->print();
 					cout << endl;
 					delete rare_patterns;
 				}
@@ -174,12 +171,12 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 		{
 			cout << "Failed to create header table" << endl;
 		}
-		delete(array);
 	}
 	else
 	{
 		cout << "Not enough memory for Transaction array" << endl;
 	}
+	delete array;
 }
 
 int main()

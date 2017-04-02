@@ -90,9 +90,9 @@ bool Set::add_item(ListItem *item)
 		int i;
 		for (i = 0; i < present && !added; i++)
 		{
-			// std::cout << "I = " << i << std::endl;
 			ListItem *curr = set[i];
 			
+			// if the item being added is already present, update the support value of the present item
 			if (curr->equals(item))
 			{
 				if (item->get_support() > 1)
@@ -103,11 +103,11 @@ bool Set::add_item(ListItem *item)
 				{
 					curr->increment_support();
 				}
-				delete item;
 				added = true;
 			}
 		}
 		
+		// otherwise add the item to the set
 		if (i == present && !added)
 		{
 			if (i < size)
@@ -132,12 +132,14 @@ bool Set::add_item(ListItem *item)
 	{
 		if (size > 0)
 		{
+			// first item
 			set[0] = item->copy();
 			added = true;
 			present++;
 		}
 		else
 		{
+			// set needs to be initialized
 			size = 5;
 			set = new ListItem*[size];
 			present = 1;
@@ -159,7 +161,7 @@ void Set::print()
 		{
 			if (Set *s = dynamic_cast<Set *>(set[i]))
 			{
-				s->print();
+				s->print_with_support();
 				
 				if (i+1 < present)
 				{
@@ -451,12 +453,12 @@ ListItem *Set::copy()
 	return copy;
 }
 
-void Set::merge(Set *other)
+void Set::add_sets(Set *other)
 {
 	int i;
 	for (i = 0; i < other->present; i++)
 	{
-		if (Set *s = dynamic_cast<Set *>(other->remove_item(i)))
+		if (Set *s = dynamic_cast<Set *>(other->get_item(i)))
 		{
 			bool add = add_item(s);
 			
@@ -467,7 +469,8 @@ void Set::merge(Set *other)
 		}
 	}
 	
-	resize(present); // this should be conditional
+	if (present != size)
+		resize(present);
 }
 
 int Set::get_size() { return size; }
@@ -477,7 +480,7 @@ ListItem *Set::remove_item(int index)
 {
 	ListItem *removed = NULL;
 	
-	if (set != NULL)
+	if (set != NULL && present > 0)
 	{
 		ListItem *at_index = set[index];
 		if (at_index != NULL)
@@ -490,6 +493,7 @@ ListItem *Set::remove_item(int index)
 	return removed;
 }
 
+// prints the set along with the support values of each item
 void Set::print_with_support()
 {
 	std::cout << "{";
@@ -520,4 +524,17 @@ void Set::print_with_support()
 	}
 	
 	std::cout << "}:" << ListItem::get_support();
+}
+
+// adds item to each set in the set
+void Set::add_item_to_sets(Item *item)
+{
+	int i;
+	for (i = 0; i < present; i++)
+	{
+		if (Set *curr = dynamic_cast<Set *>(set[i]))
+		{
+			curr->add_item(item);
+		}
+	}
 }
