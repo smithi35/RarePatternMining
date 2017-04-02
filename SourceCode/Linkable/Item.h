@@ -24,6 +24,7 @@ class Item: public ListItem
 		void print();
 		ListItem *copy(ListItem *other);
 		ListItem *copy();
+		std::string to_string();
 };
 
 #endif

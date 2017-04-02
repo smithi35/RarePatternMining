@@ -538,3 +538,37 @@ void Set::add_item_to_sets(Item *item)
 		}
 	}
 }
+
+std::string Set::to_string()
+{
+	std::string output = "{";
+	if (present > 0 && present <= size)
+	{
+		int i;
+		for (i = 0; i < present; i++)
+		{
+			if (Set *s = dynamic_cast<Set *>(set[i]))
+			{
+				output = output + s->to_string();
+				
+				if (i+1 < present)
+				{
+					output = output + "," + "\n";
+				}
+			}
+			else if (Item *j = dynamic_cast<Item *>(set[i]))
+			{
+				output = output + j->to_string();
+				
+				if (i+1 < present)
+				{
+					output = output + ",";
+				}
+			}
+		}
+	}
+	
+	output = output + "}";
+	
+	return output;
+}

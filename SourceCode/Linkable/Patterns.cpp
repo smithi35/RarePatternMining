@@ -100,6 +100,14 @@ void build_tree(RPTree *tree, TransactionList *list)
 	}
 }
 
+void output_to_file(const char *outputfilename, Set *rare_patterns, int rare_patterns_number)
+{
+	ofstream write(outputfilename);
+	write << "There are " << rare_patterns_number << " rare patterns in this database" << endl;
+	write << rare_patterns->to_string();
+	write.close();
+}
+
 void process(const char *inputfilename, const char *outputfilename, const int max_support)
 {
 	string contents = get_contents(inputfilename);
@@ -145,12 +153,14 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				
 				// recursively examine the tree
 				Set *rare_patterns = tree->examine();
-				std::cout << "There are " << rare_patterns->get_present() << " patterns" << std::endl;
+				int rare_patterns_number = rare_patterns->get_present();
+				std::cout << "There are " << rare_patterns_number << " patterns" << std::endl;
 				
 				if (rare_patterns != NULL)
 				{
 					cout << "Printing Rare Patterns" << endl;
 					rare_patterns->print();
+					output_to_file(outputfilename, rare_patterns, rare_patterns_number);
 					cout << endl;
 					delete rare_patterns;
 				}
@@ -180,10 +190,16 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 }
 
 int main()
-{	
+{
+	int i = 1;
+	ostringstream stream;
+	stream << i;
+	string trial_number = stream.str();
+	stream.clear();
+	
 	string input = "PreciseDB.txt";
 	const char *inputfilename = input.c_str();
-	string output = "first_trial.txt";
+	string output = trial_number + "trial.txt";
 	const char *outputfilename = output.c_str();
 	// process(inputfilename, outputfilename, 2);
 	

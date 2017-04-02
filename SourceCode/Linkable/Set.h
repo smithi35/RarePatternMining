@@ -3,6 +3,7 @@
 
 #include "Item.h"
 #include "ListItem.h"
+#include <string>
 
 class Set: public ListItem
 {
@@ -43,6 +44,7 @@ class Set: public ListItem
 		int get_size();
 		int get_present();
 		void resize(int s);
+		std::string to_string();
 };
 
 #endif

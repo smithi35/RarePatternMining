@@ -1,5 +1,6 @@
 #include "IntAtom.h"
 #include <iostream>
+#include <sstream>
 
 IntAtom::IntAtom(int atom)
 {
@@ -21,4 +22,12 @@ ListItem *IntAtom::copy()
 {
 	ListItem *copy = (ListItem *) new IntAtom(ListItem::get_support());
 	return copy;
+}
+
+std::string IntAtom::to_string()
+{
+	int q = ListItem::get_support();
+	std::ostringstream ss;
+	ss << q;
+	return ss.str();
 }

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Item.h"
 #include <limits.h>
+#include <sstream>
 
 Item::Item(int n)
 {
@@ -60,4 +61,15 @@ ListItem *Item::copy()
 	copy->ListItem::set_support(ListItem::get_support());
 	
 	return copy;
+}
+
+std::string Item::to_string()
+{
+	std::string output = "";
+	
+	std::ostringstream ss;
+	ss << name;
+	output = output + ss.str();
+	
+	return output;
 }

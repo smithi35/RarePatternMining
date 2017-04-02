@@ -12,6 +12,7 @@ class IntAtom: public ListItem
 		void print();
 		bool equals(ListItem *other);
 		ListItem *copy();
+		std::string to_string();
 };
 
 #endif

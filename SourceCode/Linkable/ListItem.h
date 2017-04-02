@@ -2,6 +2,7 @@
 #define LISTITEM_H
 
 #include <iostream>
+#include <string>
 
 class ListItem
 {
@@ -16,6 +17,7 @@ class ListItem
 		int get_support();
 		void increment_support();
 		void increase_support(int add);
+		virtual std::string to_string() = 0;
 };
 
 #endif
