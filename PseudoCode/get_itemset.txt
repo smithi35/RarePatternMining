@@ -1,0 +1,35 @@
+get_itemset()
+{
+	total = 0
+	
+	for (i = 0; i < present; i++)
+	{
+		// total represents the largest possible number of items in the database
+		total+=list[i]->get_length()
+	}
+	
+	set = new Set(total)
+	
+	if (set != NULL)
+	{
+		// first get the support of all items in the transaction database
+		for (i = 0; i < present; i++)
+		{
+			items = list[i]->get_items()
+			length = list[i]->get_length()
+			
+			for (j = 0; j < length; j++)
+			{
+				curr = items[j]
+				item = new Item(curr)
+				
+				// add_item automatically increments support if the item is already present in the database
+				set->add_item(item)
+			}
+		}
+		
+		set->resize(set->get_present())
+	}
+	
+	return set
+}

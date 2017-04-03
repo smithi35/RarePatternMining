@@ -1,0 +1,59 @@
+Set::remove_non_rare_items(max_support)
+{
+	non-rares = 0
+	
+	for (i = 0; i < present; i++)
+		if (set[i]->get_support() > max_support)
+			non-rares++
+	
+	int new_size = size - non-rares
+	
+	// create replacement set of ListItems
+	new_set = new ListItem *[new_size]
+	next = 0
+	
+	for (i = 0; i < present; i++)
+	{
+		if (set[i]->get_support() <= max_support)
+		{
+			n = new Item(curr->get_name(), set[i]->get_support())
+			new_set[next] = n
+			next++
+		}
+	}
+	
+	this->present = next
+	this->size = new_size
+	this->set = new_set
+}
+
+TransactionList::remove_non_rare_items(set)
+{
+	revised = 0
+	for (i = 0; i < present; i++)
+	{
+		temp = list[i]->remove_non_rare_items(set)
+		
+		if (temp != NULL)
+		{
+			revised++
+		}
+		list[i] = temp
+	}
+	
+	replacement = new Transaction*[revised]
+	index = 0
+	
+	for (i = 0; i < present; i++)
+	{
+		if (list[i] != NULL)
+		{
+			replacement[index] = new Transaction(list[i])
+			index++
+		}
+	}
+	
+	list = replacement
+	present = revised
+	size = revised
+}

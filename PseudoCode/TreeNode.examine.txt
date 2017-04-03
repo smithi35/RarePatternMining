@@ -1,0 +1,23 @@
+TreeNode::examine()
+{
+	set = new Set()
+	singleton = new Set(this->item)
+	set->add_item(singleton)
+	
+	if (children_number > 0)
+	{
+		for (i = 0; i < children_number; i++)
+		{
+			// examine each child node
+			Set *child_set = children[i]->examine()
+			
+			// merge only adds the contents of the new set to set right now
+			set->add_sets(child_set)
+			
+			child_set->add_item_to_sets(q);
+			set->add_sets(child_set);
+		}
+	}
+	
+	return set;
+}

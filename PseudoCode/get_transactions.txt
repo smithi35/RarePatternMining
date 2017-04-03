@@ -1,0 +1,14 @@
+get_transactions(contents, transactions, transaction_list)
+{
+	istringstream f(contents)
+	line = ""
+	getline(stream, line)
+	int i = 0
+	
+	while (getline(stream, line) && i < transactions)
+	{
+		Transaction *t = new Transaction(line)
+		transaction ->add_transaction(t)
+		i++
+	}
+}

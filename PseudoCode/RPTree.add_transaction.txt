@@ -1,0 +1,68 @@
+RPTree::add_transaction(transaction)
+{
+	items = transaction->get_items()
+	size = transaction->get_length()
+	added = false
+	
+	if (present > 0)
+	{
+		for (i = 0; i < present && !added; i++)
+		{
+			item = roots[i]->get_item();
+			name = item->get_name();
+			
+			for (j = 0; j < size && !added; j++)
+			{
+				if (name == items[j])
+				{
+					temp->increment_support();
+					
+					// remove items[j] from items array
+					int rep[size-1];
+					
+					int q;
+					for (q = 1; q < size; q++)
+					{
+						rep[q-1] = items[q];
+					}
+					size--;
+					
+					roots[i]->add_transaction(rep, size);
+					added = true;
+				}
+			}
+		}
+		
+		// added is false if the transaction has nothing in common with any of the roots
+		if (!added)
+		{
+			// none of the items in the transaction correspond to a branch, need a new root
+			q = new Item(items[0])
+			add = new TreeNode(q)
+			replacement[size-1]
+			
+			for (i = 1; i < size; i++)
+				replacement[i-1] = items[i]
+			
+			size--
+			items = replacement
+			
+			add->add_transaction(replacement, size)
+			add_root(add)
+		}
+	}
+	else
+	{
+		// first root case
+		q = new Item(items[0])
+		add = new TreeNode(q)
+		replacement[size-1]
+		
+		for (i = 1; i < size; i++)
+			replacement[i-1] = items[i]
+		size--
+		
+		add->add_transaction(replacement, size)
+		add_root(add)
+	}
+}
