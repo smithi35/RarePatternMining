@@ -174,7 +174,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				build_tree(tree, array);
 				cout << "Built RPTree of size " << tree->tree_size() << endl;
 				//cout << "The tree has " << tree->tree_size() << " nodes in it" << endl;
-				//tree->print();
+				// tree->print();
 				
 				// recursively examine the tree
 				Set *rare_patterns = tree->examine();
@@ -243,7 +243,6 @@ int main()
 	outputfilename = output.c_str();
 	process(inputfilename, outputfilename, 6);
 	
-	/*
 	inputfilename = "Input/PreciseDB.txt";
 	output = get_trial();
 	outputfilename = output.c_str();
@@ -264,11 +263,25 @@ int main()
 	outputfilename = output.c_str();
 	process(inputfilename, outputfilename, 10);
 	
+	inputfilename = "Input/1k5L.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 15);
+	
 	inputfilename = "Input/10k5L.txt";
 	output = get_trial();
 	outputfilename = output.c_str();
-	process(inputfilename, outputfilename, 5);
-	*/
+	process(inputfilename, outputfilename, 10);
+	
+	inputfilename = "Input/10k5L.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 20);
+	
+	inputfilename = "Input/10k5L.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 30);
 	
 	return 0;
 }

@@ -84,11 +84,13 @@ void RPTree::add_transaction(Transaction *transaction)
 					if (name == items[j])
 					{
 						temp->increment_support();
+						int q = items[j];
+						items[j] = items[0];
+						items[0] = q;						
 						
 						// remove items[j] from items array
 						int rep[size-1];
 						
-						int q;
 						for (q = 1; q < size; q++)
 						{
 							rep[q-1] = items[q];
