@@ -13,7 +13,6 @@ TransactionList::TransactionList(int s)
 TransactionList::~TransactionList()
 {
 	int i;
-	std::cout << "PResent = " << present << ", Size = " << size << std::endl;
 	for (i = 0; i < present; i++)
 	{
 		Transaction *curr = list[i];

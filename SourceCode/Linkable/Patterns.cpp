@@ -39,6 +39,18 @@ bool do_a_test()
 	return success;
 }
 
+string get_trial()
+{
+	static int trial_number = 1;
+	ostringstream stream;
+	stream << trial_number;
+	string trial_string = stream.str();
+	string outputfile = "Output/" + trial_string + "trial.txt";
+	
+	trial_number++;
+	return outputfile;
+}
+
 string get_contents(const char* filename)
 {
 	ifstream stream;
@@ -89,58 +101,70 @@ void get_transactions(string contents, int transactions, TransactionList *list)
 
 void build_tree(RPTree *tree, TransactionList *list)
 {
-	cout << "Building RPTree" << endl;
+	//cout << "Building RPTree" << endl;
 	int i;
 	
 	for (i = 0; i < list->get_size(); i++)
 	{
 		Transaction *add = list->get_transaction(i);
-		cout << "Adding Transaction: " << add->get_id() << endl;
+		//cout << "Adding Transaction: " << add->get_id() << endl;
 		tree->add_transaction(add);
 	}
 }
 
-void output_to_file(const char *outputfilename, Set *rare_patterns, int rare_patterns_number)
+void output_to_file(const char *outputfilename, Set *rare_patterns, int rare_patterns_number, const int max_support)
 {
 	ofstream write(outputfilename);
-	write << "There are " << rare_patterns_number << " rare patterns in this database" << endl;
+	write << "There are " << rare_patterns_number << 
+		" patterns in this database with a support of " << max_support << " or less " << endl;
 	write << rare_patterns->to_string();
 	write.close();
 }
 
 void process(const char *inputfilename, const char *outputfilename, const int max_support)
 {
+	cout << "Max_support is " << max_support << endl;
 	string contents = get_contents(inputfilename);
 	int transactions = get_number_transactions(contents);
-	cout << contents << endl << transactions << endl;
+	cout << "Read in file: " << inputfilename << std::endl;
 	
 	TransactionList *array = new TransactionList(transactions);
 	
 	if (array != NULL)
 	{
 		get_transactions(contents, transactions, array);
+		cout << "Retrieved " << transactions << " transactions" << endl;
 		Set *header = array->get_itemset();
+		cout << "There are " << header->get_present() << " items in the header table" << endl;
 		
 		if (header != NULL)
 		{
-			cout << "Initial header table: " << std::endl;
-			header->print();
-			cout << endl;
+			//cout << "Initial header table: " << std::endl;
+			//header->print();
+			//cout << endl;
 			header->remove_non_rare_items(max_support);
-			cout << "Only rare items" << std::endl;
-			header->print();
-			cout << endl;
+			cout << "Removed non-rare items from header table" << endl;
+			cout << header->get_present() << " items remain." << endl;
+			//cout << "Only rare items" << std::endl;
+			//header->print();
+			//cout << endl;
 			header->sort();
 			cout << "Sorted header table" << endl;
-			header->print();
-			cout << endl;
+			//cout << "Sorted header table" << endl;
+			//header->print();
+			//cout << endl;
 			
 			array->remove_non_rare_items(header);
 			
-			array->print();
-			std::cout << "Printing Transaction List" << std::endl;
+			cout << "Removed non-rare items from transaction list" << endl;
+			cout << array->get_size() << " transactions remain" << endl;
+			
+			//array->print();
+			//std::cout << "Printing Transaction List" << std::endl;
 			array->sort(header);
-			array->print();
+			//array->print();
+			
+			cout << "Sorted transaction list" << endl;
 			
 			// build the tree
 			RPTree *tree = new RPTree();
@@ -148,20 +172,22 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 			if (tree != NULL)
 			{
 				build_tree(tree, array);
-				cout << "The tree has " << tree->tree_size() << " nodes in it" << endl;
-				tree->print();
+				cout << "Built RPTree of size " << tree->tree_size() << endl;
+				//cout << "The tree has " << tree->tree_size() << " nodes in it" << endl;
+				//tree->print();
 				
 				// recursively examine the tree
 				Set *rare_patterns = tree->examine();
 				int rare_patterns_number = rare_patterns->get_present();
-				std::cout << "There are " << rare_patterns_number << " patterns" << std::endl;
+				cout << "Mined " << rare_patterns_number << " rare patterns" << endl;
 				
 				if (rare_patterns != NULL)
 				{
-					cout << "Printing Rare Patterns" << endl;
-					rare_patterns->print();
-					output_to_file(outputfilename, rare_patterns, rare_patterns_number);
-					cout << endl;
+					//cout << "Printing Rare Patterns" << endl;
+					//rare_patterns->print();
+					output_to_file(outputfilename, rare_patterns, rare_patterns_number, max_support);
+					cout << "Printed rare patterns to: " << outputfilename << endl;
+					//cout << endl;
 					delete rare_patterns;
 				}
 				else
@@ -187,23 +213,62 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 		cout << "Not enough memory for Transaction array" << endl;
 	}
 	delete array;
+	
+	cout << endl;
+	cout << endl;
 }
 
 int main()
 {
-	int i = 1;
-	ostringstream stream;
-	stream << i;
-	string trial_number = stream.str();
-	stream.clear();
+	string input, output;
+	const char *inputfilename, *outputfilename;
 	
-	string input = "PreciseDB.txt";
-	const char *inputfilename = input.c_str();
-	string output = trial_number + "trial.txt";
-	const char *outputfilename = output.c_str();
-	// process(inputfilename, outputfilename, 2);
+	inputfilename = "Input/Subset.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 4);
 	
+	inputfilename = "Input/Subset.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
 	process(inputfilename, outputfilename, 3);
+	
+	inputfilename = "Input/Subset.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 5);
+	
+	inputfilename = "Input/Subset.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 6);
+	
+	/*
+	inputfilename = "Input/PreciseDB.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 2);
+
+	inputfilename = "Input/PreciseDB.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 3);
+	
+	inputfilename = "Input/1k5L.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 5);
+	
+	inputfilename = "Input/1k5L.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 10);
+	
+	inputfilename = "Input/10k5L.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 5);
+	*/
 	
 	return 0;
 }

@@ -1,0 +1,8 @@
+There are 7 patterns in this database with a support of 3 or less 
+{{5}: 4,
+{4}: 2,
+{6}: 1,
+{6,4}: 1,
+{4,5}: 1,
+{6,5}: 1,
+{6,4,5}: 1}

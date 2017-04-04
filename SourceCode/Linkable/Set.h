@@ -45,6 +45,7 @@ class Set: public ListItem
 		int get_present();
 		void resize(int s);
 		std::string to_string();
+		std::string to_string_with_support();
 };
 
 #endif

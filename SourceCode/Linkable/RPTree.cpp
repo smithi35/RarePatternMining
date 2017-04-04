@@ -173,7 +173,6 @@ void RPTree::print()
 	int i;
 	for (i = 0; i < present; i++)
 	{
-		std::cout << "i = " << i << std::endl;
 		roots[i]->print();
 	}
 }

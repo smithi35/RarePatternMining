@@ -1,6 +1,7 @@
 #include "Set.h"
 #include <iostream>
 #include <cstdlib>
+#include <sstream>
 
 Set::Set(int s)
 {
@@ -186,18 +187,18 @@ void Set::print()
 // if an item in the set has more support than max_support it is removed from the set
 void Set::remove_non_rare_items(int max_support)
 {
-	int total = 0;
+	int non_rares = 0;
 	
 	int i;
 	for (i = 0; i < present; i++)
 	{
 		if (set[i]->get_support() > max_support)
 		{
-			total++;
+			non_rares++;
 		}
 	}
 	
-	int new_size = size - total;
+	int new_size = size - non_rares;
 	ListItem **new_set = new ListItem *[new_size];
 	int next = 0;
 	
@@ -549,7 +550,7 @@ std::string Set::to_string()
 		{
 			if (Set *s = dynamic_cast<Set *>(set[i]))
 			{
-				output = output + s->to_string();
+				output = output + s->to_string_with_support();
 				
 				if (i+1 < present)
 				{
@@ -569,6 +570,35 @@ std::string Set::to_string()
 	}
 	
 	output = output + "}";
+	
+	return output;
+}
+
+std::string Set::to_string_with_support()
+{
+	std::string output = "{";
+	if (present > 0 && present <= size)
+	{
+		int i;
+		for (i = 0; i < present; i++)
+		{
+			if (Item *j = dynamic_cast<Item *>(set[i]))
+			{
+				output = output + j->to_string();
+				
+				if (i+1 < present)
+				{
+					output = output + ",";
+				}
+			}
+		}
+	}
+	
+	output = output + "}: ";
+	
+	std::ostringstream stream;
+	stream << ListItem::get_support();
+	output = output + stream.str();
 	
 	return output;
 }
