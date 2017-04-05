@@ -343,6 +343,7 @@ bool Set::equals(ListItem *other)
 			{
 				if (Item *temp_a = dynamic_cast<Item *>(set[i]))
 				{
+					bool present = false;
 					int j;
 					for (j = 0; j < p->present; j++)
 					{
@@ -350,10 +351,12 @@ bool Set::equals(ListItem *other)
 						{
 							if (temp_a->equals(temp_b))
 							{
-								equals = equals && temp_a->equals(temp_b);
+								present = true;
 							}
 						}
 					}
+					
+					equals = equals && present;
 				}
 				else if (Set *temp_a = dynamic_cast<Set *>(set[i]))
 				{

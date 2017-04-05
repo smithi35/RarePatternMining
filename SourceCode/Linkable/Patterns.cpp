@@ -54,6 +54,16 @@ void test_set_equals()
 	b->add_item(i);
 	
 	cout << "Equal? " << a->equals(b) << endl;
+	
+	Item *k = new Item(3, 3);
+	Set *c = new Set(2);
+	c->add_item(k);
+	c->add_item(a);
+	
+	cout << "Equal? " << a->equals(c) << endl;
+	
+	delete a, delete b, delete c;
+	delete i, delete j, delete k;
 }
 
 string get_trial()
@@ -129,9 +139,10 @@ void build_tree(RPTree *tree, TransactionList *list)
 	}
 }
 
-void output_to_file(const char *outputfilename, Set *rare_patterns, int rare_patterns_number, const int max_support)
+void output_to_file(const char *inputfilename, const char *outputfilename, Set *rare_patterns, int rare_patterns_number, const int max_support)
 {
 	ofstream write(outputfilename);
+	write << "Input file: " << inputfilename << endl;
 	write << "There are " << rare_patterns_number << 
 		" patterns in this database with a support of " << max_support << " or less " << endl;
 	write << rare_patterns->to_string();
@@ -202,7 +213,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				{
 					//cout << "Printing Rare Patterns" << endl;
 					//rare_patterns->print();
-					output_to_file(outputfilename, rare_patterns, rare_patterns_number, max_support);
+					output_to_file(inputfilename, outputfilename, rare_patterns, rare_patterns_number, max_support);
 					cout << "Printed rare patterns to: " << outputfilename << endl;
 					//cout << endl;
 					delete rare_patterns;
@@ -243,12 +254,12 @@ int main()
 	inputfilename = "Input/Subset.txt";
 	output = get_trial();
 	outputfilename = output.c_str();
-	process(inputfilename, outputfilename, 4);
+	process(inputfilename, outputfilename, 3);
 	
 	inputfilename = "Input/Subset.txt";
 	output = get_trial();
 	outputfilename = output.c_str();
-	process(inputfilename, outputfilename, 3);
+	process(inputfilename, outputfilename, 4);
 	
 	inputfilename = "Input/Subset.txt";
 	output = get_trial();
