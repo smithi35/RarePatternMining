@@ -341,9 +341,33 @@ bool Set::equals(ListItem *other)
 			int i;
 			for (i = 0; i < present; i++)
 			{
-				if (!p->set[i]->equals(set[i]))
+				if (Item *temp_a = dynamic_cast<Item *>(set[i]))
 				{
-					equals = false;
+					int j;
+					for (j = 0; j < p->present; j++)
+					{
+						if (Item *temp_b = dynamic_cast<Item *>(p->set[j]))
+						{
+							if (temp_a->equals(temp_b))
+							{
+								equals = equals && temp_a->equals(temp_b);
+							}
+						}
+					}
+				}
+				else if (Set *temp_a = dynamic_cast<Set *>(set[i]))
+				{
+					int j;
+					for (j = 0; j < p->present; j++)
+					{
+						if (Set *temp_b = dynamic_cast<Set *>(p->set[j]))
+						{
+							if (temp_a->equals(temp_b))
+							{
+								equals = equals && temp_a->equals(temp_b);
+							}
+						}
+					}
 				}
 			}
 		}

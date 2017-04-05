@@ -39,6 +39,23 @@ bool do_a_test()
 	return success;
 }
 
+void test_set_equals()
+{
+	Set *a = new Set(2);
+	Set *b = new Set(2);
+	
+	Item *i = new Item(1, 2);
+	Item *j = new Item(2, 2);
+	
+	a->add_item(i);
+	a->add_item(j);
+	
+	b->add_item(j);
+	b->add_item(i);
+	
+	cout << "Equal? " << a->equals(b) << endl;
+}
+
 string get_trial()
 {
 	static int trial_number = 1;
