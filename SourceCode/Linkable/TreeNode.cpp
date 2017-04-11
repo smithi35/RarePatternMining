@@ -37,11 +37,8 @@ TreeNode::~TreeNode()
 ListItem *TreeNode::get_item() {return item;}
 
 // add another child to the children array
-void TreeNode::add_child(Item *child_item)
+void TreeNode::add_child(TreeNode *child)
 {
-	child_item->set_support(1);
-	child = new TreeNode(child_item);
-	
 	TreeNode **new_children = (TreeNode **)malloc(sizeof(TreeNode *) * (children_number+1));
 	
 	int i;
