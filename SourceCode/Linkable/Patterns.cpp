@@ -35,6 +35,7 @@ bool do_a_test()
 	
 	if (a->equals(comp))
 		success = true;
+		
 	
 	return success;
 }
@@ -55,11 +56,16 @@ void test_set_equals()
 	
 	cout << "Equal? " << a->equals(b) << endl;
 	
+	cout << endl;
+	cout << "Contains returns: " << a->contains(b) << endl;
+	
 	Item *k = new Item(3, 3);
 	Set *c = new Set(2);
-	c->add_item(k);
-	c->add_item(a);
+	c->add_item(i);
+	cout << "Contains returns: " << a->contains(c) << endl;
 	
+	c->add_item(k);
+	cout << "Contains returns: " << a->contains(c) << endl;
 	cout << "Equal? " << a->equals(c) << endl;
 	
 	delete a, delete b, delete c;
@@ -202,7 +208,7 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				build_tree(tree, array);
 				cout << "Built RPTree of size " << tree->tree_size() << endl;
 				//cout << "The tree has " << tree->tree_size() << " nodes in it" << endl;
-				// tree->print();
+				//tree->print();
 				
 				// recursively examine the tree
 				Set *rare_patterns = tree->examine();
@@ -251,6 +257,8 @@ int main()
 	string input, output;
 	const char *inputfilename, *outputfilename;
 	
+	/*
+	// very, very basic test data
 	inputfilename = "Input/Subset.txt";
 	output = get_trial();
 	outputfilename = output.c_str();
@@ -270,6 +278,7 @@ int main()
 	output = get_trial();
 	outputfilename = output.c_str();
 	process(inputfilename, outputfilename, 6);
+	*/
 	
 	inputfilename = "Input/PreciseDB.txt";
 	output = get_trial();
@@ -284,32 +293,32 @@ int main()
 	inputfilename = "Input/1k5L.txt";
 	output = get_trial();
 	outputfilename = output.c_str();
+	process(inputfilename, outputfilename, 3);
+	
+	inputfilename = "Input/1k5L.txt";
+	output = get_trial();
+	outputfilename = output.c_str();
 	process(inputfilename, outputfilename, 5);
 	
 	inputfilename = "Input/1k5L.txt";
 	output = get_trial();
 	outputfilename = output.c_str();
-	process(inputfilename, outputfilename, 10);
-	
-	inputfilename = "Input/1k5L.txt";
-	output = get_trial();
-	outputfilename = output.c_str();
-	process(inputfilename, outputfilename, 15);
+	process(inputfilename, outputfilename, 7);
 	
 	inputfilename = "Input/10k5L.txt";
 	output = get_trial();
 	outputfilename = output.c_str();
-	process(inputfilename, outputfilename, 10);
+	process(inputfilename, outputfilename, 5);
 	
 	inputfilename = "Input/10k5L.txt";
 	output = get_trial();
 	outputfilename = output.c_str();
-	process(inputfilename, outputfilename, 20);
+	process(inputfilename, outputfilename, 7);
 	
 	inputfilename = "Input/10k5L.txt";
 	output = get_trial();
 	outputfilename = output.c_str();
-	process(inputfilename, outputfilename, 30);
+	process(inputfilename, outputfilename, 9);
 	
 	return 0;
 }

@@ -24,13 +24,9 @@ Set::Set(Set *copy)
 	for (i = 0; i < present; i++)
 	{
 		if (Set *s = dynamic_cast<Set *>(copy->set[i]))
-		{
 			set[i] = new Set(s);
-		}
 		else if (Item *item = dynamic_cast<Item *>(copy->set[i]))
-		{
 			set[i] = new Item(item);
-		}
 	}
 }
 
@@ -50,16 +46,13 @@ Set::Set(Item *i)
 	set = new ListItem *[size];
 	init_array();
 	add_item(i);
-	// std::cout << "Initialized with single item" << std::endl;
 }
 
 void Set::init_array()
 {
 	int i;
 	for (i = 0; i < size; i++)
-	{
 		set[i] = NULL;
-	}
 }
 
 Set::~Set()
@@ -97,13 +90,9 @@ bool Set::add_item(ListItem *item)
 			if (curr->equals(item))
 			{
 				if (item->get_support() > 1)
-				{
 					curr->increase_support(item->get_support());
-				}
 				else
-				{
 					curr->increment_support();
-				}
 				added = true;
 			}
 		}
@@ -225,7 +214,6 @@ void Set::remove_non_rare_items(int max_support)
 	
 	for (i = 0; i < present; i++)
 		delete(set[i]);
-	
 	delete [] set;
 	
 	this->present = next;
@@ -233,16 +221,42 @@ void Set::remove_non_rare_items(int max_support)
 	this->set = new_set;
 }
 
+// determine whether item is present in the set
 bool Set::contains(ListItem *item)
 {
 	bool contains = false;
 	
-	int i;
-	for (i = 0; i < present; i++)
+	if (Item *q = dynamic_cast<Item *>(item))
 	{
-		if (set[i]->equals(item))
+		int i;
+		for (i = 0; i < present; i++)
 		{
-			contains = true;
+			if (set[i]->equals(q))
+			{
+				contains = true;
+			}
+		}
+	}
+	else if (Set *s = dynamic_cast<Set *>(item))
+	{
+		// if a set, all the elements of s must be present in the set
+		contains = true;
+		
+		int i;
+		for (i = 0; i < s->present; i++)
+		{
+			bool in_both = false;
+			
+			int j;
+			for (j = 0; j < present && !in_both; j++)
+			{
+				if (s->set[i]->equals(set[j]))
+				{
+					in_both = true;
+				}
+			}
+			
+			contains = contains && in_both;
 		}
 	}
 	
@@ -251,10 +265,10 @@ bool Set::contains(ListItem *item)
 
 void Set::sort()
 {
-	// std::cout << "Sorting Set" << std::endl;
 	qsort(0, present-1);
 }
 
+// quick sort the set in place
 void Set::qsort(int first, int last)
 {
 	int range = last - first;
@@ -305,6 +319,7 @@ int Set::partition(int first, int last)
 
 ListItem *Set::get_item(int index) { return set[index];}
 
+// return support of item matching name parameter
 int Set::get_support(int name)
 {
 	ListItem *temp = new Item(name);
@@ -327,6 +342,7 @@ int Set::get_support(int name)
 
 int Set::get_support() { return ListItem::get_support(); }
 
+// determine if other is the same as this set
 bool Set::equals(ListItem *other)
 {
 	bool equals = true;
@@ -338,41 +354,7 @@ bool Set::equals(ListItem *other)
 		
 		if (length1 == length2)
 		{
-			int i;
-			for (i = 0; i < present; i++)
-			{
-				if (Item *temp_a = dynamic_cast<Item *>(set[i]))
-				{
-					bool present = false;
-					int j;
-					for (j = 0; j < p->present; j++)
-					{
-						if (Item *temp_b = dynamic_cast<Item *>(p->set[j]))
-						{
-							if (temp_a->equals(temp_b))
-							{
-								present = true;
-							}
-						}
-					}
-					
-					equals = equals && present;
-				}
-				else if (Set *temp_a = dynamic_cast<Set *>(set[i]))
-				{
-					int j;
-					for (j = 0; j < p->present; j++)
-					{
-						if (Set *temp_b = dynamic_cast<Set *>(p->set[j]))
-						{
-							if (temp_a->equals(temp_b))
-							{
-								equals = equals && temp_a->equals(temp_b);
-							}
-						}
-					}
-				}
-			}
+			equals = equals && contains(p);
 		}
 		else
 		{
@@ -438,31 +420,6 @@ void Set::resize(int s)
 	}
 }
 
-/*
-ListItem **Set::copy(ListItem **old, int count)
-{
-	ListItem **new_set = (ListItem **)malloc(sizeof(ListItem *) * count);
-	
-	int i;
-	for (i = 0; i < count; i++)
-	{
-		if (Set *s = dynamic_cast<Set *>(old[i]))
-		{
-			new_set[i] = new Set(s);
-			delete(set[i]);
-		}
-		else if (Item *item = dynamic_cast<Item *>(old[i]))
-		{
-			new_set[i] = new Item(item);
-			delete(set[i]);
-		}
-	}
-	delete [] old;
-	
-	return new_set;
-}
-*/
-
 // copies the contents of the set into a new ListItem
 ListItem *Set::copy()
 {
@@ -485,17 +442,8 @@ void Set::add_sets(Set *other)
 {
 	int i;
 	for (i = 0; i < other->present; i++)
-	{
 		if (Set *s = dynamic_cast<Set *>(other->get_item(i)))
-		{
-			bool add = add_item(s);
-			
-			if (!add)
-			{
-				std::cout << "Add item failed" << std::endl;
-			}
-		}
-	}
+			add_item(s);
 	
 	if (present != size)
 		resize(present);
@@ -503,23 +451,6 @@ void Set::add_sets(Set *other)
 
 int Set::get_size() { return size; }
 int Set::get_present() { return present; }
-
-ListItem *Set::remove_item(int index)
-{
-	ListItem *removed = NULL;
-	
-	if (set != NULL && present > 0)
-	{
-		ListItem *at_index = set[index];
-		if (at_index != NULL)
-		{
-			removed = at_index;
-			set[index] = NULL;
-		}
-	}
-	
-	return removed;
-}
 
 // prints the set along with the support values of each item
 void Set::print_with_support()
@@ -559,12 +490,8 @@ void Set::add_item_to_sets(Item *item)
 {
 	int i;
 	for (i = 0; i < present; i++)
-	{
 		if (Set *curr = dynamic_cast<Set *>(set[i]))
-		{
 			curr->add_item(item);
-		}
-	}
 }
 
 std::string Set::to_string()

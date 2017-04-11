@@ -58,15 +58,6 @@ void TreeNode::set_quantity(int q)
 	item->set_support(q);
 }
 
-/*
-void TreeNode::set_children(TreeNode **c, int q)
-{
-	children = c;
-	ListItem *i = BaseNode::get_item();
-	i->set_support(q);
-}
-*/
-
 int TreeNode::get_children_number() { return children_number;}
 
 TreeNode *TreeNode::get_child(int index)
@@ -91,19 +82,6 @@ void TreeNode::print()
 	}
 }
 
-int *TreeNode::revise_array(int array[], int size)
-{
-	int *replacement = (int *)malloc(sizeof(int) * (size-1));
-	
-	int i;
-	for (i = 1; i < size; i++)
-	{
-		replacement[i-1] = array[i];
-	}
-	
-	return replacement;
-}
-
 void TreeNode::swap(int first, int second, int array[])
 {
 	int temp = array[first];
@@ -112,20 +90,18 @@ void TreeNode::swap(int first, int second, int array[])
 }
 
 // recursively adds the contents of a transaction to the node and its children
-void TreeNode::add_transaction(int *array, int size)
+void TreeNode::add_transaction(int *array, int size, int index)
 {
-	if (size > 0)
+	if (index < size)
 	{
 		if (children_number == 0)
 		{
-			// std::cout << "Children: " << children_number << std::endl;
-			Item *i = new Item(array[0]);
+			// need to add first child
+			Item *i = new Item(array[index]);
 			i->set_support(1);
 			TreeNode *child = new TreeNode(i);
 			add_child(child);
-			int *new_array = revise_array(array, size);
-			child->add_transaction(new_array, size-1);
-			free(new_array);
+			child->add_transaction(array, size, (index+1));
 		}
 		else
 		{
@@ -142,17 +118,16 @@ void TreeNode::add_transaction(int *array, int size)
 					int name = q->get_name();
 					
 					int j;
-					for (j = 0; j < size && !stop; j++)
+					for (j = index; j < size && !stop; j++)
 					{
 						if (name == array[j])
 						{
 							// std::cout << "Incrementing " << name << std::endl;
 							stop = true;
 							curr->increment_quantity();
-							swap(0, j, array);
-							int *new_array = revise_array(array, size);
-							curr->add_transaction(new_array, size-1);
-							free(new_array);
+							swap(index, j, array);
+							
+							curr->add_transaction(array, size, (index+1));
 							// this is not the most efficient way to add the transactions
 						}
 					}
@@ -161,14 +136,12 @@ void TreeNode::add_transaction(int *array, int size)
 			
 			if (!stop)
 			{
-				// std::cout << "Need to add another child" << std::endl;
-				Item *i = new Item(array[0]);
+				// Need to add another child
+				Item *i = new Item(array[index]);
 				i->set_support(1);
 				TreeNode *child = new TreeNode(i);
 				add_child(child);
-				int *new_array = revise_array(array, size);
-				child->add_transaction(new_array, size-1);
-				free(new_array);
+				child->add_transaction(array, size, (index+1));
 			}
 		}
 	}
@@ -177,11 +150,6 @@ void TreeNode::add_transaction(int *array, int size)
 void TreeNode::increment_quantity()
 {
 	item->increment_support();
-}
-
-void TreeNode::delete_itemset_array(Set **set, int size)
-{
-	// item->increment_support();
 }
 
 // recursively counts the number of children, and their children, and so on until it returns the number of nodes in the (sub)tree
@@ -202,12 +170,7 @@ int TreeNode::count()
 	{
 		int i;
 		for (i = 0; i < children_number; i++)
-		{
-			// std::cout << i << " " << children[i]->get_item() << std::endl;
 			count+= children[i]->count();
-			
-			// std::cout << "Count = " << count << std::endl;
-		}
 	}
 	
 	return count;
@@ -246,10 +209,3 @@ Set *TreeNode::examine()
 	
 	return set;
 }
-
-/*
-int main()
-{
-	
-}
-*/

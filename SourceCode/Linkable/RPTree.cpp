@@ -46,6 +46,7 @@ void RPTree::add_root(TreeNode *root)
 	}
 	else
 	{
+		// add first root
 		present = 1;
 		size = 1;
 		roots = new TreeNode*[size];
@@ -63,6 +64,7 @@ void RPTree::add_transaction(Transaction *transaction)
 	int *copy = (int *)malloc(sizeof(int) * size);
 	bool added = false;
 	
+	// copy transaction's items
 	int i;
 	for (i = 0; i < size; i++)
 		copy[i] = items[i];
@@ -70,6 +72,7 @@ void RPTree::add_transaction(Transaction *transaction)
 	
 	if (present > 0)
 	{
+		// find an item in the transaction that is equal to one of the roots
 		for (i = 0; i < present && !added; i++)
 		{
 			ListItem *item = roots[i]->get_item();
@@ -84,21 +87,13 @@ void RPTree::add_transaction(Transaction *transaction)
 					if (name == items[j])
 					{
 						temp->increment_support();
+						
+						// move items[j] to the front of items
 						int q = items[j];
 						items[j] = items[0];
-						items[0] = q;						
+						items[0] = q;
 						
-						// remove items[j] from items array
-						int rep[size-1];
-						
-						for (q = 1; q < size; q++)
-						{
-							rep[q-1] = items[q];
-						}
-						size--;
-						
-						
-						roots[i]->add_transaction(rep, size);
+						roots[i]->add_transaction(items, size, 1);
 						added = true;
 					}
 				}
@@ -110,16 +105,7 @@ void RPTree::add_transaction(Transaction *transaction)
 			// none of the items in the transaction correspond to a branch, need a new root
 			Item *q = new Item(items[0]);
 			TreeNode *add = new TreeNode(q);
-			int replacement[size-1];
-			
-			for (i = 1; i < size; i++)
-			{
-				replacement[i-1] = items[i];
-			}
-			size--;
-			items = replacement;
-			
-			add->add_transaction(replacement, size);
+			add->add_transaction(items, size, 1);
 			add_root(add);
 		}
 	}
@@ -128,22 +114,14 @@ void RPTree::add_transaction(Transaction *transaction)
 		// first root case
 		Item *q = new Item(items[0]);
 		TreeNode *add = new TreeNode(q);
-		int replacement[size-1];
-		
-		int i;
-		for (i = 1; i < size; i++)
-		{
-			replacement[i-1] = items[i];
-		}
-		size--;
-		
-		add->add_transaction(replacement, size);
+		add->add_transaction(items, size, 1);
 		add_root(add);
 	}
 	
 	free(copy);
 }
 
+// examine the tree
 Set *RPTree::examine()
 {
 	Set *out = new Set();
@@ -159,6 +137,7 @@ Set *RPTree::examine()
 	return out;
 }
 
+// determine the size of the tree
 int RPTree::tree_size()
 {
 	int total = 0;
@@ -178,11 +157,3 @@ void RPTree::print()
 		roots[i]->print();
 	}
 }
-
-/*
-int main()
-{
-	RPTree *tree = new RPTree();
-	delete tree;
-}
-*/
