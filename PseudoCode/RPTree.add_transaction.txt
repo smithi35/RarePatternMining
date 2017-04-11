@@ -8,27 +8,17 @@ RPTree::add_transaction(transaction)
 	{
 		for (i = 0; i < present && !added; i++)
 		{
-			item = roots[i]->get_item();
-			name = item->get_name();
+			item = roots[i]->get_item()
+			name = item->get_name()
 			
 			for (j = 0; j < size && !added; j++)
 			{
 				if (name == items[j])
 				{
-					temp->increment_support();
+					temp->increment_support()
 					
-					// remove items[j] from items array
-					int rep[size-1];
-					
-					int q;
-					for (q = 1; q < size; q++)
-					{
-						rep[q-1] = items[q];
-					}
-					size--;
-					
-					roots[i]->add_transaction(rep, size);
-					added = true;
+					roots[i]->add_transaction(rep, size, (index+1))
+					added = true
 				}
 			}
 		}
@@ -39,15 +29,7 @@ RPTree::add_transaction(transaction)
 			// none of the items in the transaction correspond to a branch, need a new root
 			q = new Item(items[0])
 			add = new TreeNode(q)
-			replacement[size-1]
-			
-			for (i = 1; i < size; i++)
-				replacement[i-1] = items[i]
-			
-			size--
-			items = replacement
-			
-			add->add_transaction(replacement, size)
+			add->add_transaction(replacement, size, (index+1))
 			add_root(add)
 		}
 	}
@@ -56,13 +38,8 @@ RPTree::add_transaction(transaction)
 		// first root case
 		q = new Item(items[0])
 		add = new TreeNode(q)
-		replacement[size-1]
 		
-		for (i = 1; i < size; i++)
-			replacement[i-1] = items[i]
-		size--
-		
-		add->add_transaction(replacement, size)
+		add->add_transaction(replacement, size, (index+1))
 		add_root(add)
 	}
 }
