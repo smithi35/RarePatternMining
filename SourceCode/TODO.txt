@@ -1,5 +1,0 @@
-1. Make the set class more general
-	Should be able to store Items or Sets
-	Works like an array at this point and that's fine
-2. Implement superclass for Node with some basic functionality
-3. Put some thought into the examine method of the TreeNode class, it should recursively return sets which are then recombined to that if there are repeat sets their support is incremented

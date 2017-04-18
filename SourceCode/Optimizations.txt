@@ -1,2 +1,0 @@
-1. Can do a whole lot of refactoring reused code. It's kind of ridiculous at this point
-2. Instead of creating new arrays for add_transaction, just pass around indexes and stuff
