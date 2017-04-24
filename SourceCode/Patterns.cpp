@@ -12,66 +12,6 @@
 
 using namespace std;
 
-bool do_a_test()
-{
-	bool success = false;
-	
-	Set *a = new Set(1);
-	Set *b = new Set(1);
-	
-	Item *i = new Item(1, 1);
-	Item *j = new Item(2, 2);
-	
-	a->add_item(i);
-	b->add_item(j);
-	
-	a->add_sets(b);
-	cout << "Support = " << a->get_support() << endl;
-	a->print();
-	
-	Set *comp = new Set(2);
-	comp->add_item(i->copy());
-	comp->add_item(j->copy());
-	
-	if (a->equals(comp))
-		success = true;
-		
-	
-	return success;
-}
-
-void test_set_equals()
-{
-	Set *a = new Set(2);
-	Set *b = new Set(2);
-	
-	Item *i = new Item(1, 2);
-	Item *j = new Item(2, 2);
-	
-	a->add_item(i);
-	a->add_item(j);
-	
-	b->add_item(j);
-	b->add_item(i);
-	
-	cout << "Equal? " << a->equals(b) << endl;
-	
-	cout << endl;
-	cout << "Contains returns: " << a->contains(b) << endl;
-	
-	Item *k = new Item(3, 3);
-	Set *c = new Set(2);
-	c->add_item(i);
-	cout << "Contains returns: " << a->contains(c) << endl;
-	
-	c->add_item(k);
-	cout << "Contains returns: " << a->contains(c) << endl;
-	cout << "Equal? " << a->equals(c) << endl;
-	
-	delete a, delete b, delete c;
-	delete i, delete j, delete k;
-}
-
 string get_trial()
 {
 	static int trial_number = 1;
@@ -134,13 +74,12 @@ void get_transactions(string contents, int transactions, TransactionList *list)
 
 void build_tree(RPTree *tree, TransactionList *list)
 {
-	//cout << "Building RPTree" << endl;
+	cout << "Building RPTree" << endl;
 	int i;
 	
 	for (i = 0; i < list->get_size(); i++)
 	{
 		Transaction *add = list->get_transaction(i);
-		//cout << "Adding Transaction: " << add->get_id() << endl;
 		tree->add_transaction(add);
 	}
 }
@@ -200,14 +139,13 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 			
 			cout << "Sorted transaction list" << endl;
 			
-			// build the tree
 			RPTree *tree = new RPTree();
 			
 			if (tree != NULL)
 			{
+				// build the tree
 				build_tree(tree, array);
 				cout << "Built RPTree of size " << tree->tree_size() << endl;
-				//cout << "The tree has " << tree->tree_size() << " nodes in it" << endl;
 				//tree->print();
 				
 				// recursively examine the tree
@@ -228,14 +166,13 @@ void process(const char *inputfilename, const char *outputfilename, const int ma
 				{
 					cout << "Failed to create rare patterns" << endl;
 				}
-				
-				delete(tree);
+				delete tree;
 			}
 			else
 			{
 				cout << "Failed to create tree" << endl;
 			}
-			delete(header);
+			delete header;
 		}
 		else
 		{
