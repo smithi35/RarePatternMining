@@ -1,5 +1,0 @@
-Input file: Input/PreciseDB.txt
-There are 3 patterns in this database with a support of 2 or less 
-{{1}: 2,
-{4}: 1,
-{4,1}: 1}
